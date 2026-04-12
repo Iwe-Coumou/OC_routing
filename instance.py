@@ -1,7 +1,6 @@
 import pandas as pd
 from dataclasses import dataclass
-
-MATRIX_VALUES = ['TOOLS', 'COORDINATES', 'REQUESTS']
+from InstanceCVRPTWUI import InstanceCVRPTWUI  # teacher's file
 
 @dataclass
 class Config:
@@ -40,95 +39,74 @@ class Instance:
         self._load(filename)
 
     def _load(self, filename: str):
-        with open(filename, "r") as f:
-            raw = f.read().strip()
+        
 
-        items = "\n".join(raw.split("\n\n"))
-        parsed = _process_instance(items)
+        raw = InstanceCVRPTWUI(filename)
+        if not raw.isValid():
+            raise ValueError(
+                "Invalid instance file:\n" + "\n".join(raw.errorReport)
+            )
 
-        self.dataset = parsed.get("dataset")
-        self.name = parsed.get("name")
+        # scalar config — direct attribute mapping
+        self.dataset = raw.Dataset
+        self.name    = raw.Name
 
 
         self.config = Config(
-            days=parsed["days"],
-            capacity=parsed["capacity"],
-            max_trip_distance=parsed["max_trip_distance"],
-            vehicle_cost=parsed["vehicle_cost"],
-            vehicle_day_cost=parsed["vehicle_day_cost"],
-            distance_cost=parsed["distance_cost"],
+            days              = raw.Days,
+            capacity          = raw.Capacity,
+            max_trip_distance = raw.MaxDistance,
+            vehicle_cost      = raw.VehicleCost,
+            vehicle_day_cost  = raw.VehicleDayCost,
+            distance_cost     = raw.DistanceCost,
         )
 
-        requests_df = parsed.get("requests")
-        assert isinstance(requests_df, pd.DataFrame), "No requests found in instance file"
-        self.requests = [
-            Request(
-                id=int(row[0]),
-                location_id=int(row[1]),
-                earliest=int(row[2]),
-                latest=int(row[3]),
-                duration=int(row[4]),
-                machine_type=int(row[5]),
-                num_machines=int(row[6]),
-            )
-            for _, row in requests_df.iterrows()
-        ]
-
-        tools_df = parsed.get("tools")
-        assert isinstance(tools_df, pd.DataFrame), "No tools found in instance file"
+        # tools — teacher uses raw.Tools[i].ID/.weight/.amount/.cost
         self.tools = [
             Tool(
-                id=int(row[0]),
-                size=int(row[1]),
-                num_available=int(row[2]),
-                cost=int(row[3]),
+                id            = t.ID,
+                size          = t.weight,
+                num_available = t.amount,
+                cost          = t.cost,
             )
-            for _, row in tools_df.iterrows()
+            for t in raw.Tools
         ]
 
-        coordinates_df = parsed.get("coordinates")
-        assert isinstance(coordinates_df, pd.DataFrame), "No coordinates found in instance file"
+        # requests — teacher uses raw.Requests[i].ID/.node/.fromDay/.toDay/.numDays/.tool/.toolCount
+        self.requests = [
+            Request(
+                id            = r.ID,
+                location_id   = r.node,
+                earliest      = r.fromDay,
+                latest        = r.toDay,
+                duration      = r.numDays,
+                machine_type  = r.tool,
+                num_machines  = r.toolCount,
+            )
+            for r in raw.Requests
+        ]
+
+        # coordinates — teacher uses raw.Coordinates[i].ID/.X/.Y
         self.coordinates = [
-            (int(row[1]), int(row[2]))
-            for _, row in coordinates_df.iterrows()
+            (c.X, c.Y) for c in raw.Coordinates
         ]
-        depot_id = parsed.get("depot_coordinate", 0)
-        self.depot = self.coordinates[depot_id]
+        self.depot = self.coordinates[raw.DepotCoordinate]
+        self.depot_id = raw.DepotCoordinate
 
-        distance_df = parsed.get("distance")
-        self.distance = distance_df# keep as DataFrame, easy to index
+        raw.calculateDistances()
+        if raw.ReadDistance is not None:
+            self.distance = raw.ReadDistance
+        elif raw.calcDistance is not None:
+            self.distance = raw.calcDistance
+        else:
+            raise ValueError("Could not obtain distance matrix — no coordinates to compute from")
 
     def _print(self):
         for k, v in vars(self).items():
             print(f"{k}: {v}")
+            
+    def get_distance(self, loc_a: int, loc_b: int) -> int:
+        return self.distance[loc_a][loc_b]
 
-
-def _get_key_value(line: str) -> tuple[str, str]:
-    key, value = line.split("=")
-    return key.strip(), value.strip()
-
-def _lines_to_matrix(lines: list[str]) -> pd.DataFrame:
-    matrix = [[int(item.strip()) for item in line.split("\t") if item] for line in lines]
-    return pd.DataFrame(matrix)
-
-def _process_instance(file_str: str) -> dict:
-    result = dict()
-    lines = file_str.split("\n")
-    for i in range(len(lines)):
-        if "=" in lines[i]:
-            key, value = _get_key_value(lines[i])
-            if key in MATRIX_VALUES:
-                size = int(value)
-                result[key.lower()] = _lines_to_matrix(lines[i+1:i+size+1])
-                i += size
-                continue
-            else:
-                try:
-                    value = int(value)
-                except ValueError:
-                    pass
-                result[key.lower()] = value
-        if lines[i] == "DISTANCE":
-            result["distance"] = _lines_to_matrix(lines[i+1:])
-            break
-    return result
+    def get_distance_from_depot(self, loc: int) -> int:
+        return self.distance[self.depot_id][loc]
