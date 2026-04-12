@@ -1,4 +1,4 @@
-from instance import Instance, Request, Config, Tool
+from instance import Instance, Request, Tool
 import bisect
 import logging
 from collections import defaultdict
@@ -30,7 +30,7 @@ def build_state(instance: Instance) -> dict:
     for req in sorted(instance.requests, key=lambda r: r.latest):
         unscheduled[req.machine_type].append(req)
     state_dict['unscheduled'] = unscheduled
-    
+
     return state_dict
     
 def print_state(state: dict) -> None:
@@ -118,6 +118,12 @@ def is_feasible(state, instance, request, delivery_day, pickup_day, chained_from
     if not pickup_day <= instance.config.days:
         log.debug(f"INFEASIBLE req={request.id} pickup_day={pickup_day} > days={instance.config.days}")
         return False
+    
+    current_loans = sum(state['loans'][request.machine_type][:delivery_day+1])
+    tool = next(t for t in instance.tools if t.id == request.machine_type)
+    if current_loans + request.num_machines > tool.num_available:
+        log.debug(f"INFEASIBLE req={request.id} loans exceed available: current={current_loans} + needed={request.num_machines} > available={tool.num_available}")
+        return False
 
     if chained_from:
         if chained_from['pickup_day'] != delivery_day:
@@ -136,13 +142,13 @@ def try_backwards_extend(state: dict, instance: Instance) -> bool:
             if count <= 0:
                 continue
             for req in list(state['unscheduled'][machine_type]):
-                if req.earliest <= day <= req.latest and count > 0:
+                if req.earliest <= day <= req.latest:
                     source_entry = next(e for e in state['scheduled']
                                         if e['pickup_day'] == day and e['request'].machine_type == machine_type)
                     log.debug(f"BACKWARDS_EXTEND req={req.id} onto pool day={day} type={machine_type}")
                     commit_request(state, instance, req, day, chained_from=source_entry)
                     changed = True
-                    break  # pool count may have changed, re-scan from outer loop
+                    break
     return changed
 
 def try_forward_chain(state: dict, instance: Instance, request: Request) -> bool:
@@ -254,13 +260,18 @@ def restore(state: dict, instance: Instance, snap: list) -> None:
         commit_request(state, instance, req, delivery_day, chained_from=chained_from)
         committed[req.id] = state['scheduled'][-1]
 
-def optimize_lns(state: dict, instance: Instance, iterations: int = 100, destroy_fraction: float = 0.2) -> float:
+def optimize_initial(state: dict, instance: Instance, iterations: int = 500, destroy_fraction: float = 0.2, patience: int = 500) -> float:
     """LNS: destroy a random subset of requests and repair. Returns best cost achieved."""
     import random
 
+    if patience is None:
+        patience = iterations // 4
+
     best_cost = compute_cost(state, instance)
     best_snap = snapshot(state)
-    log.debug(f"LNS start cost={best_cost}")
+    no_improve = 0
+    total_improvements = 0
+    log.debug(f"LNS start cost={best_cost} patience={patience}")
 
     pbar = tqdm(range(iterations), desc="LNS", unit="iter")
     for i in pbar:
@@ -285,30 +296,18 @@ def optimize_lns(state: dict, instance: Instance, iterations: int = 100, destroy
         if cost < best_cost:
             best_cost = cost
             best_snap = snapshot(state)
+            no_improve = 0
+            total_improvements += 1
             log.debug(f"LNS improvement at iter={i} cost={best_cost}")
-            pbar.set_postfix(best=best_cost, improved=True)
         else:
             restore(state, instance, best_snap)
-            pbar.set_postfix(best=best_cost, improved=False)
+            no_improve += 1
+        pbar.set_postfix(best=f"{best_cost:,}", improvements=total_improvements, stale=no_improve)
+        if no_improve >= patience:
+            log.debug(f"LNS early stop at iter={i} after {patience} iterations without improvement")
+            break
 
     return best_cost
-
-def optimize_rechain(state: dict, instance: Instance) -> int:
-    """Try to rechain fallback-scheduled requests. Returns number of requests rechained."""
-    rechained = 0
-    fallbacks = [e for e in state['scheduled'] if e['chained_from'] is None]
-
-    for entry in fallbacks:
-        request = entry['request']
-        uncommit_request(state, request)
-        chained = try_forward_chain(state, instance, request)
-        if chained:
-            rechained += 1
-        else:
-            # restore original day
-            commit_request(state, instance, request, entry['delivery_day'])
-
-    return rechained
 
 def validate_schedule(scheduled: list, instance: Instance) -> bool:
     valid = True

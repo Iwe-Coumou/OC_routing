@@ -1,6 +1,6 @@
 import argparse
 from instance import Instance
-from initial_schedule import build_schedule, validate_schedule, optimize_rechain, optimize_lns, compute_cost
+from initial_schedule import build_schedule, validate_schedule, optimize_initial, compute_cost
 import os
 
 def valid_txt(value: str) -> str:
@@ -19,18 +19,19 @@ def main():
     #print_instance(instance)
     
     state = build_schedule(instance)
-    print(f"Initial cost: {compute_cost(state, instance)}")
-    best_cost = optimize_lns(state, instance, iterations=5000)
-    print(f"Best cost:  {best_cost}")
+    initial_cost = compute_cost(state, instance)
+    print(f"Initial cost: {initial_cost}")
+    best_cost = optimize_initial(state, instance)
+    print(f"Best cost:  {best_cost}\nImproved by {round((initial_cost-best_cost)/ initial_cost * 100):.2f}%")
     schedule = state['scheduled']
     validated = validate_schedule(schedule, instance)
     if not validated:
         raise ValueError("Schedule not valid")
-    # for entry in schedule:
-    #     r = entry['request']
-    #     chain = f" (chained from req {entry['chained_from']['request'].id})" if entry['chained_from'] else ""
-    #     print(f"req={r.id} type={r.machine_type} loc={r.location_id} "
-    #           f"delivery={entry['delivery_day']} pickup={entry['pickup_day']}{chain}")
+    for entry in schedule:
+        r = entry['request']
+        chain = f" (chained from req {entry['chained_from']['request'].id})" if entry['chained_from'] else ""
+        print(f"req={r.id} type={r.machine_type} loc={r.location_id} "
+              f"delivery={entry['delivery_day']} pickup={entry['pickup_day']}{chain}")
     
 
 def print_instance(instance: Instance) -> None:
