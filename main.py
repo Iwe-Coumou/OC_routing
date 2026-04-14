@@ -1,7 +1,17 @@
 import argparse
-from instance import Instance
-from initial_schedule import build_schedule, validate_schedule, optimize_initial, compute_cost
+import logging
 import os
+from instance import Instance
+from scheduling import build_schedule, optimize_initial, cost_breakdown, print_cost, validate_schedule
+from scheduling.analysis import print_analysis, print_load_distribution
+
+logging.basicConfig(
+    filename='schedule.log',
+    filemode='w',
+    level=logging.DEBUG,
+    format='%(message)s'
+)
+
 
 def valid_txt(value: str) -> str:
     if not value.endswith(".txt"):
@@ -10,62 +20,54 @@ def valid_txt(value: str) -> str:
         raise argparse.ArgumentTypeError(f"{value} does not exist")
     return value
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("instance", help="txt file of the instance to be used.", type=valid_txt)
+    parser.add_argument("--iterations", type=int, default=2500)
+    parser.add_argument("--patience",   type=int, default=750)
     args = parser.parse_args()
 
     instance = Instance(args.instance)
-    #print_instance(instance)
-    
+
+    # --- initial schedule ---
     state = build_schedule(instance)
-    initial_cost = compute_cost(state, instance)
-    print(f"Initial cost: {initial_cost}")
-    best_cost = optimize_initial(state, instance)
-    print(f"Best cost:  {best_cost}\nImproved by {round((initial_cost-best_cost)/ initial_cost * 100):.2f}%")
-    schedule = state['scheduled']
-    validated = validate_schedule(schedule, instance)
-    if not validated:
-        raise ValueError("Schedule not valid")
-    for entry in schedule:
-        r = entry['request']
-        chain = f" (chained from req {entry['chained_from']['request'].id})" if entry['chained_from'] else ""
-        print(f"req={r.id} type={r.machine_type} loc={r.location_id} "
-              f"delivery={entry['delivery_day']} pickup={entry['pickup_day']}{chain}")
-    
+    if not validate_schedule(state['scheduled'], instance):
+        raise ValueError("Initial schedule is not valid")
+    initial_bd = cost_breakdown(state, instance)
 
-def print_instance(instance: Instance) -> None:
-    print(f"Dataset: {instance.dataset}")
-    print(f"Name: {instance.name}")
+    print(f"\n{'='*60}")
+    print("  INITIAL SCHEDULE")
+    print(f"{'='*60}")
+    print_cost(initial_bd)
+    print_load_distribution(state, instance)
     print()
+    print_analysis(state, instance)
 
-    print("=== Config ===")
-    for k, v in vars(instance.config).items():
-        print(f"  {k}: {v}")
+    # --- LNS ---
+    print(f"\n{'='*60}")
+    print("  LNS OPTIMISATION")
+    print(f"{'='*60}")
+    optimize_initial(state, instance, iterations=args.iterations, patience=args.patience)
+    best_bd = cost_breakdown(state, instance)
+
+    print(f"\n{'='*60}")
+    print("  FINAL SCHEDULE")
+    print(f"{'='*60}")
+    print_cost(best_bd)
+    print_load_distribution(state, instance)
     print()
+    print_analysis(state, instance)
 
-    print(f"=== Depot ===")
-    print(f"  {instance.depot}")
-    print()
+    # --- summary ---
+    print(f"\n{'='*60}")
+    print("  SUMMARY")
+    print(f"{'='*60}")
+    print_cost(initial_bd, label='Initial')
+    print_cost(best_bd,    label='Best   ')
+    pct = (initial_bd['total'] - best_bd['total']) / initial_bd['total'] * 100
+    print(f"LNS improved by {pct:.1f}%")
 
-    print(f"=== Tools ({len(instance.tools)}) ===")
-    for tool in instance.tools:
-        print(f"  {tool}")
-    print()
-
-    print(f"=== Coordinates ({len(instance.coordinates)}) ===")
-    for i, coord in enumerate(instance.coordinates):
-        print(f"  {i}: {coord}")
-    print()
-
-    print(f"=== Requests ({len(instance.requests)}) ===")
-    for req in instance.requests:
-        print(f"  {req}")
-    print()
-
-    print(f"=== Distance matrix ===")
-    for row in instance.distance:
-        print(row)
 
 if __name__ == "__main__":
     main()
