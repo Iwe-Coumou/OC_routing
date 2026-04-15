@@ -37,28 +37,6 @@ def _best_delivery_day(state: dict, instance: Instance, request: Request) -> int
     return best_day
 
 
-def _register_implicit_chains(state: dict) -> None:
-    """After scheduling, record implicit chains where one entry's pickup_day
-    matches another's delivery_day for the same tool type.
-
-    This lets the LNS destroy_chain operator and repair's pool tracking
-    work correctly on minload schedules.
-    """
-    pickup_index = {}
-    for e in state['scheduled']:
-        key = (e['request'].machine_type, e['pickup_day'])
-        pickup_index[key] = e
-
-    for e in state['scheduled']:
-        r = e['request']
-        source = pickup_index.get((r.machine_type, e['delivery_day']))
-        if source and source is not e:
-            e['chained_from'] = source
-            consumed = min(state['pool'][r.machine_type][e['delivery_day']], r.num_machines)
-            e['pool_consumed'] = consumed
-            state['pool'][r.machine_type][e['delivery_day']] -= consumed
-            log.debug(f"IMPLICIT_CHAIN req={r.id} chained_from=req{source['request'].id} day={e['delivery_day']}")
-
 
 def repair(state: dict, instance: Instance) -> None:
     """Re-schedule all unscheduled requests using minload scoring.
@@ -112,5 +90,4 @@ def build_schedule(instance: Instance) -> dict:
             log.debug(f"MINLOAD req={request.id} has no feasible day at all, leaving unscheduled")
             state['unscheduled'][request.machine_type].remove(request)
 
-    _register_implicit_chains(state)
     return state

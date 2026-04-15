@@ -6,11 +6,6 @@ from .cost import estimate_vehicles_and_distance
 def tasks_by_day(state: dict, instance: Instance) -> dict:
     """Return per-day task lists. Each task is a dict with type, location, load, request_id."""
     tool_by_type = {t.id: t for t in instance.tools}
-    chained_parent_ids = {
-        e['chained_from']['request'].id
-        for e in state['scheduled']
-        if e['chained_from'] is not None
-    }
     result = defaultdict(list)
     for e in state['scheduled']:
         req = e['request']
@@ -19,19 +14,12 @@ def tasks_by_day(state: dict, instance: Instance) -> dict:
             'type': 'delivery', 'request_id': req.id,
             'location': req.location_id, 'load': load,
         })
-        if req.id not in chained_parent_ids:
-            result[e['pickup_day']].append({
-                'type': 'pickup', 'request_id': req.id,
-                'location': req.location_id, 'load': load,
-            })
+        result[e['pickup_day']].append({
+            'type': 'pickup', 'request_id': req.id,
+            'location': req.location_id, 'load': load,
+        })
     return result
 
-
-def chaining_stats(state: dict) -> dict:
-    """Return counts of chained vs standalone scheduled requests."""
-    chained    = sum(1 for e in state['scheduled'] if e['chained_from'] is not None)
-    standalone = len(state['scheduled']) - chained
-    return {'chained': chained, 'standalone': standalone, 'total': len(state['scheduled'])}
 
 
 def tool_peak_usage(state: dict, instance: Instance) -> dict:
@@ -46,11 +34,6 @@ def tool_peak_usage(state: dict, instance: Instance) -> dict:
         result[t.id] = {'peak': peak, 'available': t.num_available, 'size': t.size, 'cost': t.cost}
     return result
 
-
-def print_chaining_stats(state: dict) -> None:
-    s = chaining_stats(state)
-    pct = s['chained'] / s['total'] * 100 if s['total'] else 0
-    print(f"Requests: {s['total']}  |  chained: {s['chained']} ({pct:.0f}%)  |  standalone: {s['standalone']}")
 
 
 def print_daily_breakdown(state: dict, instance: Instance) -> None:
@@ -105,10 +88,7 @@ def print_analysis(state: dict, instance: Instance) -> None:
     print(f"=== Schedule Analysis: {instance.name} ===")
     print(f"Horizon: {instance.config.days} days  |  Capacity: {instance.config.capacity}  |  Tools: {len(instance.tools)} types\n")
 
-    print("--- Chaining ---")
-    print_chaining_stats(state)
-
-    print("\n--- Tool usage ---")
+    print("--- Tool usage ---")
     print_tool_usage(state, instance)
 
     print("\n--- Daily breakdown ---")

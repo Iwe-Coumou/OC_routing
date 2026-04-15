@@ -28,12 +28,6 @@ def estimate_vehicles_and_distance(state: dict, instance: Instance) -> tuple[dic
     """Return (vehicles_per_day, total_distance_score) estimated without actual routes."""
     tool_by_type = {t.id: t for t in instance.tools}
 
-    chained_parent_ids = {
-        e['chained_from']['request'].id
-        for e in state['scheduled']
-        if e['chained_from'] is not None
-    }
-
     load_per_day = defaultdict(int)
     locs_per_day = defaultdict(set)
 
@@ -48,8 +42,7 @@ def estimate_vehicles_and_distance(state: dict, instance: Instance) -> tuple[dic
         locs_per_day[p_day].add(loc)
 
         load_per_day[d_day] += load
-        if req.id not in chained_parent_ids:
-            load_per_day[p_day] += load
+        load_per_day[p_day] += load
 
     cap = instance.config.capacity
     vehicles_per_day = {d: math.ceil(load / cap) for d, load in load_per_day.items()}
@@ -81,7 +74,7 @@ def cost_breakdown(state: dict, instance: Instance) -> dict:
     }
 
 
-def compute_cost(state: dict, instance: Instance) -> float:
+def compute_cost_estimate(state: dict, instance: Instance) -> float:
     """Total estimated cost."""
     return cost_breakdown(state, instance)['total']
 

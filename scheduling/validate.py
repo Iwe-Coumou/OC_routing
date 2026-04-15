@@ -28,10 +28,6 @@ def validate_schedule(scheduled: list, instance: Instance) -> bool:
             print(f"FAIL: req={r.id} pickup_day={p} exceeds horizon {instance.config.days}")
             valid = False
 
-        if entry['chained_from'] and entry['chained_from']['pickup_day'] != d:
-            print(f"FAIL: req={r.id} delivery_day={d} != chained source pickup_day={entry['chained_from']['pickup_day']}")
-            valid = False
-
     tool_by_type = {t.id: t for t in instance.tools}
     loans = defaultdict(lambda: [0] * (instance.config.days + 2))
     for entry in scheduled:
