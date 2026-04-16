@@ -9,11 +9,14 @@ log = logging.getLogger(__name__)
 def build_state(instance: Instance) -> dict:
     state_dict = dict()
 
-    pool = defaultdict(lambda: defaultdict(int))
-    state_dict['pool'] = pool
-
     loans = defaultdict(lambda: [0] * (instance.config.days + 2))
     state_dict['loans'] = loans
+
+    # Per-day pickup counts per machine type.  Kept separately so is_feasible()
+    # can check the within-day peak (after deliveries, before pickups), which is
+    # what Validate._calculateSolution measures.
+    pickups_per_day = defaultdict(lambda: [0] * (instance.config.days + 2))
+    state_dict['pickups_per_day'] = pickups_per_day
 
     stops_per_day = defaultdict(int)
     state_dict['stops_per_day'] = stops_per_day
@@ -29,12 +32,6 @@ def build_state(instance: Instance) -> dict:
 
 
 def print_state(state: dict) -> None:
-    print("=== POOL ===")
-    for machine_type, days in state['pool'].items():
-        for day, count in sorted(days.items()):
-            if count > 0:
-                print(f"  type={machine_type} day={day}: {count} units")
-
     print("=== STOPS PER DAY ===")
     for day, count in sorted(state['stops_per_day'].items()):
         print(f"  day={day}: {count} stops")
@@ -60,11 +57,23 @@ def is_feasible(state, instance, request, delivery_day, pickup_day) -> bool:
         log.debug(f"INFEASIBLE req={request.id} pickup_day={pickup_day} > days={instance.config.days}")
         return False
 
-    current_loans = sum(state['loans'][request.machine_type][:delivery_day + 1])
     tool = next(t for t in instance.tools if t.id == request.machine_type)
-    if current_loans + request.num_machines > tool.num_available:
-        log.debug(f"INFEASIBLE req={request.id} loans exceed available: current={current_loans} + needed={request.num_machines} > available={tool.num_available}")
-        return False
+    diff = state['loans'][request.machine_type]
+    pickups = state['pickups_per_day'][request.machine_type]
+    running = 0
+    # Loop includes pickup_day: on that day the request's tools are still at
+    # the customer before the vehicle arrives (morning peak).
+    for day in range(pickup_day + 1):
+        running += diff[day]
+        if day >= delivery_day:
+            # Within-day peak: running is end-of-day net (pickups subtracted),
+            # so adding pickups[day] back gives the before-pickup count.
+            # The new request's machines are at customers from delivery_day
+            # through (and including) pickup_day.
+            peak = running + pickups[day] + request.num_machines
+            if peak > tool.num_available:
+                log.debug(f"INFEASIBLE req={request.id} peak on day={day}: {peak} > available={tool.num_available}")
+                return False
 
     return True
 
@@ -74,10 +83,9 @@ def commit_request(state: dict, instance: Instance, request: Request, delivery_d
     if not is_feasible(state, instance, request, delivery_day, pickup_day):
         raise ValueError(f"Commiting request ({request.id}) on day {delivery_day} is not feasible")
 
-    state['pool'][request.machine_type][pickup_day] += request.num_machines
-
     state['loans'][request.machine_type][delivery_day] += request.num_machines
     state['loans'][request.machine_type][pickup_day] -= request.num_machines
+    state['pickups_per_day'][request.machine_type][pickup_day] += request.num_machines
 
     state['stops_per_day'][delivery_day] += 1
     state['stops_per_day'][pickup_day] += 1
@@ -100,10 +108,9 @@ def uncommit_request(state: dict, request: Request) -> None:
     delivery_day = entry['delivery_day']
     pickup_day = entry['pickup_day']
 
-    state['pool'][request.machine_type][pickup_day] -= request.num_machines
-
     state['loans'][request.machine_type][delivery_day] -= request.num_machines
     state['loans'][request.machine_type][pickup_day] += request.num_machines
+    state['pickups_per_day'][request.machine_type][pickup_day] -= request.num_machines
 
     state['stops_per_day'][delivery_day] -= 1
     state['stops_per_day'][pickup_day] -= 1
@@ -128,10 +135,10 @@ def restore(state: dict, instance: Instance, snap: list) -> None:
     avoiding the O(n²) list.remove cost of the naive approach.
     """
     state['scheduled'].clear()
-    state['pool'].clear()
     state['stops_per_day'].clear()
     for v in state['loans'].values():
         v[:] = [0] * len(v)
+    state['pickups_per_day'].clear()
 
     state['unscheduled'].clear()
     for req in sorted(instance.requests, key=lambda r: r.latest):

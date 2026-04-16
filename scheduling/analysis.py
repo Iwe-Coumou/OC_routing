@@ -23,14 +23,18 @@ def tasks_by_day(state: dict, instance: Instance) -> dict:
 
 
 def tool_peak_usage(state: dict, instance: Instance) -> dict:
-    """Return peak concurrent usage per tool type."""
+    """Return peak concurrent usage per tool type.
+
+    Peak = after-deliveries before-pickups, matching Validate._calculateSolution.
+    """
     result = {}
     for t in instance.tools:
-        diff = state['loans'].get(t.id, [0] * (instance.config.days + 2))
+        diff    = state['loans'].get(t.id, [0] * (instance.config.days + 2))
+        pickups = state['pickups_per_day'].get(t.id, [0] * (instance.config.days + 2))
         peak, current = 0, 0
-        for delta in diff:
+        for day, delta in enumerate(diff):
             current += delta
-            peak = max(peak, current)
+            peak = max(peak, current + pickups[day])
         result[t.id] = {'peak': peak, 'available': t.num_available, 'size': t.size, 'cost': t.cost}
     return result
 
@@ -63,12 +67,13 @@ def print_tool_usage(state: dict, instance: Instance) -> None:
 def print_load_distribution(state: dict, instance: Instance, bar_width: int = 40) -> None:
     """For each tool type, print concurrent loan count per day as a bar chart."""
     for t in instance.tools:
-        diff = state['loans'].get(t.id, [0] * (instance.config.days + 2))
+        diff    = state['loans'].get(t.id, [0] * (instance.config.days + 2))
+        pickups = state['pickups_per_day'].get(t.id, [0] * (instance.config.days + 2))
         concurrent = []
         current = 0
         for d in range(1, instance.config.days + 1):
             current += diff[d]
-            concurrent.append(current)
+            concurrent.append(current + pickups[d])
 
         peak = max(concurrent, default=0)
         if peak == 0:

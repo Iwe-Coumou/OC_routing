@@ -1,5 +1,8 @@
+import logging
 from collections import defaultdict
 from instance import Instance
+
+log = logging.getLogger(__name__)
 
 
 def validate_schedule(scheduled: list, instance: Instance) -> bool:
@@ -30,20 +33,26 @@ def validate_schedule(scheduled: list, instance: Instance) -> bool:
 
     tool_by_type = {t.id: t for t in instance.tools}
     loans = defaultdict(lambda: [0] * (instance.config.days + 2))
+    pickups = defaultdict(lambda: [0] * (instance.config.days + 2))
     for entry in scheduled:
         r = entry['request']
         loans[r.machine_type][entry['delivery_day']] += r.num_machines
         loans[r.machine_type][entry['pickup_day']]   -= r.num_machines
+        pickups[r.machine_type][entry['pickup_day']] += r.num_machines
 
     for machine_type, diff in loans.items():
         current = 0
+        limit = tool_by_type[machine_type].num_available
         for day, delta in enumerate(diff):
             current += delta
-            limit = tool_by_type[machine_type].num_available
-            if current > limit:
-                print(f"FAIL: type={machine_type} day={day} concurrent use={current} exceeds available={limit}")
+            # Check within-day peak: after deliveries, before pickups.
+            # current is the end-of-day net; adding pickups[day] back gives
+            # the before-pickup count, matching Validate._calculateSolution.
+            peak = current + pickups[machine_type][day]
+            if peak > limit:
+                print(f"FAIL: type={machine_type} day={day} peak use={peak} exceeds available={limit}")
                 valid = False
 
     if valid:
-        print("OK: schedule is valid")
+        log.debug("OK: schedule is valid")
     return valid

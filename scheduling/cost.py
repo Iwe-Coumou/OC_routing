@@ -4,15 +4,20 @@ from instance import Instance
 
 
 def compute_tool_cost(state: dict, instance: Instance) -> int:
-    """Peak concurrent tool usage across the horizon, multiplied by per-tool cost."""
+    """Peak concurrent tool usage across the horizon, multiplied by per-tool cost.
+
+    Peak is measured after deliveries but before pickups on each day, matching
+    Validate._calculateSolution (worst-case: no same-day same-vehicle transfers).
+    """
     tool_by_type = {t.id: t for t in instance.tools}
     tool_cost = 0
     for machine_type, diff in state['loans'].items():
+        pickups = state['pickups_per_day'][machine_type]
         peak = 0
         current = 0
-        for delta in diff:
+        for day, delta in enumerate(diff):
             current += delta
-            peak = max(peak, current)
+            peak = max(peak, current + pickups[day])
         tool_cost += peak * tool_by_type[machine_type].cost
     return tool_cost
 
@@ -77,6 +82,44 @@ def cost_breakdown(state: dict, instance: Instance) -> dict:
 def compute_cost_estimate(state: dict, instance: Instance) -> float:
     """Total estimated cost."""
     return cost_breakdown(state, instance)['total']
+
+
+def routed_cost_breakdown(state: dict, route_set: dict, instance: Instance) -> dict:
+    """Exact cost breakdown using actual routed distances.
+
+    Replaces the naive distance estimate in cost_breakdown() with the true
+    distances from solved vehicle routes. Tool cost is unchanged — it depends
+    only on the schedule, not the routes.
+
+    Args:
+        state:     Schedule state (for tool cost via loans).
+        route_set: RouteSet from routing.solve_routing() —
+                   dict[int, list[VehicleRoute]].
+        instance:  Problem instance.
+
+    Returns:
+        Same dict structure as cost_breakdown(), compatible with print_cost().
+    """
+    tool_cost = compute_tool_cost(state, instance)
+
+    max_vehicles       = max((len(routes) for routes in route_set.values()), default=0)
+    total_vehicle_days = sum(len(routes) for routes in route_set.values())
+    total_distance     = sum(r.distance for routes in route_set.values() for r in routes)
+
+    vehicle_cost   = instance.config.vehicle_cost     * max_vehicles
+    vehicle_d_cost = instance.config.vehicle_day_cost * total_vehicle_days
+    distance_cost  = instance.config.distance_cost    * total_distance
+    total          = tool_cost + vehicle_cost + vehicle_d_cost + distance_cost
+
+    return {
+        'tool':               tool_cost,
+        'vehicle':            vehicle_cost,
+        'vehicle_days':       vehicle_d_cost,
+        'distance':           distance_cost,
+        'total':              total,
+        'max_vehicles':       max_vehicles,
+        'vehicle_days_count': total_vehicle_days,
+    }
 
 
 def print_cost(breakdown: dict, label: str = '') -> None:

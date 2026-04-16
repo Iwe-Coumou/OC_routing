@@ -2,7 +2,7 @@ import random
 from tqdm import tqdm
 from .state import uncommit_request, snapshot, restore
 from .cost import compute_cost_estimate
-from .greedy_minload import repair
+from .greedy_mcf import place_unscheduled
 
 
 def destroy_random(state, fraction=0.2):
@@ -81,7 +81,7 @@ def optimize_initial(state, instance, iterations=500, patience=500):
         for req in seed_reqs:
             uncommit_request(state, req)
 
-        repair(state, instance)
+        place_unscheduled(state, instance)
         cost = compute_cost_estimate(state, instance)
 
         if cost < best_cost:
