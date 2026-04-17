@@ -79,9 +79,17 @@ def cost_breakdown(state: dict, instance: Instance) -> dict:
     }
 
 
+_UNSCHEDULED_PENALTY = 1_000_000  # per unscheduled request
+
+
 def compute_cost_estimate(state: dict, instance: Instance) -> float:
-    """Total estimated cost."""
-    return cost_breakdown(state, instance)['total']
+    """Total estimated cost, plus a large penalty for any unscheduled requests.
+
+    The penalty ensures LNS never accepts a state where repair failed to place
+    all requests, even if the partial schedule has lower raw cost.
+    """
+    unscheduled = sum(len(v) for v in state['unscheduled'].values())
+    return cost_breakdown(state, instance)['total'] + unscheduled * _UNSCHEDULED_PENALTY
 
 
 def routed_cost_breakdown(state: dict, route_set: dict, instance: Instance) -> dict:

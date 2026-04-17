@@ -2,7 +2,7 @@ import random
 from tqdm import tqdm
 from .state import uncommit_request, snapshot, restore
 from .cost import compute_cost_estimate
-from .greedy_mcf import place_unscheduled
+from .greedy_edd import place_unscheduled
 
 
 def destroy_random(state, fraction=0.2):

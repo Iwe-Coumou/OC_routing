@@ -9,7 +9,7 @@ from .cost import (
     cost_breakdown, compute_cost_estimate, print_cost,
     routed_cost_breakdown,
 )
-from .greedy_mcf import build_schedule
+from .greedy_edd import build_schedule
 from .lns import optimize_initial
 from .validate import validate_schedule
 from .analysis import print_analysis

@@ -2,7 +2,7 @@ import argparse
 import logging
 import os
 from instance import Instance
-from scheduling import build_schedule, optimize_initial, cost_breakdown, print_cost, validate_schedule
+from scheduling import build_schedule, cost_breakdown, print_cost, validate_schedule
 from scheduling.analysis import print_analysis, print_load_distribution
 from routing import solve_routing, write_solution, cost_from_routes
 
@@ -25,23 +25,17 @@ def valid_txt(value: str) -> str:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("instance", help="txt file of the instance to be used.", type=valid_txt)
-    parser.add_argument("--iterations",  type=int, default=2500)
-    parser.add_argument("--patience",    type=int, default=750)
     args = parser.parse_args()
 
     instance = Instance(args.instance)
 
-    # --- schedule + LNS ---
+    # --- initial schedule ---
     state = build_schedule(instance)
     if not validate_schedule(state['scheduled'], instance):
         raise ValueError("Initial schedule is not valid")
-    optimize_initial(state, instance, iterations=args.iterations, patience=args.patience)
-
-    if not validate_schedule(state['scheduled'], instance):
-        raise ValueError("LNS produced an invalid schedule")
 
     print(f"\n{'='*60}")
-    print("  OPTIMISED SCHEDULE")
+    print("  INITIAL SCHEDULE")
     print(f"{'='*60}")
     print_cost(cost_breakdown(state, instance))
     print_load_distribution(state, instance)
