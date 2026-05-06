@@ -6,7 +6,7 @@ given and calculated values always agree.
 """
 
 from instance import Instance
-from .routes import VehicleRoute
+from .routes import VehicleRoute, Stop
 
 
 # ---------------------------------------------------------------------------
@@ -191,6 +191,88 @@ def cost_from_routes(route_set: dict, instance: Instance) -> dict:
 # ---------------------------------------------------------------------------
 # File writer
 # ---------------------------------------------------------------------------
+
+def read_solution(path: str, instance: Instance) -> tuple[dict, dict]:
+    """Parse a saved VeRoLog solution file and reconstruct (state, route_set).
+
+    Reads the format written by write_solution(). Returns a fully committed
+    scheduling state and a RouteSet, ready to use as a warm start for route_lns().
+    Uses a local import of scheduling.state to avoid circular imports at module level.
+    """
+    from scheduling.state import build_state, commit_request
+
+    req_by_id = {r.id: r for r in instance.requests}
+    tool_by_type = {t.id: t for t in instance.tools}
+
+    delivery_days: dict[int, int] = {}   # req_id -> delivery_day
+    route_set: dict[int, list] = {}
+
+    current_day = None
+    veh_stops: dict[int, list] = {}
+    veh_dist: dict[int, int] = {}
+
+    def _finalise_day():
+        if current_day is None:
+            return
+        routes = []
+        for vnum in sorted(veh_stops):
+            stops = veh_stops[vnum]
+            if stops:
+                routes.append(VehicleRoute(
+                    vehicle_id=vnum,
+                    stops=stops,
+                    distance=veh_dist.get(vnum, 0),
+                ))
+        route_set[current_day] = routes
+
+    with open(path) as fh:
+        for raw in fh:
+            line = raw.rstrip('\n')
+            if line.startswith('DAY ='):
+                _finalise_day()
+                current_day = int(line.split('=', 1)[1].strip())
+                veh_stops = {}
+                veh_dist = {}
+            elif '\tR\t' in line:
+                parts = line.split('\t')
+                vnum = int(parts[0])
+                # format: vnum  R  0  [+delivery_id / -pickup_id ...]  0
+                tokens = parts[3:-1]
+                stops = []
+                for tok in tokens:
+                    rid = int(tok)
+                    if rid > 0:
+                        req = req_by_id[rid]
+                        delivery_days[rid] = current_day
+                        stops.append(Stop(
+                            request_id=rid,
+                            action='delivery',
+                            location_id=req.location_id,
+                            load=req.num_machines * tool_by_type[req.machine_type].size,
+                            machine_type=req.machine_type,
+                        ))
+                    elif rid < 0:
+                        req = req_by_id[-rid]
+                        stops.append(Stop(
+                            request_id=-rid,
+                            action='pickup',
+                            location_id=req.location_id,
+                            load=req.num_machines * tool_by_type[req.machine_type].size,
+                            machine_type=req.machine_type,
+                        ))
+                veh_stops[vnum] = stops
+            elif '\tD\t' in line:
+                parts = line.split('\t')
+                veh_dist[int(parts[0])] = int(parts[2])
+
+    _finalise_day()
+
+    state = build_state(instance)
+    for req_id, day in delivery_days.items():
+        commit_request(state, instance, req_by_id[req_id], day)
+
+    return state, route_set
+
 
 def write_solution(route_set: dict, instance: Instance, output_path: str) -> None:
     """Write a VeRoLog-format solution file.

@@ -22,11 +22,22 @@ def compute_tool_cost(state: dict, instance: Instance) -> int:
     return tool_cost
 
 
-def day_distance_score(locs: list[int], instance: Instance) -> float:
-    """Naive distance proxy for a set of locations on one day: mean distance to depot."""
-    if not locs:
+def day_tour_estimate(locs: list[int], instance: Instance) -> float:
+    """Nearest-neighbour TSP approximation: depot → all unique locations → depot.
+
+    Much closer to actual routing cost than mean-distance-to-depot, at O(n²)
+    per day (n ≤ ~80 stops in practice — acceptable for a scheduling proxy).
+    """
+    unvisited = list(dict.fromkeys(locs))  # deduplicate, preserve order
+    if not unvisited:
         return 0.0
-    return sum(instance.get_distance_from_depot(l) for l in locs) / len(locs)
+    tour, current = 0, 0  # start at depot (location id 0)
+    while unvisited:
+        nearest = min(unvisited, key=lambda loc: instance.get_distance(current, loc))
+        tour += instance.get_distance(current, nearest)
+        current = nearest
+        unvisited.remove(nearest)
+    return float(tour + instance.get_distance(current, 0))  # return to depot
 
 
 def estimate_vehicles_and_distance(state: dict, instance: Instance) -> tuple[dict, float]:
@@ -34,7 +45,7 @@ def estimate_vehicles_and_distance(state: dict, instance: Instance) -> tuple[dic
     tool_by_type = {t.id: t for t in instance.tools}
 
     load_per_day = defaultdict(int)
-    locs_per_day = defaultdict(set)
+    locs_per_day = defaultdict(list)
 
     for e in state['scheduled']:
         req = e['request']
@@ -43,15 +54,15 @@ def estimate_vehicles_and_distance(state: dict, instance: Instance) -> tuple[dic
         p_day = e['pickup_day']
         loc = req.location_id
 
-        locs_per_day[d_day].add(loc)
-        locs_per_day[p_day].add(loc)
+        locs_per_day[d_day].append(loc)
+        locs_per_day[p_day].append(loc)
 
         load_per_day[d_day] += load
         load_per_day[p_day] += load
 
     cap = instance.config.capacity
     vehicles_per_day = {d: math.ceil(load / cap) for d, load in load_per_day.items()}
-    total_distance = sum(day_distance_score(list(locs_per_day[d]), instance) for d in vehicles_per_day)
+    total_distance = sum(day_tour_estimate(locs_per_day[d], instance) for d in vehicles_per_day)
     return vehicles_per_day, total_distance
 
 

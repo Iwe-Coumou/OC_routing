@@ -101,10 +101,11 @@ def commit_request(state: dict, instance: Instance, request: Request, delivery_d
 
 
 def uncommit_request(state: dict, request: Request) -> None:
-    entry = next((e for e in state['scheduled'] if e['request'] is request), None)
-    if entry is None:
+    idx = next((i for i, e in enumerate(state['scheduled']) if e['request'] is request), None)
+    if idx is None:
         raise ValueError(f"Request ({request.id}) is not scheduled, cannot uncommit")
 
+    entry = state['scheduled'][idx]
     delivery_day = entry['delivery_day']
     pickup_day = entry['pickup_day']
 
@@ -115,7 +116,7 @@ def uncommit_request(state: dict, request: Request) -> None:
     state['stops_per_day'][delivery_day] -= 1
     state['stops_per_day'][pickup_day] -= 1
 
-    state['scheduled'].remove(entry)
+    del state['scheduled'][idx]
 
     # re-insert into unscheduled preserving latest-ascending order
     reqs = state['unscheduled'][request.machine_type]

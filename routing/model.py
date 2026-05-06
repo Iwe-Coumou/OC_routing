@@ -20,7 +20,8 @@ def _compute_route_distance(stops: list, instance: Instance) -> int:
 
 
 def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
-                     time_limit_seconds: int, fast: bool):
+                     time_limit_seconds: int, fast: bool,
+                     initial_routes: list = None):
     """Build and solve an OR-Tools CVRP model for one day.
 
     Returns list[VehicleRoute] on success, None if OR-Tools finds no solution.
@@ -30,20 +31,21 @@ def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
     manager = pywrapcp.RoutingIndexManager(num_nodes, num_vehicles, 0)
     routing = pywrapcp.RoutingModel(manager)
 
-    def _loc(node):
-        return 0 if node == 0 else stops[node - 1].location_id
+    # Precompute distance matrices once (avoids n² Python→C++ callbacks per solve).
+    loc_ids = [0] + [s.location_id for s in stops]
+    n = len(loc_ids)
+    d_cost = instance.config.distance_cost
+    scaled_matrix = [
+        [instance.get_distance(loc_ids[i], loc_ids[j]) * d_cost for j in range(n)]
+        for i in range(n)
+    ]
+    raw_matrix = [
+        [instance.get_distance(loc_ids[i], loc_ids[j]) for j in range(n)]
+        for i in range(n)
+    ]
 
-    def scaled_distance_callback(from_index, to_index):
-        return (instance.get_distance(_loc(manager.IndexToNode(from_index)),
-                                      _loc(manager.IndexToNode(to_index)))
-                * instance.config.distance_cost)
-
-    def raw_distance_callback(from_index, to_index):
-        return instance.get_distance(_loc(manager.IndexToNode(from_index)),
-                                     _loc(manager.IndexToNode(to_index)))
-
-    scaled_transit_index = routing.RegisterTransitCallback(scaled_distance_callback)
-    raw_transit_index    = routing.RegisterTransitCallback(raw_distance_callback)
+    scaled_transit_index = routing.RegisterTransitMatrix(scaled_matrix)
+    raw_transit_index    = routing.RegisterTransitMatrix(raw_matrix)
 
     routing.SetArcCostEvaluatorOfAllVehicles(scaled_transit_index)
     routing.SetFixedCostOfAllVehicles(instance.config.vehicle_day_cost)
@@ -88,16 +90,41 @@ def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
     )
 
     search_params = pywrapcp.DefaultRoutingSearchParameters()
-    search_params.first_solution_strategy = (
-        routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
-    )
-    if not fast:
+    if fast:
+        search_params.first_solution_strategy = (
+            routing_enums_pb2.FirstSolutionStrategy.SAVINGS
+        )
+    else:
+        # Better initial solution → GLS converges faster
+        search_params.first_solution_strategy = (
+            routing_enums_pb2.FirstSolutionStrategy.PARALLEL_CHEAPEST_INSERTION
+        )
         search_params.local_search_metaheuristic = (
             routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
         )
+        search_params.guided_local_search_lambda_coefficient = 0.1
         search_params.time_limit.seconds = time_limit_seconds
 
-    solution = routing.SolveWithParameters(search_params)
+    # Warm-start GLS from a previously known good solution (fast=False only).
+    if initial_routes and not fast:
+        stop_to_node = {(s.request_id, s.action): i + 1 for i, s in enumerate(stops)}
+        routes_as_nodes = []
+        for route in initial_routes:
+            nodes = [stop_to_node[k]
+                     for stop in route.stops
+                     if (k := (stop.request_id, stop.action)) in stop_to_node]
+            routes_as_nodes.append(nodes)
+        while len(routes_as_nodes) < num_vehicles:
+            routes_as_nodes.append([])
+        try:
+            hint = routing.ReadAssignmentFromRoutes(routes_as_nodes, True)
+            solution = routing.SolveFromAssignmentWithParameters(hint, search_params) if hint else \
+                       routing.SolveWithParameters(search_params)
+        except Exception:
+            solution = routing.SolveWithParameters(search_params)
+    else:
+        solution = routing.SolveWithParameters(search_params)
+
     if solution is None:
         return None
 
@@ -123,6 +150,7 @@ def solve_day(
     instance: Instance,
     time_limit_seconds: int = 30,
     fast: bool = False,
+    initial_routes: list = None,
 ) -> list:
     """Solve CVRP for a single day.
 
@@ -136,6 +164,7 @@ def solve_day(
         instance: Problem instance.
         time_limit_seconds: OR-Tools solver time budget per day (ignored when fast=True).
         fast: If True, use PATH_CHEAPEST_ARC only — completes in seconds per day.
+        initial_routes: Optional list[VehicleRoute] to warm-start GLS (ignored when fast=True).
 
     Returns:
         list[VehicleRoute] — only non-empty routes included.
@@ -145,145 +174,20 @@ def solve_day(
 
     capacity = instance.config.capacity
 
-    # Tight fleet bound: need at least enough vehicles to carry all deliveries
-    # (start full) or all pickups (end full) — whichever direction binds.
     delivery_load = sum(s.load for s in stops if s.action == 'delivery')
     pickup_load   = sum(s.load for s in stops if s.action == 'pickup')
     min_cap = max(1, math.ceil(max(delivery_load, pickup_load) / capacity))
-    # Buffer for distance-constraint splits and routing complexity.
     tight_n = min(len(stops), max(min_cap + 3, min_cap * 2))
 
-    result = _build_and_solve(stops, instance, tight_n, time_limit_seconds, fast)
+    # Ensure the model has enough vehicles to accommodate the warm-start hint.
+    if initial_routes and len(initial_routes) > tight_n:
+        tight_n = min(len(stops), len(initial_routes))
+
+    result = _build_and_solve(stops, instance, tight_n, time_limit_seconds, fast, initial_routes)
     if result is None and tight_n < len(stops):
-        # Tight bound was infeasible — retry with full fleet
         result = _build_and_solve(stops, instance, len(stops), time_limit_seconds, fast)
 
     return result or []
-
-    # Node 0 = depot, nodes 1..k = stops
-    num_nodes = len(stops) + 1
-    manager = pywrapcp.RoutingIndexManager(num_nodes, num_vehicles, 0)
-    routing = pywrapcp.RoutingModel(manager)
-
-    # Two distance callbacks: one scaled for the objective (monetary units),
-    # one unscaled for the max_trip_distance constraint (raw distance units).
-    def _loc(node):
-        return 0 if node == 0 else stops[node - 1].location_id
-
-    def scaled_distance_callback(from_index, to_index):
-        return (instance.get_distance(_loc(manager.IndexToNode(from_index)),
-                                      _loc(manager.IndexToNode(to_index)))
-                * instance.config.distance_cost)
-
-    def raw_distance_callback(from_index, to_index):
-        return instance.get_distance(_loc(manager.IndexToNode(from_index)),
-                                     _loc(manager.IndexToNode(to_index)))
-
-    scaled_transit_index = routing.RegisterTransitCallback(scaled_distance_callback)
-    raw_transit_index    = routing.RegisterTransitCallback(raw_distance_callback)
-
-    routing.SetArcCostEvaluatorOfAllVehicles(scaled_transit_index)
-
-    # Fixed cost per vehicle used: vehicle_day_cost (cost of running a route).
-    # OR-Tools only pays this for vehicles that serve at least one stop.
-    routing.SetFixedCostOfAllVehicles(instance.config.vehicle_day_cost)
-
-    # Per-type capacity dimensions.
-    #
-    # A single "net load" dimension fails for mixed-type routes because a
-    # pickup of type A can cancel a delivery of type B in the cumulative,
-    # even though both types are physically on the vehicle simultaneously.
-    # Instead we give each tool type its own dimension:
-    #   delivery of type t  -> cumul_t decreases (tools dropped off)
-    #   pickup   of type t  -> cumul_t increases (tools collected)
-    #   stop of other type  -> cumul_t unchanged (demand = 0)
-    # fix_start_cumul_to_zero=False: OR-Tools sets each start_cumul_t to the
-    # minimum pre-load of type t needed for the chosen stop ordering.
-    # cumul_t >= 0 enforces "can't deliver type-t tools you don't have".
-    #
-    # The joint constraint  sum(cumul_t)  <= capacity  is then added
-    # explicitly at every node, correctly enforcing that all tool sizes share
-    # the single vehicle capacity regardless of type.
-
-    types_present = {s.machine_type for s in stops}
-    type_dims = {}
-    solver = routing.solver()
-
-    for tool in instance.tools:
-        if tool.id not in types_present:
-            continue
-
-        def make_demand_cb(t):
-            def cb(from_index):
-                node = manager.IndexToNode(from_index)
-                if node == 0:
-                    return 0
-                s = stops[node - 1]
-                if s.machine_type != t:
-                    return 0
-                return -s.load if s.action == 'delivery' else s.load
-            return cb
-
-        cb_idx = routing.RegisterUnaryTransitCallback(make_demand_cb(tool.id))
-        dim_name = f'Cap_{tool.id}'
-        routing.AddDimensionWithVehicleCapacity(
-            cb_idx,
-            0,
-            [capacity] * num_vehicles,
-            False,
-            dim_name,
-        )
-        type_dims[tool.id] = routing.GetDimensionOrDie(dim_name)
-
-    # Joint constraint: physical load across all types must not exceed capacity.
-    all_dims = list(type_dims.values())
-    if len(all_dims) > 1:
-        for node in range(1, num_nodes):
-            idx = manager.NodeToIndex(node)
-            solver.Add(solver.Sum([d.CumulVar(idx) for d in all_dims]) <= capacity)
-        for v in range(num_vehicles):
-            for idx in [routing.Start(v), routing.End(v)]:
-                solver.Add(solver.Sum([d.CumulVar(idx) for d in all_dims]) <= capacity)
-
-    # Max trip distance dimension — uses unscaled distances so the limit is
-    # correctly compared against instance.config.max_trip_distance (raw units).
-    routing.AddDimension(
-        raw_transit_index,
-        0,
-        instance.config.max_trip_distance,
-        True,
-        'Distance',
-    )
-
-    # Search parameters
-    search_params = pywrapcp.DefaultRoutingSearchParameters()
-    search_params.first_solution_strategy = (
-        routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
-    )
-    if not fast:
-        search_params.local_search_metaheuristic = (
-            routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
-        )
-        search_params.time_limit.seconds = time_limit_seconds
-
-    solution = routing.SolveWithParameters(search_params)
-    if solution is None:
-        return []
-
-    vehicle_routes = []
-    for vehicle_id in range(num_vehicles):
-        index = routing.Start(vehicle_id)
-        route_stops = []
-        while not routing.IsEnd(index):
-            node = manager.IndexToNode(index)
-            if node != 0:
-                route_stops.append(stops[node - 1])
-            index = solution.Value(routing.NextVar(index))
-        if route_stops:
-            dist = _compute_route_distance(route_stops, instance)
-            vehicle_routes.append(VehicleRoute(vehicle_id=vehicle_id, stops=route_stops, distance=dist))
-
-    return vehicle_routes
 
 
 def solve_all_days(
@@ -291,26 +195,52 @@ def solve_all_days(
     instance: Instance,
     time_limit_seconds: int = 30,
     fast: bool = False,
+    initial_routes: dict = None,
 ) -> dict:
     """Solve CVRP independently for every day that has stops.
+
+    Uses a ThreadPoolExecutor for parallel solving when fast=True (OR-Tools C++
+    solver releases the GIL during SolveWithParameters). Falls back to sequential
+    for fast=False GLS solves to avoid thread safety concerns.
 
     Args:
         daily_stops: dict[int, list[Stop]] from tasks.build_daily_stops().
         instance: Problem instance.
         time_limit_seconds: Solver time budget per day (ignored when fast=True).
         fast: If True, use PATH_CHEAPEST_ARC only (no GLS, no time limit).
+        initial_routes: Optional RouteSet to warm-start GLS per day (ignored when fast=True).
 
     Returns:
         RouteSet: dict[int, list[VehicleRoute]]
     """
-    route_set = {}
+    import os
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
     days = sorted(daily_stops)
-    with tqdm(days, desc='Routing', unit='day', disable=fast) as bar:
-        for day in bar:
-            stops = daily_stops[day]
-            if not fast:
+    route_set = {}
+
+    if fast:
+        max_workers = min(len(days), os.cpu_count() or 4)
+        futures = {}
+        with ThreadPoolExecutor(max_workers=max_workers) as pool:
+            for day in days:
+                f = pool.submit(solve_day, day, daily_stops[day], instance,
+                                time_limit_seconds, True, None)
+                futures[f] = day
+            for f in as_completed(futures):
+                day = futures[f]
+                routes = f.result()
+                if routes:
+                    route_set[day] = routes
+    else:
+        with tqdm(days, desc='Routing', unit='day', leave=True) as bar:
+            for day in bar:
+                stops = daily_stops[day]
                 bar.set_postfix(day=day, stops=len(stops))
-            routes = solve_day(day, stops, instance, time_limit_seconds, fast=fast)
-            if routes:
-                route_set[day] = routes
+                day_hint = initial_routes.get(day) if initial_routes else None
+                routes = solve_day(day, stops, instance, time_limit_seconds,
+                                   fast=False, initial_routes=day_hint)
+                if routes:
+                    route_set[day] = routes
+
     return route_set

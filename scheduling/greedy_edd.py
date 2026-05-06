@@ -1,4 +1,5 @@
 import logging
+import random
 from instance import Instance, Request
 from .state import build_state, commit_request, is_feasible
 
@@ -13,15 +14,11 @@ def _first_feasible_day(state: dict, instance: Instance, request: Request) -> in
     return None
 
 
-def place_unscheduled(state: dict, instance: Instance) -> None:
+def place_unscheduled(state: dict, instance: Instance, key=None, randomize=False) -> None:
     """Place unscheduled requests into the schedule.
 
-    Ordering: earliest deadline first; among equal deadlines, smallest resource
-    demand (num_machines * duration) first.  Placement: earliest feasible day.
-
-    EDD ensures tight-deadline requests get first pick of capacity.  The
-    small-demand tiebreaker keeps lightweight requests from blocking congested
-    windows before heavy requests have had a chance to be placed.
+    Ordering: earliest deadline first by default; alternate insertion orders can
+    be used during LNS to explore different schedule structures.
 
     Called by build_schedule for initial construction and by LNS after each
     destroy step.  Any request that has no feasible day is left in unscheduled
@@ -29,7 +26,11 @@ def place_unscheduled(state: dict, instance: Instance) -> None:
     never accepts such a state as an improvement.
     """
     requests = [r for reqs in state['unscheduled'].values() for r in reqs]
-    requests.sort(key=lambda r: (r.latest, r.num_machines * r.duration))
+    if randomize:
+        random.shuffle(requests)
+    else:
+        key = key or (lambda r: (r.latest, r.num_machines * r.duration))
+        requests.sort(key=key)
 
     for request in requests:
         day = _first_feasible_day(state, instance, request)

@@ -1,14 +1,15 @@
+import random
 from collections import defaultdict
 from instance import Instance, Request
 
 
-def break_tool_cost(state: dict, instance: Instance, k: int | None = None) -> list[Request]:
-    """Return requests most responsible for peak tool cost.
+def break_tool_cost(state: dict, instance: Instance) -> list[Request]:
+    """Return all requests on loan during the peak tool-cost day.
 
-    Finds the (tool_type, day) pair with the highest weighted concurrent loan count
-    (concurrent_loans * tool_cost_per_unit), then returns the top-k requests on loan
-    during that peak day, scored by their individual tool cost contribution.
-    Tool cost depends only on the schedule, so no route_set is needed.
+    Finds the (tool_type, day) pair with the highest weighted concurrent loan
+    count, then returns every request on loan that day sorted by cost contribution.
+    Returning the full set (not top-k) gives repair maximum freedom to flatten
+    the loan peak.
     """
     tool_by_id = {t.id: t for t in instance.tools}
 
@@ -36,9 +37,7 @@ def break_tool_cost(state: dict, instance: Instance, k: int | None = None) -> li
         and e['delivery_day'] <= peak_day < e['pickup_day']
     ]
     candidates.sort(key=lambda e: e['request'].num_machines * tool.cost, reverse=True)
-
-    k = k if k is not None else len(candidates)
-    return [e['request'] for e in candidates[:k]]
+    return [e['request'] for e in candidates]
 
 
 def _stop_detour(route, stop_idx: int, depot_id: int, instance: Instance) -> int:
@@ -52,12 +51,12 @@ def _stop_detour(route, stop_idx: int, depot_id: int, instance: Instance) -> int
             - instance.get_distance(prev_loc, next_loc))
 
 
-def break_vehicle_cost(state: dict, instance: Instance, route_set: dict,
-                       k: int | None = None) -> list[Request]:
-    """Return requests most responsible for peak vehicle count.
+def break_vehicle_cost(state: dict, instance: Instance, route_set: dict) -> list[Request]:
+    """Return all requests with a stop on the peak vehicle day.
 
-    Uses route_set to identify the day with the most actual vehicles, then returns
-    the top-k requests with a stop on that day, scored by their load contribution.
+    Clears the entire peak day so repair can freely redistribute its requests
+    across other days, enabling structural vehicle-count reduction rather than
+    just marginal load shuffling.
     """
     if not route_set:
         return []
@@ -76,8 +75,7 @@ def break_vehicle_cost(state: dict, instance: Instance, route_set: dict,
 
     candidates = [(load, req_by_id[rid]) for rid, load in seen.items()]
     candidates.sort(key=lambda x: x[0], reverse=True)
-    k = k if k is not None else max(1, len(candidates) // 3)
-    return [req for _, req in candidates[:k]]
+    return [req for _, req in candidates]
 
 
 def break_vehicle_day_cost(state: dict, instance: Instance, route_set: dict,
@@ -138,3 +136,45 @@ def break_distance_cost(state: dict, instance: Instance, route_set: dict,
     scored.sort(key=lambda x: x[0], reverse=True)
     k = k if k is not None else max(1, len(scored) // 5)
     return [req for _, req in scored[:k]]
+
+
+def break_worst_day(state: dict, instance: Instance, route_set: dict) -> list[Request]:
+    """Return all requests with a stop on the highest-distance routing day.
+
+    Clears the entire worst day so repair can freely redistribute its requests,
+    enabling structural route improvements rather than marginal detour reduction.
+    """
+    if not route_set:
+        return []
+
+    worst_day = max(route_set, key=lambda d: sum(r.distance for r in route_set[d]))
+    depot_id = instance.depot_id
+
+    req_detour: dict[int, int] = defaultdict(int)
+    for route in route_set[worst_day]:
+        for i, stop in enumerate(route.stops):
+            req_detour[stop.request_id] += _stop_detour(route, i, depot_id, instance)
+
+    candidates = [
+        e for e in state['scheduled']
+        if e['delivery_day'] == worst_day or e['pickup_day'] == worst_day
+    ]
+    candidates.sort(key=lambda e: req_detour.get(e['request'].id, 0), reverse=True)
+    return [e['request'] for e in candidates]
+
+
+def break_geographic(state: dict, instance: Instance, k: int) -> list[Request]:
+    """Return k requests nearest (by location) to a random seed request.
+
+    Selects a random scheduled request as seed, then returns the k closest
+    scheduled requests by location distance (seed included). Destroying a
+    geographic cluster enables the repair to find better joint routings.
+    """
+    if not state['scheduled']:
+        return []
+    seed_loc = random.choice(state['scheduled'])['request'].location_id
+    candidates = sorted(
+        state['scheduled'],
+        key=lambda e: instance.get_distance(seed_loc, e['request'].location_id),
+    )
+    return [e['request'] for e in candidates[:k]]

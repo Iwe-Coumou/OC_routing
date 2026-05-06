@@ -41,7 +41,27 @@ def _first_feasible_day(state: dict, instance: Instance, req) -> int | None:
     return None
 
 
-def repair_tool_cost(state: dict, instance: Instance, epsilon: float = 0.0) -> None:
+def _cheapest_insertion_cost(loc: int, routes: list, depot_id: int, instance) -> int:
+    """Minimum additional distance to insert loc into any position across all routes on a day."""
+    if not routes:
+        return 2 * instance.get_distance(depot_id, loc)
+    best = float('inf')
+    for route in routes:
+        stops = route.stops
+        n = len(stops)
+        for i in range(n + 1):
+            prev = stops[i - 1].location_id if i > 0 else depot_id
+            nxt = stops[i].location_id if i < n else depot_id
+            cost = (instance.get_distance(prev, loc)
+                    + instance.get_distance(loc, nxt)
+                    - instance.get_distance(prev, nxt))
+            if cost < best:
+                best = cost
+    return max(0, best)
+
+
+def repair_tool_cost(state: dict, instance: Instance, epsilon: float = 0.0,
+                     current_routes: dict | None = None) -> None:
     """Place unscheduled requests to minimise peak concurrent tool loans.
 
     For each request (MRV order), picks the feasible delivery day that minimises the
@@ -75,13 +95,12 @@ def repair_tool_cost(state: dict, instance: Instance, epsilon: float = 0.0) -> N
             suffix_max[i] = max(suffix_max[i + 1], current_peaks[i])
 
         best_day, best_peak = None, float('inf')
+        feasible_days = []
         for d in range(req.earliest, req.latest + 1):
             p = d + req.duration
             if not is_feasible(state, instance, req, d, p):
                 continue
-            if epsilon > 0 and random.random() < epsilon:
-                best_day = d
-                break
+            feasible_days.append(d)
             window_peak = max(current_peaks[d: p + 1]) + req.num_machines
             outside_peak = max(
                 prefix_max[d - 1] if d > 0 else 0,
@@ -91,6 +110,8 @@ def repair_tool_cost(state: dict, instance: Instance, epsilon: float = 0.0) -> N
             if new_peak < best_peak:
                 best_peak = new_peak
                 best_day = d
+        if epsilon > 0 and feasible_days and random.random() < epsilon:
+            best_day = random.choice(feasible_days)
 
         if best_day is None:
             best_day = _first_feasible_day(state, instance, req)
@@ -101,7 +122,8 @@ def repair_tool_cost(state: dict, instance: Instance, epsilon: float = 0.0) -> N
             blocked.add(req.id)
 
 
-def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0) -> None:
+def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0,
+                        current_routes: dict | None = None) -> None:
     """Place unscheduled requests to minimise the peak daily vehicle count.
 
     For each request (MRV order), picks the feasible day where adding this request
@@ -131,14 +153,13 @@ def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0) -
         best_day = None
         best_peak = float('inf')
         best_secondary = float('-inf')
+        feasible_days = []
 
         for d in range(req.earliest, req.latest + 1):
             p = d + req.duration
             if not is_feasible(state, instance, req, d, p):
                 continue
-            if epsilon > 0 and random.random() < epsilon:
-                best_day = d
-                break
+            feasible_days.append(d)
             new_veh_d = math.ceil((load.get(d, 0) + req_load) / cap)
             new_veh_p = math.ceil((load.get(p, 0) + req_load) / cap)
             projected_max = max(current_max, new_veh_d, new_veh_p)
@@ -147,6 +168,8 @@ def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0) -
                 best_peak = projected_max
                 best_secondary = secondary
                 best_day = d
+        if epsilon > 0 and feasible_days and random.random() < epsilon:
+            best_day = random.choice(feasible_days)
 
         if best_day is None:
             best_day = _first_feasible_day(state, instance, req)
@@ -157,7 +180,8 @@ def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0) -
             blocked.add(req.id)
 
 
-def repair_vehicle_day_cost(state: dict, instance: Instance, epsilon: float = 0.0) -> None:
+def repair_vehicle_day_cost(state: dict, instance: Instance, epsilon: float = 0.0,
+                            current_routes: dict | None = None) -> None:
     """Place unscheduled requests to minimise total vehicle-days.
 
     For each request (MRV order), picks the feasible day pair (delivery, pickup) where
@@ -181,18 +205,19 @@ def repair_vehicle_day_cost(state: dict, instance: Instance, epsilon: float = 0.
 
         best_day = None
         best_score = float('-inf')
+        feasible_days = []
 
         for d in range(req.earliest, req.latest + 1):
             p = d + req.duration
             if not is_feasible(state, instance, req, d, p):
                 continue
-            if epsilon > 0 and random.random() < epsilon:
-                best_day = d
-                break
+            feasible_days.append(d)
             score = load.get(d, 0) + load.get(p, 0)
             if score > best_score:
                 best_score = score
                 best_day = d
+        if epsilon > 0 and feasible_days and random.random() < epsilon:
+            best_day = random.choice(feasible_days)
 
         if best_day is None:
             best_day = _first_feasible_day(state, instance, req)
@@ -203,13 +228,16 @@ def repair_vehicle_day_cost(state: dict, instance: Instance, epsilon: float = 0.
             blocked.add(req.id)
 
 
-def repair_distance_cost(state: dict, instance: Instance, epsilon: float = 0.0) -> None:
+def repair_distance_cost(state: dict, instance: Instance, epsilon: float = 0.0,
+                         current_routes: dict | None = None) -> None:
     """Place unscheduled requests to minimise distance cost.
 
-    For each request (MRV order), picks the feasible day where its location is
-    closest to existing stops — co-locating nearby requests on the same day reduces
-    the marginal route length added by each new stop.
+    When current_routes is provided (optimiser context), scores each candidate day
+    by the cheapest insertion cost into the actual routes for that day — the exact
+    marginal distance the new stop adds. Falls back to nearest-stop estimate when
+    routes are unavailable (scheduling context).
     """
+    depot_id = instance.depot_id
     blocked: set = set()
 
     while True:
@@ -217,37 +245,48 @@ def repair_distance_cost(state: dict, instance: Instance, epsilon: float = 0.0) 
         if req is None:
             break
 
-        depot_dist = instance.get_distance_from_depot(req.location_id)
+        depot_dist = instance.get_distance(depot_id, req.location_id)
 
         locs_per_day: dict[int, list[int]] = defaultdict(list)
-        for e in state['scheduled']:
-            locs_per_day[e['delivery_day']].append(e['request'].location_id)
-            locs_per_day[e['pickup_day']].append(e['request'].location_id)
+        if current_routes is None:
+            for e in state['scheduled']:
+                locs_per_day[e['delivery_day']].append(e['request'].location_id)
+                locs_per_day[e['pickup_day']].append(e['request'].location_id)
 
         best_day = None
         best_score = float('inf')
+        feasible_days = []
 
         for d in range(req.earliest, req.latest + 1):
             p = d + req.duration
             if not is_feasible(state, instance, req, d, p):
                 continue
-            if epsilon > 0 and random.random() < epsilon:
-                best_day = d
-                break
-            d_locs = locs_per_day.get(d, [])
-            nearest_d = min(
-                (instance.get_distance(req.location_id, l) for l in d_locs),
-                default=depot_dist,
-            )
-            p_locs = locs_per_day.get(p, [])
-            nearest_p = min(
-                (instance.get_distance(req.location_id, l) for l in p_locs),
-                default=depot_dist,
-            )
-            score = nearest_d + nearest_p
+            feasible_days.append(d)
+
+            if current_routes is not None:
+                score = (
+                    _cheapest_insertion_cost(req.location_id, current_routes.get(d, []), depot_id, instance)
+                    + _cheapest_insertion_cost(req.location_id, current_routes.get(p, []), depot_id, instance)
+                )
+            else:
+                d_locs = locs_per_day.get(d, [])
+                nearest_d = min(
+                    (instance.get_distance(req.location_id, l) for l in d_locs),
+                    default=depot_dist,
+                )
+                p_locs = locs_per_day.get(p, [])
+                nearest_p = min(
+                    (instance.get_distance(req.location_id, l) for l in p_locs),
+                    default=depot_dist,
+                )
+                score = nearest_d + nearest_p
+
             if score < best_score:
                 best_score = score
                 best_day = d
+
+        if epsilon > 0 and feasible_days and random.random() < epsilon:
+            best_day = random.choice(feasible_days)
 
         if best_day is None:
             best_day = _first_feasible_day(state, instance, req)
