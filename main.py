@@ -4,7 +4,8 @@ import os
 from instance import Instance
 from scheduling import build_schedule, cost_breakdown, print_cost, validate_schedule
 from scheduling.analysis import print_analysis, print_load_distribution
-from routing import solve_routing, write_solution, cost_from_routes
+from routing import write_solution, cost_from_routes, solve_all_days
+from optimiser import optimize
 
 logging.basicConfig(
     filename='schedule.log',
@@ -12,6 +13,13 @@ logging.basicConfig(
     level=logging.DEBUG,
     format='%(message)s'
 )
+
+_opt_handler = logging.FileHandler('optimiser.log', mode='w')
+_opt_handler.setFormatter(logging.Formatter('%(message)s'))
+_opt_logger = logging.getLogger('optimiser')
+_opt_logger.setLevel(logging.INFO)
+_opt_logger.addHandler(_opt_handler)
+_opt_logger.propagate = False  # keep optimiser events out of schedule.log
 
 
 def valid_txt(value: str) -> str:
@@ -42,11 +50,11 @@ def main():
     print()
     print_analysis(state, instance)
 
-    # --- routing ---
+    # --- optimise ---
     print(f"\n{'='*60}")
-    print("  ROUTING")
+    print("  OPTIMISING")
     print(f"{'='*60}")
-    route_set = solve_routing(state, instance, fast=True)
+    route_set = optimize(state, instance)
 
     # --- final cost ---
     print(f"\n{'='*60}")

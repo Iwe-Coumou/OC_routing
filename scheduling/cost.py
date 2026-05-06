@@ -135,9 +135,9 @@ def print_cost(breakdown: dict, label: str = '') -> None:
     b = breakdown
     prefix = f"{label}: " if label else ''
     print(
-        f"{prefix}total={b['total']:>14,.0f}  "
-        f"| tools={b['tool']:>12,.0f} "
-        f"| vehicles={b['vehicle']:>10,.0f} ({b['max_vehicles']} max) "
-        f"| veh-days={b['vehicle_days']:>10,.0f} ({b['vehicle_days_count']} routes) "
-        f"| distance={b['distance']:>12,.0f}"
+        f"{prefix}total={b['total']:>12.3e}  "
+        f"| tools={b['tool']:>12,} "
+        f"| vehicles={b['vehicle']:>10,} ({b['max_vehicles']} max) "
+        f"| veh-days={b['vehicle_days']:>10,} ({b['vehicle_days_count']} routes) "
+        f"| distance={b['distance']:>12,}"
     )

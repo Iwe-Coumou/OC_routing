@@ -1,0 +1,60 @@
+=== OPTIMISE START  instance=tools over vehicles over vehicle days over distance with 100 requests over 10 days  initial=4.325e+09  tool=4.320e+09  vehicle=4.500e+06  veh_days=2.400e+05  distance=6.213e+05 ===
+iter=   0  op=rand k=21 repair=tool  candidate=4.435e+09  delta=+1.095e+08  reject (routing)
+iter=   1  op=rand k=14 repair=distance  candidate=4.275e+09  delta=-5.002e+07  ACCEPT  [tool=4.270e+09  vehicle=4.500e+06  veh_days=2.360e+05  distance=6.101e+05]
+iter=   2  op=rand k=26 repair=tool  candidate=4.565e+09  delta=+2.895e+08  reject (routing)
+iter=   3  op=rand k=25 repair=vehicle_days  candidate=4.175e+09  delta=-1.005e+08  ACCEPT  [tool=4.170e+09  vehicle=4.000e+06  veh_days=2.400e+05  distance=6.276e+05]
+iter=   4  op=cost driver=tool k=14  candidate=4.235e+09  delta=+6.001e+07  reject (routing)
+iter=   5  op=rand k=17 repair=tool  candidate=4.315e+09  delta=+1.405e+08  reject (routing)
+iter=   6  op=cost driver=tool k=17  candidate=4.365e+09  delta=+1.900e+08  reject (routing)
+iter=   7  op=rand k=25 repair=distance  candidate=4.235e+09  delta=+6.049e+07  reject (routing)
+iter=   8  op=rand k=10 repair=distance  candidate=4.285e+09  delta=+1.105e+08  reject (routing)
+iter=   9  op=rand k=12 repair=tool  candidate=4.175e+09  delta=+1.331e+03  reject (routing)
+repair_tool_cost: req=69 has no feasible day — leaving unscheduled
+iter=  10  op=rand k=19 repair=tool  REJECT (unscheduled=1)
+iter=  11  op=rand k=13 repair=tool  candidate=4.315e+09  delta=+1.400e+08  reject (routing)
+iter=  12  op=rand k=17 repair=vehicle  candidate=4.355e+09  delta=+1.800e+08  reject (routing)
+iter=  13  op=rand k=18 repair=vehicle_days  candidate=4.335e+09  delta=+1.600e+08  reject (routing)
+iter=  14  op=rand k=18 repair=distance  candidate=4.105e+09  delta=-6.951e+07  ACCEPT  [tool=4.100e+09  vehicle=4.500e+06  veh_days=2.440e+05  distance=6.168e+05]
+iter=  15  op=rand k=27 repair=vehicle_days  candidate=4.155e+09  delta=+4.996e+07  reject (routing)
+iter=  16  op=rand k=17 repair=tool  candidate=4.065e+09  delta=-4.004e+07  ACCEPT  [tool=4.060e+09  vehicle=4.500e+06  veh_days=2.400e+05  distance=5.825e+05]
+iter=  17  op=rand k=25 repair=distance  candidate=4.265e+09  delta=+1.995e+08  reject (routing)
+iter=  18  op=rand k=19 repair=tool  candidate=4.135e+09  delta=+6.950e+07  reject (routing)
+iter=  19  op=rand k=28 repair=vehicle_days  candidate=4.095e+09  delta=+3.003e+07  reject (routing)
+iter=  20  op=cost driver=tool k=13  candidate=4.095e+09  delta=+3.001e+07  reject (routing)
+iter=  21  op=rand k=16 repair=vehicle  candidate=4.085e+09  delta=+2.004e+07  reject (routing)
+iter=  22  op=rand k=19 repair=vehicle  candidate=3.976e+09  delta=-8.947e+07  ACCEPT  [tool=3.970e+09  vehicle=5.000e+06  veh_days=2.440e+05  distance=6.120e+05]
+iter=  23  op=rand k=17 repair=distance  candidate=4.055e+09  delta=+7.951e+07  reject (routing)
+iter=  24  op=rand k=26 repair=vehicle_days  candidate=3.945e+09  delta=-3.052e+07  ACCEPT  [tool=3.940e+09  vehicle=4.500e+06  veh_days=2.280e+05  distance=6.050e+05]
+iter=  25  op=rand k=22 repair=vehicle_days  candidate=4.255e+09  delta=+3.100e+08  reject (routing)
+iter=  26  op=cost driver=tool k=11  candidate=4.265e+09  delta=+3.200e+08  reject (routing)
+iter=  27  op=rand k=27 repair=vehicle  candidate=3.945e+09  delta=-5.224e+05  ACCEPT  [tool=3.940e+09  vehicle=4.000e+06  veh_days=2.280e+05  distance=5.826e+05]
+iter=  28  op=rand k=12 repair=vehicle  candidate=3.935e+09  delta=-9.994e+06  ACCEPT  [tool=3.930e+09  vehicle=4.000e+06  veh_days=2.280e+05  distance=5.882e+05]
+iter=  29  op=rand k=21 repair=distance  candidate=4.005e+09  delta=+7.002e+07  reject (routing)
+iter=  30  op=rand k=13 repair=tool  candidate=3.955e+09  delta=+2.000e+07  reject (routing)
+iter=  31  op=cost driver=tool k=19  candidate=3.885e+09  delta=-4.997e+07  ACCEPT  [tool=3.880e+09  vehicle=4.000e+06  veh_days=2.320e+05  distance=6.099e+05]
+iter=  32  op=rand k=26 repair=distance  candidate=3.976e+09  delta=+9.151e+07  reject (routing)
+repair_vehicle_cost: req=25 has no feasible day — leaving unscheduled
+iter=  33  op=rand k=24 repair=vehicle  REJECT (unscheduled=1)
+iter=  34  op=cost driver=tool k=22  candidate=4.135e+09  delta=+2.500e+08  reject (routing)
+iter=  35  op=rand k=27 repair=vehicle_days  candidate=3.965e+09  delta=+8.050e+07  reject (routing)
+iter=  36  op=cost driver=tool k=14  candidate=3.935e+09  delta=+4.999e+07  reject (routing)
+iter=  37  op=rand k=13 repair=tool  candidate=3.855e+09  delta=-3.002e+07  ACCEPT  [tool=3.850e+09  vehicle=4.000e+06  veh_days=2.280e+05  distance=5.965e+05]
+repair_vehicle_cost: req=74 has no feasible day — leaving unscheduled
+iter=  38  op=rand k=28 repair=vehicle  REJECT (unscheduled=1)
+iter=  39  op=rand k=24 repair=vehicle  candidate=3.764e+09  delta=-9.052e+07  ACCEPT  [tool=3.760e+09  vehicle=3.500e+06  veh_days=2.200e+05  distance=5.810e+05]
+iter=  40  op=rand k=25 repair=vehicle_days  candidate=3.884e+09  delta=+1.200e+08  reject (routing)
+iter=  41  op=rand k=14 repair=vehicle  candidate=4.194e+09  delta=+4.300e+08  reject (routing)
+iter=  42  op=rand k=18 repair=tool  candidate=3.844e+09  delta=+8.001e+07  reject (routing)
+iter=  43  op=rand k=27 repair=distance  candidate=3.845e+09  delta=+8.051e+07  reject (routing)
+iter=  44  op=rand k=13 repair=tool  candidate=3.814e+09  delta=+5.002e+07  reject (routing)
+iter=  45  op=rand k=15 repair=tool  candidate=4.095e+09  delta=+3.305e+08  reject (routing)
+iter=  46  op=rand k=21 repair=vehicle_days  candidate=3.954e+09  delta=+1.900e+08  reject (routing)
+iter=  47  op=rand k=17 repair=vehicle  candidate=3.605e+09  delta=-1.590e+08  ACCEPT  [tool=3.600e+09  vehicle=4.500e+06  veh_days=2.320e+05  distance=5.949e+05]
+iter=  48  op=cost driver=tool k=13  candidate=4.055e+09  delta=+4.500e+08  reject (routing)
+iter=  49  op=rand k=23 repair=vehicle_days  candidate=4.026e+09  delta=+4.205e+08  reject (routing)
+iter=  50  op=rand k=22 repair=distance  candidate=4.195e+09  delta=+5.895e+08  reject (routing)
+iter=  51  op=rand k=10 repair=tool  candidate=4.055e+09  delta=+4.500e+08  reject (routing)
+iter=  52  op=rand k=15 repair=distance  candidate=3.916e+09  delta=+3.105e+08  reject (routing)
+iter=  53  op=rand k=14 repair=distance  candidate=3.825e+09  delta=+2.200e+08  reject (routing)
+repair_vehicle_day_cost: req=32 has no feasible day — leaving unscheduled
+iter=  54  op=rand k=10 repair=vehicle_days  REJECT (unscheduled=1)
