@@ -4,7 +4,6 @@ import os
 from instance import Instance
 from scheduling.state import build_schedule, validate_schedule
 from scheduling.cost import cost_breakdown, print_cost
-from scheduling.lns import schedule_lns
 from routing.export import write_solution, cost_from_routes, read_solution
 from optimiser.lns import route_lns
 
@@ -63,18 +62,12 @@ def main():
         print(f"{'='*60}")
         print_cost(cost_breakdown(state, instance))
 
-        print(f"\n{'='*60}")
-        print("  SCHEDULING LNS")
-        print(f"{'='*60}")
-        schedule_lns(state, instance, iterations=1000, patience=250)
-        print_cost(cost_breakdown(state, instance))
-
     # --- optimise ---
     print(f"\n{'='*60}")
     print("  OPTIMISING")
     print(f"{'='*60}")
     route_set = route_lns(state, instance, iterations=500, patience=500,
-                          refine_time=0, initial_routes=initial_routes)
+                          initial_routes=initial_routes)
 
     # --- final cost ---
     print(f"\n{'='*60}")

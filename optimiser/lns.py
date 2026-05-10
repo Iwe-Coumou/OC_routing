@@ -3,7 +3,7 @@ import random
 import logging
 from tqdm import tqdm
 from scheduling.state import snapshot, restore, uncommit_request, place_unscheduled
-from routing.model import solve_routing, solve_routing_incremental, VehicleRoute
+from routing.solver import solve_routing, solve_routing_incremental, VehicleRoute
 from routing.export import cost_from_routes
 from .break_fns import (
     break_tool_cost,
@@ -86,7 +86,6 @@ def route_lns(
     instance,
     iterations: int = 500,
     patience: int = 500,
-    refine_time: int = 2,
     initial_routes: dict | None = None,
 ) -> dict:
     if initial_routes is not None:
@@ -210,32 +209,16 @@ def route_lns(
 
         if delta < 0:
             accept = True
-            sa_accept = False
         elif T > 1e-6 and random.random() < math.exp(-delta / T):
             accept = True
-            sa_accept = True
         else:
             accept = False
-            sa_accept = False
 
         if accept:
             current_cost = candidate_cost
             current_routes = candidate_routes
 
             if candidate_cost < best_cost:
-                if refine_time > 0:
-                    refined_routes = solve_routing(
-                        state, instance, fast=False,
-                        time_limit_seconds=refine_time,
-                        initial_routes=candidate_routes,
-                    )
-                    refined_cost = cost_from_routes(refined_routes, instance)['total']
-                    if refined_cost < candidate_cost:
-                        candidate_routes = refined_routes
-                        candidate_cost = refined_cost
-                    current_routes = candidate_routes
-                    current_cost = candidate_cost
-
                 best_cost = candidate_cost
                 best_snap = snapshot(state)
                 breakdown = cost_from_routes(candidate_routes, instance)

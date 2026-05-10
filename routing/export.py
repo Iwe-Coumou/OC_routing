@@ -1,5 +1,5 @@
 from instance import Instance
-from .model import VehicleRoute, Stop
+from .solver import VehicleRoute, Stop
 
 
 def _compute_depot_visits(route: VehicleRoute, instance: Instance, req_lookup: dict) -> list:
@@ -32,7 +32,6 @@ def _compute_depot_visits(route: VehicleRoute, instance: Instance, req_lookup: d
 
 def _day_aggregates(vehicles: list, instance: Instance, req_lookup: dict) -> tuple:
     n = len(instance.tools)
-    tool_size = [t.size for t in instance.tools]
     calc_start = [0] * n
     calc_finish = [0] * n
 

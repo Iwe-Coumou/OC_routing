@@ -21,12 +21,6 @@ class Request:
     machine_type: int
     num_machines: int
 
-    def pickup_day(self, delivery_day: int) -> int:
-        return delivery_day + self.duration
-
-    def is_feasible(self, delivery_day: int) -> bool:
-        return self.earliest <= delivery_day <= self.latest
-
 @dataclass
 class Tool:
     id: int
@@ -97,12 +91,6 @@ class Instance:
         else:
             raise ValueError("Could not obtain distance matrix — no coordinates to compute from")
 
-    def _print(self):
-        for k, v in vars(self).items():
-            print(f"{k}: {v}")
-            
     def get_distance(self, loc_a: int, loc_b: int) -> int:
         return self.distance[loc_a][loc_b]
 
-    def get_distance_from_depot(self, loc: int) -> int:
-        return self.distance[self.depot_id][loc]

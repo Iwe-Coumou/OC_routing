@@ -4,13 +4,11 @@ Solver for the VeRoLog 2017 challenge: a capacitated vehicle routing problem whe
 
 ## How it works
 
-The solver runs in two phases:
+1. **Greedy schedule** — requests are placed using earliest-deadline-first, producing a capacity-feasible initial schedule.
 
-1. **Scheduling** — decides which day each request is delivered and picked up. Starts with a greedy earliest-deadline-first schedule, then improves it with an LNS loop using adaptive destroy/repair operators.
+2. **ALNS optimisation** (`route_lns`) — an adaptive large neighbourhood search with simulated annealing acceptance. Each iteration destroys a subset of requests, repairs the schedule with a cost-targeted heuristic, re-routes only the affected days using OR-Tools, and accepts or rejects based on true routing cost. Operator weights adapt based on success history.
 
-2. **Routing** — given the schedule, solves a daily CVRP for each day using OR-Tools. Fast solves (SAVINGS heuristic, parallel threads) are used during optimisation; a final GLS solve polishes the best found solution.
-
-The main optimisation loop (`route_lns`) is an ALNS with simulated annealing acceptance. It destroys a subset of requests, repairs the schedule with a cost-targeted heuristic, re-routes only the affected days, and accepts or rejects based on true routing cost.
+The routing solver uses OR-Tools: fast solves (SAVINGS heuristic, parallel threads) during the ALNS loop; a final GLS solve for the best found solution.
 
 ## Usage
 
@@ -20,6 +18,10 @@ python main.py instances/B2.txt
 
 # repeated warm-start runs until no improvement
 python run.py instances/B2.txt --patience 3
+
+# run all instances (optionally in parallel)
+python bench.py
+python bench.py --workers 2
 ```
 
 The solution is written to `instances/B2_solution.txt`. If a solution file already exists, the solver warm-starts from it and only overwrites if it finds a lower cost.
@@ -27,25 +29,24 @@ The solution is written to `instances/B2_solution.txt`. If a solution file alrea
 ## Structure
 
 ```
-instance.py          — loads and wraps the teacher-provided instance format
-main.py              — entry point (CLI, scheduling, optimisation, file output)
-run.py               — reruns main.py in a loop with warm-starting
-visualisation.py     — generates a GIF animation of the daily vehicle routes
+instance.py      — loads and wraps the teacher-provided instance format
+main.py          — entry point (CLI, greedy schedule, optimisation, file output)
+run.py           — reruns main.py in a loop with warm-starting
+bench.py         — runs all instances and prints a cost summary table
+visualisation.py — generates a GIF animation of the daily vehicle routes
 
 scheduling/
-  state.py           — schedule state, commit/uncommit, greedy builder, validator
-  cost.py            — cost estimation functions (tool, vehicle, distance)
-  lns.py             — scheduling-phase LNS with ALNS weights
-  analysis.py        — per-day and per-tool usage breakdown (printing)
+  state.py       — schedule state, commit/uncommit, greedy builder, validator
+  cost.py        — cost estimation (tool, vehicle, distance)
 
 routing/
-  model.py           — OR-Tools CVRP solver, Stop/VehicleRoute dataclasses
-  export.py          — writes/reads VeRoLog solution files, exact cost from routes
+  solver.py      — OR-Tools CVRP solver, Stop/VehicleRoute dataclasses
+  export.py      — writes/reads VeRoLog solution files, exact cost from routes
 
 optimiser/
-  lns.py             — main ALNS + SA optimisation loop (route_lns)
-  break_fns.py       — destroy operators (tool cost, vehicle cost, distance, geographic)
-  repair_fns.py      — repair operators (MRV insertion, cheapest insertion)
+  lns.py         — ALNS + SA optimisation loop
+  break_fns.py   — destroy operators (tool cost, vehicle cost, distance, geographic)
+  repair_fns.py  — repair operators (MRV insertion, cheapest insertion)
 ```
 
 ## Dependencies

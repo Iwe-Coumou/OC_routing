@@ -78,37 +78,6 @@ def cost_breakdown(state: dict, instance: Instance) -> dict:
     }
 
 
-_UNSCHEDULED_PENALTY = 1_000_000  # per unscheduled request
-
-
-def compute_cost_estimate(state: dict, instance: Instance) -> float:
-    unscheduled = sum(len(v) for v in state['unscheduled'].values())
-    return cost_breakdown(state, instance)['total'] + unscheduled * _UNSCHEDULED_PENALTY
-
-
-def routed_cost_breakdown(state: dict, route_set: dict, instance: Instance) -> dict:
-    tool_cost = compute_tool_cost(state, instance)
-
-    max_vehicles       = max((len(routes) for routes in route_set.values()), default=0)
-    total_vehicle_days = sum(len(routes) for routes in route_set.values())
-    total_distance     = sum(r.distance for routes in route_set.values() for r in routes)
-
-    vehicle_cost   = instance.config.vehicle_cost     * max_vehicles
-    vehicle_d_cost = instance.config.vehicle_day_cost * total_vehicle_days
-    distance_cost  = instance.config.distance_cost    * total_distance
-    total          = tool_cost + vehicle_cost + vehicle_d_cost + distance_cost
-
-    return {
-        'tool':               tool_cost,
-        'vehicle':            vehicle_cost,
-        'vehicle_days':       vehicle_d_cost,
-        'distance':           distance_cost,
-        'total':              total,
-        'max_vehicles':       max_vehicles,
-        'vehicle_days_count': total_vehicle_days,
-    }
-
-
 def print_cost(breakdown: dict, label: str = '') -> None:
     b = breakdown
     prefix = f"{label}: " if label else ''

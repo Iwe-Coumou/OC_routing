@@ -30,23 +30,6 @@ def build_state(instance: Instance) -> dict:
     return state_dict
 
 
-def print_state(state: dict) -> None:
-    print("=== STOPS PER DAY ===")
-    for day, count in sorted(state['stops_per_day'].items()):
-        print(f"  day={day}: {count} stops")
-
-    print("=== SCHEDULED ===")
-    for entry in state['scheduled']:
-        r = entry['request']
-        print(f"  req={r.id} type={r.machine_type} loc={r.location_id} "
-              f"delivery={entry['delivery_day']} pickup={entry['pickup_day']}")
-
-    print("=== UNSCHEDULED ===")
-    for machine_type, reqs in state['unscheduled'].items():
-        ids = [r.id for r in reqs]
-        print(f"  type={machine_type}: {ids}")
-
-
 def is_feasible(state, instance, request, delivery_day, pickup_day) -> bool:
     if not request.earliest <= delivery_day <= request.latest:
         log.debug(f"INFEASIBLE req={request.id} window [{request.earliest},{request.latest}] delivery={delivery_day}")

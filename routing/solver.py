@@ -8,11 +8,8 @@ import math
 from dataclasses import dataclass, field
 from tqdm import tqdm
 
+from collections import defaultdict
 from instance import Instance
-from scheduling.analysis import tasks_by_day
-
-
-RouteSet = dict  # dict[int, list[VehicleRoute]]
 
 
 @dataclass
@@ -31,9 +28,26 @@ class VehicleRoute:
     distance: int = 0
 
 
+def _tasks_by_day(state: dict, instance: Instance) -> dict:
+    tool_by_type = {t.id: t for t in instance.tools}
+    result = defaultdict(list)
+    for e in state['scheduled']:
+        req = e['request']
+        load = req.num_machines * tool_by_type[req.machine_type].size
+        result[e['delivery_day']].append({
+            'type': 'delivery', 'request_id': req.id,
+            'location': req.location_id, 'load': load,
+        })
+        result[e['pickup_day']].append({
+            'type': 'pickup', 'request_id': req.id,
+            'location': req.location_id, 'load': load,
+        })
+    return result
+
+
 def build_daily_stops(state: dict, instance: Instance) -> dict:
     req_lookup = {r.id: r for r in instance.requests}
-    raw = tasks_by_day(state, instance)
+    raw = _tasks_by_day(state, instance)
     result = {}
     for day, tasks in raw.items():
         if not tasks:
