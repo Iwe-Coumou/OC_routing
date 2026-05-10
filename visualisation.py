@@ -29,22 +29,8 @@ def build_sequential_gif(instance_path, solution_path, output_path):
                     except ValueError:
                         pass
 
-        """    # 2. Parse Routes
-    routes_by_day = {}
-    current_day = None
-    with open(solution_path, "r") as f:
-        for line in f:
-            line = line.strip()
-            if line.startswith("DAY"):
-                current_day = int(line.split("=")[1].strip())
-                routes_by_day[current_day] = []
-            elif " R " in line:
-                route_nodes = [abs(int(n)) for n in line.split(" R ")[1].split()]
-                routes_by_day[current_day].append(route_nodes)
-    
-        """
 
-    #IWE 
+    #IWE
     # 2. Parse Routes
     routes_by_day = {}
     current_day = None

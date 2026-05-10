@@ -1,7 +1,7 @@
-from instance import Instance, Request
-import bisect
+import random
 import logging
 from collections import defaultdict
+from instance import Instance, Request
 
 log = logging.getLogger(__name__)
 
@@ -12,9 +12,8 @@ def build_state(instance: Instance) -> dict:
     loans = defaultdict(lambda: [0] * (instance.config.days + 2))
     state_dict['loans'] = loans
 
-    # Per-day pickup counts per machine type.  Kept separately so is_feasible()
-    # can check the within-day peak (after deliveries, before pickups), which is
-    # what Validate._calculateSolution measures.
+    # Per-day pickup counts kept separately so is_feasible() can check the
+    # within-day peak (after deliveries, before pickups), matching Validate._calculateSolution.
     pickups_per_day = defaultdict(lambda: [0] * (instance.config.days + 2))
     state_dict['pickups_per_day'] = pickups_per_day
 
@@ -61,15 +60,11 @@ def is_feasible(state, instance, request, delivery_day, pickup_day) -> bool:
     diff = state['loans'][request.machine_type]
     pickups = state['pickups_per_day'][request.machine_type]
     running = 0
-    # Loop includes pickup_day: on that day the request's tools are still at
-    # the customer before the vehicle arrives (morning peak).
+    # Loop includes pickup_day: tools are still at the customer before pickup (morning peak).
     for day in range(pickup_day + 1):
         running += diff[day]
         if day >= delivery_day:
-            # Within-day peak: running is end-of-day net (pickups subtracted),
-            # so adding pickups[day] back gives the before-pickup count.
-            # The new request's machines are at customers from delivery_day
-            # through (and including) pickup_day.
+            # Within-day peak: add back pickups[day] to get the before-pickup count.
             peak = running + pickups[day] + request.num_machines
             if peak > tool.num_available:
                 log.debug(f"INFEASIBLE req={request.id} peak on day={day}: {peak} > available={tool.num_available}")
@@ -118,23 +113,17 @@ def uncommit_request(state: dict, request: Request) -> None:
 
     del state['scheduled'][idx]
 
-    # re-insert into unscheduled preserving latest-ascending order
     reqs = state['unscheduled'][request.machine_type]
-    bisect.insort(reqs, request, key=lambda r: r.latest)
+    reqs.append(request)
+    reqs.sort(key=lambda r: r.latest)
     log.debug(f"UNCOMMIT req={request.id} type={request.machine_type} delivery={delivery_day} pickup={pickup_day}")
 
 
 def snapshot(state: dict) -> list:
-    """Save current schedule as (request, delivery_day)."""
     return [(e['request'], e['delivery_day']) for e in state['scheduled']]
 
 
 def restore(state: dict, instance: Instance, snap: list) -> None:
-    """Restore a snapshot.
-
-    Resets state directly instead of calling uncommit_request n times,
-    avoiding the O(n²) list.remove cost of the naive approach.
-    """
     state['scheduled'].clear()
     state['stops_per_day'].clear()
     for v in state['loans'].values():
@@ -148,3 +137,83 @@ def restore(state: dict, instance: Instance, snap: list) -> None:
     for req, delivery_day in snap:
         log.debug(f"RESTORE req={req.id} delivery={delivery_day}")
         commit_request(state, instance, req, delivery_day)
+
+
+def _first_feasible_day(state: dict, instance: Instance, request: Request) -> int | None:
+    for d in range(request.earliest, request.latest + 1):
+        if is_feasible(state, instance, request, d, d + request.duration):
+            return d
+    return None
+
+
+def place_unscheduled(state: dict, instance: Instance, key=None, randomize=False) -> None:
+    requests = [r for reqs in state['unscheduled'].values() for r in reqs]
+    if randomize:
+        random.shuffle(requests)
+    else:
+        key = key or (lambda r: (r.latest, r.num_machines * r.duration))
+        requests.sort(key=key)
+
+    for request in requests:
+        day = _first_feasible_day(state, instance, request)
+        if day is None:
+            log.warning(f"EDD req={request.id} has no feasible day — leaving unscheduled")
+            continue
+        commit_request(state, instance, request, day)
+
+
+def build_schedule(instance: Instance) -> dict:
+    state = build_state(instance)
+    place_unscheduled(state, instance)
+    return state
+
+
+def validate_schedule(scheduled: list, instance: Instance) -> bool:
+    valid = True
+
+    scheduled_ids = [e['request'].id for e in scheduled]
+    expected_ids  = [r.id for r in instance.requests]
+    if sorted(scheduled_ids) != sorted(expected_ids):
+        print(f"FAIL: scheduled requests {sorted(scheduled_ids)} != expected {sorted(expected_ids)}")
+        valid = False
+
+    for entry in scheduled:
+        r = entry['request']
+        d = entry['delivery_day']
+        p = entry['pickup_day']
+
+        if not (r.earliest <= d <= r.latest):
+            print(f"FAIL: req={r.id} delivery_day={d} outside window [{r.earliest}, {r.latest}]")
+            valid = False
+
+        if p != d + r.duration:
+            print(f"FAIL: req={r.id} pickup_day={p} != delivery_day={d} + duration={r.duration}")
+            valid = False
+
+        if p > instance.config.days:
+            print(f"FAIL: req={r.id} pickup_day={p} exceeds horizon {instance.config.days}")
+            valid = False
+
+    tool_by_type = {t.id: t for t in instance.tools}
+    loans = defaultdict(lambda: [0] * (instance.config.days + 2))
+    pickups = defaultdict(lambda: [0] * (instance.config.days + 2))
+    for entry in scheduled:
+        r = entry['request']
+        loans[r.machine_type][entry['delivery_day']] += r.num_machines
+        loans[r.machine_type][entry['pickup_day']]   -= r.num_machines
+        pickups[r.machine_type][entry['pickup_day']] += r.num_machines
+
+    for machine_type, diff in loans.items():
+        current = 0
+        limit = tool_by_type[machine_type].num_available
+        for day, delta in enumerate(diff):
+            current += delta
+            # Within-day peak: after deliveries, before pickups.
+            peak = current + pickups[machine_type][day]
+            if peak > limit:
+                print(f"FAIL: type={machine_type} day={day} peak use={peak} exceeds available={limit}")
+                valid = False
+
+    if valid:
+        log.debug("OK: schedule is valid")
+    return valid

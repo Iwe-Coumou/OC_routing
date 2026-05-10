@@ -2,9 +2,11 @@ import argparse
 import logging
 import os
 from instance import Instance
-from scheduling import build_schedule, cost_breakdown, print_cost, validate_schedule, schedule_lns
-from routing import write_solution, cost_from_routes, read_solution
-from optimiser import route_lns
+from scheduling.state import build_schedule, validate_schedule
+from scheduling.cost import cost_breakdown, print_cost
+from scheduling.lns import schedule_lns
+from routing.export import write_solution, cost_from_routes, read_solution
+from optimiser.lns import route_lns
 
 logging.basicConfig(
     filename='schedule.log',
@@ -21,7 +23,7 @@ _opt_logger.addHandler(_opt_handler)
 _opt_logger.propagate = False  # keep optimiser events out of schedule.log
 
 
-def valid_txt(value: str) -> str:
+def valid_txt(value: str):
     if not value.endswith(".txt"):
         raise argparse.ArgumentTypeError(f"{value} is not a .txt file")
     if not os.path.isfile(value):

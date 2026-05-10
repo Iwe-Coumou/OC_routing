@@ -5,14 +5,54 @@ except ImportError as exc:
         "Google OR-Tools is required for routing. Install it with: pip install ortools"
     ) from exc
 import math
+from dataclasses import dataclass, field
 from tqdm import tqdm
 
 from instance import Instance
-from .routes import Stop, VehicleRoute
+from scheduling.analysis import tasks_by_day
 
 
-def _compute_route_distance(stops: list, instance: Instance) -> int:
-    """Total distance for a single vehicle route: depot -> stops -> depot."""
+RouteSet = dict  # dict[int, list[VehicleRoute]]
+
+
+@dataclass
+class Stop:
+    request_id: int
+    action: str        # 'delivery' or 'pickup'
+    location_id: int
+    load: int
+    machine_type: int
+
+
+@dataclass
+class VehicleRoute:
+    vehicle_id: int
+    stops: list = field(default_factory=list)
+    distance: int = 0
+
+
+def build_daily_stops(state: dict, instance: Instance) -> dict:
+    req_lookup = {r.id: r for r in instance.requests}
+    raw = tasks_by_day(state, instance)
+    result = {}
+    for day, tasks in raw.items():
+        if not tasks:
+            continue
+        stops = [
+            Stop(
+                request_id=t['request_id'],
+                action=t['type'],
+                location_id=t['location'],
+                load=t['load'],
+                machine_type=req_lookup[t['request_id']].machine_type,
+            )
+            for t in tasks
+        ]
+        result[day] = stops
+    return result
+
+
+def _compute_route_distance(stops, instance):
     if not stops:
         return 0
     locs = [0] + [s.location_id for s in stops] + [0]
@@ -22,16 +62,11 @@ def _compute_route_distance(stops: list, instance: Instance) -> int:
 def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
                      time_limit_seconds: int, fast: bool,
                      initial_routes: list = None):
-    """Build and solve an OR-Tools CVRP model for one day.
-
-    Returns list[VehicleRoute] on success, None if OR-Tools finds no solution.
-    """
     capacity = instance.config.capacity
     num_nodes = len(stops) + 1
     manager = pywrapcp.RoutingIndexManager(num_nodes, num_vehicles, 0)
     routing = pywrapcp.RoutingModel(manager)
 
-    # Precompute distance matrices once (avoids n² Python→C++ callbacks per solve).
     loc_ids = [0] + [s.location_id for s in stops]
     n = len(loc_ids)
     d_cost = instance.config.distance_cost
@@ -95,7 +130,6 @@ def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
             routing_enums_pb2.FirstSolutionStrategy.SAVINGS
         )
     else:
-        # Better initial solution → GLS converges faster
         search_params.first_solution_strategy = (
             routing_enums_pb2.FirstSolutionStrategy.PARALLEL_CHEAPEST_INSERTION
         )
@@ -105,21 +139,24 @@ def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
         search_params.guided_local_search_lambda_coefficient = 0.1
         search_params.time_limit.seconds = time_limit_seconds
 
-    # Warm-start GLS from a previously known good solution (fast=False only).
     if initial_routes and not fast:
         stop_to_node = {(s.request_id, s.action): i + 1 for i, s in enumerate(stops)}
         routes_as_nodes = []
         for route in initial_routes:
-            nodes = [stop_to_node[k]
-                     for stop in route.stops
-                     if (k := (stop.request_id, stop.action)) in stop_to_node]
+            nodes = []
+            for stop in route.stops:
+                k = (stop.request_id, stop.action)
+                if k in stop_to_node:
+                    nodes.append(stop_to_node[k])
             routes_as_nodes.append(nodes)
         while len(routes_as_nodes) < num_vehicles:
             routes_as_nodes.append([])
         try:
             hint = routing.ReadAssignmentFromRoutes(routes_as_nodes, True)
-            solution = routing.SolveFromAssignmentWithParameters(hint, search_params) if hint else \
-                       routing.SolveWithParameters(search_params)
+            if hint:
+                solution = routing.SolveFromAssignmentWithParameters(hint, search_params)
+            else:
+                solution = routing.SolveWithParameters(search_params)
         except Exception:
             solution = routing.SolveWithParameters(search_params)
     else:
@@ -152,34 +189,15 @@ def solve_day(
     fast: bool = False,
     initial_routes: list = None,
 ) -> list:
-    """Solve CVRP for a single day.
-
-    Tries a tight fleet-size bound first (based on load / capacity), then falls
-    back to one vehicle per stop if OR-Tools finds the tighter model infeasible
-    (e.g. when the max_trip_distance constraint forces single-stop routes).
-
-    Args:
-        day: Day number (used only for logging).
-        stops: list[Stop] for this day.
-        instance: Problem instance.
-        time_limit_seconds: OR-Tools solver time budget per day (ignored when fast=True).
-        fast: If True, use PATH_CHEAPEST_ARC only — completes in seconds per day.
-        initial_routes: Optional list[VehicleRoute] to warm-start GLS (ignored when fast=True).
-
-    Returns:
-        list[VehicleRoute] — only non-empty routes included.
-    """
     if not stops:
         return []
 
     capacity = instance.config.capacity
-
     delivery_load = sum(s.load for s in stops if s.action == 'delivery')
     pickup_load   = sum(s.load for s in stops if s.action == 'pickup')
     min_cap = max(1, math.ceil(max(delivery_load, pickup_load) / capacity))
     tight_n = min(len(stops), max(min_cap + 3, min_cap * 2))
 
-    # Ensure the model has enough vehicles to accommodate the warm-start hint.
     if initial_routes and len(initial_routes) > tight_n:
         tight_n = min(len(stops), len(initial_routes))
 
@@ -197,22 +215,6 @@ def solve_all_days(
     fast: bool = False,
     initial_routes: dict = None,
 ) -> dict:
-    """Solve CVRP independently for every day that has stops.
-
-    Uses a ThreadPoolExecutor for parallel solving when fast=True (OR-Tools C++
-    solver releases the GIL during SolveWithParameters). Falls back to sequential
-    for fast=False GLS solves to avoid thread safety concerns.
-
-    Args:
-        daily_stops: dict[int, list[Stop]] from tasks.build_daily_stops().
-        instance: Problem instance.
-        time_limit_seconds: Solver time budget per day (ignored when fast=True).
-        fast: If True, use PATH_CHEAPEST_ARC only (no GLS, no time limit).
-        initial_routes: Optional RouteSet to warm-start GLS per day (ignored when fast=True).
-
-    Returns:
-        RouteSet: dict[int, list[VehicleRoute]]
-    """
     import os
     from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -242,5 +244,38 @@ def solve_all_days(
                                    fast=False, initial_routes=day_hint)
                 if routes:
                     route_set[day] = routes
+
+    return route_set
+
+
+def solve_routing(
+    state: dict,
+    instance: Instance,
+    time_limit_seconds: int = 30,
+    fast: bool = False,
+    initial_routes: dict = None,
+) -> dict:
+    daily_stops = build_daily_stops(state, instance)
+    return solve_all_days(daily_stops, instance, time_limit_seconds,
+                          fast=fast, initial_routes=initial_routes)
+
+
+def solve_routing_incremental(
+    state: dict,
+    instance: Instance,
+    changed_days: set,
+    current_routes: dict,
+) -> dict:
+    daily_stops = build_daily_stops(state, instance)
+
+    route_set = {day: routes for day, routes in current_routes.items()
+                 if day not in changed_days}
+    route_set = {day: routes for day, routes in route_set.items()
+                 if day in daily_stops}
+
+    dirty_stops = {day: daily_stops[day] for day in changed_days if day in daily_stops}
+    if dirty_stops:
+        new_routes = solve_all_days(dirty_stops, instance, fast=True)
+        route_set.update(new_routes)
 
     return route_set

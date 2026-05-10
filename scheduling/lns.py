@@ -2,13 +2,11 @@ import math
 import random
 from collections import defaultdict
 from tqdm import tqdm
-from .state import uncommit_request, snapshot, restore
+from .state import uncommit_request, snapshot, restore, place_unscheduled
 from .cost import compute_cost_estimate
-from .greedy_edd import place_unscheduled
 
 
 def destroy_random(state, fraction=0.2):
-    """Destroy a random subset for exploration."""
     sampled = random.sample(
         state['scheduled'],
         max(1, int(len(state['scheduled']) * fraction))
@@ -17,10 +15,6 @@ def destroy_random(state, fraction=0.2):
 
 
 def destroy_peak_day(state, instance):
-    """Destroy all requests on loan during the peak tool-cost day.
-
-    Uses the diff arrays already in state — O(tools * days) instead of O(n²).
-    """
     peak_weighted, peak_tool, peak_day = 0, None, None
     for tool in instance.tools:
         diff = state['loans'].get(tool.id, [0] * (instance.config.days + 2))
@@ -44,12 +38,6 @@ def destroy_peak_day(state, instance):
 
 
 def destroy_most_overlapping(state, instance, k=None):
-    """Destroy the k requests contributing most to peak tool loans.
-
-    Precomputes per-day concurrent counts from diff arrays once per tool type
-    (O(tools * days)), then scores each request by the sum of concurrent counts
-    over its loan interval — O(requests * avg_duration) instead of O(n²).
-    """
     n = instance.config.days + 2
     concurrent = {}
     for tool in instance.tools:
@@ -92,12 +80,6 @@ def repair_random(state, instance):
 
 
 def repair_geographic(state, instance):
-    """Place unscheduled requests nearest-first to existing scheduled clusters.
-
-    Sorts unscheduled requests by their minimum distance to any already-scheduled
-    request's location, so nearby requests tend to be placed consecutively and
-    land on days with geographically close existing stops.
-    """
     locs = [e['request'].location_id for e in state['scheduled']]
 
     def geo_key(r):
@@ -109,12 +91,6 @@ def repair_geographic(state, instance):
 
 
 def destroy_heavy_day(state, instance, k=None):
-    """Destroy k heaviest requests from the day with highest vehicle load.
-
-    Targets the single busiest day (by total tool load) and removes its heaviest
-    requests, giving them a chance to scatter across lighter days and reduce the
-    vehicle count peak.
-    """
     tool_by_type = {t.id: t for t in instance.tools}
     load_per_day = defaultdict(int)
     for e in state['scheduled']:

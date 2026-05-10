@@ -2,11 +2,9 @@ import math
 import random
 import logging
 from tqdm import tqdm
-from scheduling.state import snapshot, restore, uncommit_request
-from scheduling.greedy_edd import place_unscheduled
-from routing import solve_routing, solve_routing_incremental
+from scheduling.state import snapshot, restore, uncommit_request, place_unscheduled
+from routing.model import solve_routing, solve_routing_incremental, VehicleRoute
 from routing.export import cost_from_routes
-from routing.routes import VehicleRoute
 from .break_fns import (
     break_tool_cost,
     break_vehicle_cost,
@@ -43,7 +41,6 @@ _BREAK_REPAIR = {
 _NEEDS_ROUTES = {'vehicle', 'vehicle_days', 'distance', 'worst_day'}
 _DAY_TARGETED = {'tool', 'vehicle', 'worst_day'}  # destroy full day, no k limit
 
-# Maps each operator key to the breakdown cost component it targets
 _OP_BREAKDOWN = {
     'tool':         'tool',
     'vehicle':      'vehicle',
@@ -60,12 +57,6 @@ _SA_ALPHA     = 0.998  # SA cooling rate — reaches ~37% of T0 at iter 500
 
 
 def _routes_without(routes: dict, req_ids: set) -> dict:
-    """Return routes with all stops belonging to req_ids removed.
-
-    Called before repair so that cheapest-insertion estimates are computed
-    against routes that reflect the post-destroy state, not stale routes
-    that still contain the destroyed requests' stops.
-    """
     result = {}
     for day, day_routes in routes.items():
         clean = []
@@ -82,7 +73,6 @@ def _routes_without(routes: dict, req_ids: set) -> dict:
 
 
 def _get_days_for_requests(state: dict, req_ids: set) -> set:
-    """Return all days touched by the given request IDs in the current schedule."""
     days = set()
     for e in state['scheduled']:
         if e['request'].id in req_ids:
@@ -99,17 +89,6 @@ def route_lns(
     refine_time: int = 2,
     initial_routes: dict | None = None,
 ) -> dict:
-    """ALNS optimiser with SA acceptance and incremental routing.
-
-    Uses true routing costs (from fast SAVINGS solver) for all accept/reject
-    decisions. Repair functions receive current_routes and use cheapest insertion
-    into actual routes rather than schedule-level estimates.
-
-    If initial_routes is provided (e.g. loaded from a saved solution file), the
-    search starts from that RouteSet instead of running an initial fast solve.
-
-    Returns the RouteSet corresponding to the best accepted schedule.
-    """
     if initial_routes is not None:
         current_routes = initial_routes
     else:
@@ -143,16 +122,12 @@ def route_lns(
     for iteration in pbar:
         snap = snapshot(state)
 
-        # ------------------------------------------------------------------ #
-        # Select operator and build target list                                #
-        # ------------------------------------------------------------------ #
         if random.random() < _COST_OP_PROB:
             combined = [alns_w[key] * max(breakdown[_OP_BREAKDOWN[key]], 1) for key in _OP_KEYS]
             driver = random.choices(_OP_KEYS, weights=combined, k=1)[0]
             break_fn, repair_fn = _BREAK_REPAIR[driver]
 
             if driver in _DAY_TARGETED:
-                # Full day clear — destroy everything on the target day, no k limit
                 if driver in _NEEDS_ROUTES:
                     targets = break_fn(state, instance, current_routes)
                 else:
@@ -208,9 +183,6 @@ def route_lns(
 
             op_detail = f"op={break_label} k={k} repair={rand_driver}"
 
-        # ------------------------------------------------------------------ #
-        # Re-route only dirty days (days where stops changed)                  #
-        # ------------------------------------------------------------------ #
         unscheduled_count = sum(len(v) for v in state['unscheduled'].values())
         if unscheduled_count > 0:
             log.warning(f"iter={iteration:4d}  {op_detail}  REJECT (unscheduled={unscheduled_count})")

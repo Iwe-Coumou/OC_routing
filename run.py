@@ -4,7 +4,7 @@ import subprocess
 import sys
 
 
-def _read_cost(solution_file: str) -> int | None:
+def _read_cost(solution_file: str):
     if not os.path.isfile(solution_file):
         return None
     with open(solution_file) as fh:

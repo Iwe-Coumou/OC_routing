@@ -4,13 +4,6 @@ from instance import Instance, Request
 
 
 def break_tool_cost(state: dict, instance: Instance) -> list[Request]:
-    """Return all requests on loan during the peak tool-cost day.
-
-    Finds the (tool_type, day) pair with the highest weighted concurrent loan
-    count, then returns every request on loan that day sorted by cost contribution.
-    Returning the full set (not top-k) gives repair maximum freedom to flatten
-    the loan peak.
-    """
     tool_by_id = {t.id: t for t in instance.tools}
 
     best_weighted_peak, peak_tool_id, peak_day = 0, None, None
@@ -40,8 +33,7 @@ def break_tool_cost(state: dict, instance: Instance) -> list[Request]:
     return [e['request'] for e in candidates]
 
 
-def _stop_detour(route, stop_idx: int, depot_id: int, instance: Instance) -> int:
-    """Marginal distance of stop stop_idx: dist(prev,stop)+dist(stop,next)-dist(prev,next)."""
+def _stop_detour(route, stop_idx, depot_id, instance):
     stops = route.stops
     prev_loc = stops[stop_idx - 1].location_id if stop_idx > 0 else depot_id
     curr_loc = stops[stop_idx].location_id
@@ -52,12 +44,6 @@ def _stop_detour(route, stop_idx: int, depot_id: int, instance: Instance) -> int
 
 
 def break_vehicle_cost(state: dict, instance: Instance, route_set: dict) -> list[Request]:
-    """Return all requests with a stop on the peak vehicle day.
-
-    Clears the entire peak day so repair can freely redistribute its requests
-    across other days, enabling structural vehicle-count reduction rather than
-    just marginal load shuffling.
-    """
     if not route_set:
         return []
 
@@ -80,13 +66,6 @@ def break_vehicle_cost(state: dict, instance: Instance, route_set: dict) -> list
 
 def break_vehicle_day_cost(state: dict, instance: Instance, route_set: dict,
                            k: int | None = None) -> list[Request]:
-    """Return requests most responsible for total vehicle-day cost.
-
-    Scores each request by route_distance / n_stops for its delivery and pickup routes.
-    A high score means the request rides a sparse route — the strongest driver of
-    unnecessary vehicle-days.
-    """
-    # Map request_id -> {action -> route} from actual routes
     req_route: dict[int, dict] = {}
     for routes in route_set.values():
         for route in routes:
@@ -113,12 +92,6 @@ def break_vehicle_day_cost(state: dict, instance: Instance, route_set: dict,
 
 def break_distance_cost(state: dict, instance: Instance, route_set: dict,
                         k: int | None = None) -> list[Request]:
-    """Return requests most responsible for distance cost.
-
-    Scores each request by its actual detour: dist(prev,stop)+dist(stop,next)-dist(prev,next)
-    summed over its delivery and pickup stops. This is the exact marginal distance that
-    removing the request from its current routes would save.
-    """
     depot_id = instance.depot_id
     req_by_id = {r.id: r for r in instance.requests}
 
@@ -139,11 +112,6 @@ def break_distance_cost(state: dict, instance: Instance, route_set: dict,
 
 
 def break_worst_day(state: dict, instance: Instance, route_set: dict) -> list[Request]:
-    """Return all requests with a stop on the highest-distance routing day.
-
-    Clears the entire worst day so repair can freely redistribute its requests,
-    enabling structural route improvements rather than marginal detour reduction.
-    """
     if not route_set:
         return []
 
@@ -164,12 +132,6 @@ def break_worst_day(state: dict, instance: Instance, route_set: dict) -> list[Re
 
 
 def break_geographic(state: dict, instance: Instance, k: int) -> list[Request]:
-    """Return k requests nearest (by location) to a random seed request.
-
-    Selects a random scheduled request as seed, then returns the k closest
-    scheduled requests by location distance (seed included). Destroying a
-    geographic cluster enables the repair to find better joint routings.
-    """
     if not state['scheduled']:
         return []
     seed_loc = random.choice(state['scheduled'])['request'].location_id

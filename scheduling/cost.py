@@ -4,11 +4,6 @@ from instance import Instance
 
 
 def compute_tool_cost(state: dict, instance: Instance) -> int:
-    """Peak concurrent tool usage across the horizon, multiplied by per-tool cost.
-
-    Peak is measured after deliveries but before pickups on each day, matching
-    Validate._calculateSolution (worst-case: no same-day same-vehicle transfers).
-    """
     tool_by_type = {t.id: t for t in instance.tools}
     tool_cost = 0
     for machine_type, diff in state['loans'].items():
@@ -23,11 +18,6 @@ def compute_tool_cost(state: dict, instance: Instance) -> int:
 
 
 def day_tour_estimate(locs: list[int], instance: Instance) -> float:
-    """Nearest-neighbour TSP approximation: depot → all unique locations → depot.
-
-    Much closer to actual routing cost than mean-distance-to-depot, at O(n²)
-    per day (n ≤ ~80 stops in practice — acceptable for a scheduling proxy).
-    """
     unvisited = list(dict.fromkeys(locs))  # deduplicate, preserve order
     if not unvisited:
         return 0.0
@@ -41,7 +31,6 @@ def day_tour_estimate(locs: list[int], instance: Instance) -> float:
 
 
 def estimate_vehicles_and_distance(state: dict, instance: Instance) -> tuple[dict, float]:
-    """Return (vehicles_per_day, total_distance_score) estimated without actual routes."""
     tool_by_type = {t.id: t for t in instance.tools}
 
     load_per_day = defaultdict(int)
@@ -67,7 +56,6 @@ def estimate_vehicles_and_distance(state: dict, instance: Instance) -> tuple[dic
 
 
 def cost_breakdown(state: dict, instance: Instance) -> dict:
-    """Return each cost component as a dict."""
     tool_cost = compute_tool_cost(state, instance)
 
     vehicles_per_day, total_distance = estimate_vehicles_and_distance(state, instance)
@@ -94,31 +82,11 @@ _UNSCHEDULED_PENALTY = 1_000_000  # per unscheduled request
 
 
 def compute_cost_estimate(state: dict, instance: Instance) -> float:
-    """Total estimated cost, plus a large penalty for any unscheduled requests.
-
-    The penalty ensures LNS never accepts a state where repair failed to place
-    all requests, even if the partial schedule has lower raw cost.
-    """
     unscheduled = sum(len(v) for v in state['unscheduled'].values())
     return cost_breakdown(state, instance)['total'] + unscheduled * _UNSCHEDULED_PENALTY
 
 
 def routed_cost_breakdown(state: dict, route_set: dict, instance: Instance) -> dict:
-    """Exact cost breakdown using actual routed distances.
-
-    Replaces the naive distance estimate in cost_breakdown() with the true
-    distances from solved vehicle routes. Tool cost is unchanged — it depends
-    only on the schedule, not the routes.
-
-    Args:
-        state:     Schedule state (for tool cost via loans).
-        route_set: RouteSet from routing.solve_routing() —
-                   dict[int, list[VehicleRoute]].
-        instance:  Problem instance.
-
-    Returns:
-        Same dict structure as cost_breakdown(), compatible with print_cost().
-    """
     tool_cost = compute_tool_cost(state, instance)
 
     max_vehicles       = max((len(routes) for routes in route_set.values()), default=0)
@@ -142,7 +110,6 @@ def routed_cost_breakdown(state: dict, route_set: dict, instance: Instance) -> d
 
 
 def print_cost(breakdown: dict, label: str = '') -> None:
-    """Print a formatted cost breakdown dict (from cost_breakdown())."""
     b = breakdown
     prefix = f"{label}: " if label else ''
     print(

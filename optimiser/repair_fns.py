@@ -9,13 +9,6 @@ log = logging.getLogger(__name__)
 
 
 def _next_request(state: dict, instance: Instance, blocked: set):
-    """Return the unscheduled request with the fewest currently feasible days (MRV).
-
-    Re-evaluated on every call so that capacity changes from prior commits are
-    reflected. Requests in `blocked` are skipped — they have already been found
-    to have no feasible day and can't be helped by further commits.
-    Ties broken by window width then EDD.
-    """
     best_req = None
     best_key = (float('inf'),) * 3
     for reqs in state['unscheduled'].values():
@@ -34,7 +27,6 @@ def _next_request(state: dict, instance: Instance, blocked: set):
 
 
 def _first_feasible_day(state: dict, instance: Instance, req) -> int | None:
-    """Earliest feasible delivery day in the request's time window."""
     for d in range(req.earliest, req.latest + 1):
         if is_feasible(state, instance, req, d, d + req.duration):
             return d
@@ -42,7 +34,6 @@ def _first_feasible_day(state: dict, instance: Instance, req) -> int | None:
 
 
 def _cheapest_insertion_cost(loc: int, routes: list, depot_id: int, instance) -> int:
-    """Minimum additional distance to insert loc into any position across all routes on a day."""
     if not routes:
         return 2 * instance.get_distance(depot_id, loc)
     best = float('inf')
@@ -62,12 +53,6 @@ def _cheapest_insertion_cost(loc: int, routes: list, depot_id: int, instance) ->
 
 def repair_tool_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                      current_routes: dict | None = None) -> None:
-    """Place unscheduled requests to minimise peak concurrent tool loans.
-
-    For each request (MRV order), picks the feasible delivery day that minimises the
-    resulting maximum concurrent loan count across the planning horizon, spreading
-    deliveries to flatten the loan peak for each tool type.
-    """
     n = instance.config.days + 2
     blocked: set = set()
 
@@ -124,12 +109,6 @@ def repair_tool_cost(state: dict, instance: Instance, epsilon: float = 0.0,
 
 def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                         current_routes: dict | None = None) -> None:
-    """Place unscheduled requests to minimise the peak daily vehicle count.
-
-    For each request (MRV order), picks the feasible day where adding this request
-    results in the lowest max-vehicles-on-any-day. Ties are broken by preferring the
-    day with the most existing load (consolidation into running vehicles).
-    """
     tool_by_type = {t.id: t for t in instance.tools}
     cap = instance.config.capacity
     blocked: set = set()
@@ -182,12 +161,6 @@ def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0,
 
 def repair_vehicle_day_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                             current_routes: dict | None = None) -> None:
-    """Place unscheduled requests to minimise total vehicle-days.
-
-    For each request (MRV order), picks the feasible day pair (delivery, pickup) where
-    the combined existing load is highest — consolidating onto already-busy days fills
-    running vehicles rather than spawning new trips.
-    """
     tool_by_type = {t.id: t for t in instance.tools}
     blocked: set = set()
 
@@ -230,13 +203,6 @@ def repair_vehicle_day_cost(state: dict, instance: Instance, epsilon: float = 0.
 
 def repair_distance_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                          current_routes: dict | None = None) -> None:
-    """Place unscheduled requests to minimise distance cost.
-
-    When current_routes is provided (optimiser context), scores each candidate day
-    by the cheapest insertion cost into the actual routes for that day — the exact
-    marginal distance the new stop adds. Falls back to nearest-stop estimate when
-    routes are unavailable (scheduling context).
-    """
     depot_id = instance.depot_id
     blocked: set = set()
 

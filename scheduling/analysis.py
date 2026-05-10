@@ -4,7 +4,6 @@ from .cost import estimate_vehicles_and_distance
 
 
 def tasks_by_day(state: dict, instance: Instance) -> dict:
-    """Return per-day task lists. Each task is a dict with type, location, load, request_id."""
     tool_by_type = {t.id: t for t in instance.tools}
     result = defaultdict(list)
     for e in state['scheduled']:
@@ -23,10 +22,6 @@ def tasks_by_day(state: dict, instance: Instance) -> dict:
 
 
 def tool_peak_usage(state: dict, instance: Instance) -> dict:
-    """Return peak concurrent usage per tool type.
-
-    Peak = after-deliveries before-pickups, matching Validate._calculateSolution.
-    """
     result = {}
     for t in instance.tools:
         diff    = state['loans'].get(t.id, [0] * (instance.config.days + 2))
@@ -65,7 +60,6 @@ def print_tool_usage(state: dict, instance: Instance) -> None:
 
 
 def print_load_distribution(state: dict, instance: Instance, bar_width: int = 40) -> None:
-    """For each tool type, print concurrent loan count per day as a bar chart."""
     for t in instance.tools:
         diff    = state['loans'].get(t.id, [0] * (instance.config.days + 2))
         pickups = state['pickups_per_day'].get(t.id, [0] * (instance.config.days + 2))

@@ -1,28 +1,8 @@
-"""Write a VeRoLog-format solution file from a RouteSet.
-
-The format is validated by Validate.py (teacher's tool). The V-line computation
-replicates the same logic used in Validate._calculateSolution so that the
-given and calculated values always agree.
-"""
-
 from instance import Instance
-from .routes import VehicleRoute, Stop
+from .model import VehicleRoute, Stop
 
-
-# ---------------------------------------------------------------------------
-# V-line computation
-# ---------------------------------------------------------------------------
 
 def _compute_depot_visits(route: VehicleRoute, instance: Instance, req_lookup: dict) -> list:
-    """Compute the depotVisits list for a single-trip vehicle route.
-
-    Replicates the validator's depotVisits logic for a route of the form
-    depot -> stops... -> depot (exactly one trip).
-
-    Returns a list of two tool-delta vectors:
-        [0] = what the vehicle loaded at the start depot (negative values)
-        [1] = what the vehicle unloaded at the end depot (positive values)
-    """
     n = len(instance.tools)
     current = [0] * n
     node_visits = []
@@ -44,27 +24,13 @@ def _compute_depot_visits(route: VehicleRoute, instance: Instance, req_lookup: d
     for nv in node_visits:
         bring = [min(a, b) for a, b in zip(bring, nv)]
 
-    # depotVisit[0] = bringTools added to initial depotVisits[-1] (which is [0]*n)
     depot_start = list(bring)
-    # depotVisit[1] = nodeVisits[-1] - bringTools
     depot_end = [b - a for a, b in zip(bring, node_visits[-1])]
 
     return [depot_start, depot_end]
 
 
-# ---------------------------------------------------------------------------
-# Per-day aggregates
-# ---------------------------------------------------------------------------
-
 def _day_aggregates(vehicles: list, instance: Instance, req_lookup: dict) -> tuple:
-    """Compute (calcStartDepot, calcFinishDepot) for a day.
-
-    Follows the same accumulation loop as Validate._calculateSolution.
-
-    Returns:
-        (calc_start, calc_finish): each is a list[int] of length n_tools,
-        representing net tool change for the day (delta, not absolute).
-    """
     n = len(instance.tools)
     tool_size = [t.size for t in instance.tools]
     calc_start = [0] * n
@@ -86,28 +52,14 @@ def _day_aggregates(vehicles: list, instance: Instance, req_lookup: dict) -> tup
     return calc_start, calc_finish
 
 
-# ---------------------------------------------------------------------------
-# Absolute depot inventory
-# ---------------------------------------------------------------------------
-
 def _compute_depot_inventories(route_set: dict, instance: Instance, req_lookup: dict) -> tuple:
-    """Return (tool_use, start_depots, finish_depots).
-
-    tool_use: list[int] — peak concurrent tool loans per type (for header),
-              computed from routes using the same algorithm as Validate.py
-              _calculateSolution.
-    start_depots: dict[int, list[int]] — absolute depot inventory at start of each day
-    finish_depots: dict[int, list[int]] — absolute depot inventory at end of each day
-    """
     n = len(instance.tools)
 
-    # First pass: compute delta aggregates per day
     day_deltas = {}
     for day in sorted(route_set):
         cs, cf = _day_aggregates(route_set[day], instance, req_lookup)
         day_deltas[day] = (cs, cf)
 
-    # Compute running toolStatus and toolUse (peak concurrent loans).
     # Replicates Validate._calculateSolution: peak measured after calcStartDepot
     # (morning deliveries) but before calcFinishDepot (evening pickups).
     tool_status = [0] * n
@@ -118,7 +70,6 @@ def _compute_depot_inventories(route_set: dict, instance: Instance, req_lookup: 
         tool_use = [max(-a, b) for a, b in zip(tool_status, tool_use)]
         tool_status = [a + b for a, b in zip(tool_status, cf)]
 
-    # Second pass: compute absolute depot inventories
     tool_status = list(tool_use)
     start_depots = {}
     finish_depots = {}
@@ -132,16 +83,7 @@ def _compute_depot_inventories(route_set: dict, instance: Instance, req_lookup: 
     return tool_use, start_depots, finish_depots
 
 
-# ---------------------------------------------------------------------------
-# Stats
-# ---------------------------------------------------------------------------
-
 def routing_stats(route_set: dict, instance: Instance) -> dict:
-    """Return routing statistics for the current RouteSet.
-
-    Returns:
-        dict with keys: max_vehicles, vehicle_days, total_distance
-    """
     max_vehicles = 0
     vehicle_days = 0
     total_distance = 0
@@ -156,17 +98,7 @@ def routing_stats(route_set: dict, instance: Instance) -> dict:
     }
 
 
-# ---------------------------------------------------------------------------
-# Cost breakdown from routes
-# ---------------------------------------------------------------------------
-
 def cost_from_routes(route_set: dict, instance: Instance) -> dict:
-    """Compute the full cost breakdown from routes, matching the validator exactly.
-
-    Tool cost is derived from the route V-lines (same logic as Validate.py),
-    not from the schedule state, so this value agrees with the COST line in
-    the solution file.
-    """
     req_lookup = {r.id: r for r in instance.requests}
     stats = routing_stats(route_set, instance)
     tool_use, _, _ = _compute_depot_inventories(route_set, instance, req_lookup)
@@ -188,28 +120,18 @@ def cost_from_routes(route_set: dict, instance: Instance) -> dict:
     }
 
 
-# ---------------------------------------------------------------------------
-# File writer
-# ---------------------------------------------------------------------------
-
-def read_solution(path: str, instance: Instance) -> tuple[dict, dict]:
-    """Parse a saved VeRoLog solution file and reconstruct (state, route_set).
-
-    Reads the format written by write_solution(). Returns a fully committed
-    scheduling state and a RouteSet, ready to use as a warm start for route_lns().
-    Uses a local import of scheduling.state to avoid circular imports at module level.
-    """
+def read_solution(path: str, instance: Instance) -> tuple:
     from scheduling.state import build_state, commit_request
 
     req_by_id = {r.id: r for r in instance.requests}
     tool_by_type = {t.id: t for t in instance.tools}
 
-    delivery_days: dict[int, int] = {}   # req_id -> delivery_day
-    route_set: dict[int, list] = {}
+    delivery_days = {}
+    route_set = {}
 
     current_day = None
-    veh_stops: dict[int, list] = {}
-    veh_dist: dict[int, int] = {}
+    veh_stops = {}
+    veh_dist = {}
 
     def _finalise_day():
         if current_day is None:
@@ -236,7 +158,6 @@ def read_solution(path: str, instance: Instance) -> tuple[dict, dict]:
             elif '\tR\t' in line:
                 parts = line.split('\t')
                 vnum = int(parts[0])
-                # format: vnum  R  0  [+delivery_id / -pickup_id ...]  0
                 tokens = parts[3:-1]
                 stops = []
                 for tok in tokens:
@@ -275,20 +196,12 @@ def read_solution(path: str, instance: Instance) -> tuple[dict, dict]:
 
 
 def write_solution(route_set: dict, instance: Instance, output_path: str) -> None:
-    """Write a VeRoLog-format solution file.
-
-    Args:
-        route_set: RouteSet from solve_routing().
-        instance: Problem instance.
-        output_path: Destination file path.
-    """
     req_lookup = {r.id: r for r in instance.requests}
     stats = routing_stats(route_set, instance)
     tool_use, start_depots, finish_depots = _compute_depot_inventories(
         route_set, instance, req_lookup
     )
 
-    # Compute total cost
     veh_cost = stats['max_vehicles'] * instance.config.vehicle_cost
     veh_day_cost = stats['vehicle_days'] * instance.config.vehicle_day_cost
     dist_cost = stats['total_distance'] * instance.config.distance_cost
@@ -296,7 +209,6 @@ def write_solution(route_set: dict, instance: Instance, output_path: str) -> Non
     total_cost = veh_cost + veh_day_cost + dist_cost + tool_cost
 
     with open(output_path, 'w') as f:
-        # Header
         f.write(f'DATASET = VeRoLog solver challenge 2017\n')
         f.write(f'NAME = {instance.name}\n')
         f.write('\n')
@@ -315,20 +227,17 @@ def write_solution(route_set: dict, instance: Instance, output_path: str) -> Non
             f.write(f'FINISH_DEPOT = {" ".join(str(x) for x in finish_depots[day])}\n')
 
             for veh_num, route in enumerate(routes, start=1):
-                # R line: depot, +req_id for delivery, -req_id for pickup, depot
                 route_ids = []
                 for stop in route.stops:
                     route_ids.append(stop.request_id if stop.action == 'delivery' else -stop.request_id)
                 r_line = '\t'.join(str(x) for x in [veh_num, 'R', 0] + route_ids + [0])
                 f.write(r_line + '\n')
 
-                # V lines
                 depot_visits = _compute_depot_visits(route, instance, req_lookup)
                 for visit_num, dv in enumerate(depot_visits, start=1):
                     v_line = '\t'.join(str(x) for x in [veh_num, 'V', visit_num] + dv)
                     f.write(v_line + '\n')
 
-                # D line
                 f.write(f'{veh_num}\tD\t{route.distance}\n')
 
             f.write('\n')

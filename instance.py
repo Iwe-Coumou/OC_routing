@@ -47,7 +47,6 @@ class Instance:
                 "Invalid instance file:\n" + "\n".join(raw.errorReport)
             )
 
-        # scalar config — direct attribute mapping
         self.dataset = raw.Dataset
         self.name    = raw.Name
 
@@ -61,7 +60,6 @@ class Instance:
             distance_cost     = raw.DistanceCost,
         )
 
-        # tools — teacher uses raw.Tools[i].ID/.weight/.amount/.cost
         self.tools = [
             Tool(
                 id            = t.ID,
@@ -72,7 +70,6 @@ class Instance:
             for t in raw.Tools
         ]
 
-        # requests — teacher uses raw.Requests[i].ID/.node/.fromDay/.toDay/.numDays/.tool/.toolCount
         self.requests = [
             Request(
                 id            = r.ID,
@@ -86,7 +83,6 @@ class Instance:
             for r in raw.Requests
         ]
 
-        # coordinates — teacher uses raw.Coordinates[i].ID/.X/.Y
         self.coordinates = [
             (c.X, c.Y) for c in raw.Coordinates
         ]
