@@ -71,7 +71,7 @@ optimiser/
 
 ### Greedy construction
 
-Multiple construction heuristics are tried and the one producing the lowest estimated cost is kept. The orderings are: earliest-deadline-first (EDD), tightest time window first, heaviest tool demand first, and latest-start first. Ten randomised orderings are also tried. Each ordering places requests one by one on the first feasible day; feasibility is checked in O(days) using a difference array over tool loans.
+Five construction heuristics are tried and the one producing the lowest estimated cost is kept. Four use fixed orderings — earliest-deadline-first (EDD), tightest time window first, heaviest tool demand first, and latest-start first — and one uses dynamic MRV ordering (see below). Each ordering places requests one by one on the first feasible day; feasibility is checked in O(days) using a difference array over tool loans. If a heuristic leaves requests unscheduled, an ejection-chain repair pass is attempted before evaluating its cost.
 
 If a single fixed ordering is required (benchmark methods), `build_schedule_single` is used instead.
 
@@ -82,9 +82,9 @@ The outer loop runs for up to 500 iterations. Each iteration:
 1. **Destroy** — a break operator removes a subset of requests from the schedule.
 2. **Repair** — a repair operator reinserts them.
 3. **Route** — the affected days are re-solved with OR-Tools to get an exact routing cost.
-4. **Accept/reject** — the candidate is accepted if it improves cost, or with probability exp(−Δ/T) under simulated annealing (SA).
+4. **Accept/reject** — the candidate cost is `routed_cost + n_unscheduled × penalty`, where `penalty = int(T₀)`. This means unscheduled requests are heavily penalised but never hard-rejected: SA can accept states with unscheduled requests if they are on a path toward full scheduling. A separate feasible-best tracker records the best fully-scheduled state seen; that is what is restored at the end and written to disk. If no fully-scheduled state is ever found, no solution is written.
 
-The SA temperature T starts at 2% of the initial cost and decays geometrically (α = 0.998).
+The SA temperature T starts at 2% of the initial routed cost and decays geometrically (α = 0.998).
 
 **Weight and temperature resets** — when no improvement is found for 150 consecutive iterations (patience), rather than stopping immediately the search resets all operator weights to their initial values and reheats T to 50% of T₀. This allows the search to escape local optima by giving all operators a fresh start and restoring exploration capacity. Up to 3 resets are performed before the run terminates.
 
@@ -100,7 +100,7 @@ This decoupled design gives the search `n_break × n_repair` effective operator 
 
 ### Adaptive destroy size
 
-The destroy size k is scaled by `k_scale`, which starts at 1.0 and shrinks by 10% on every repair failure (floor 0.1), recovering by 2% on every success. On instances where tool availability is fully saturated and the schedule has little flexibility, `k_scale` quickly converges to 0.1, automatically reducing destroy sizes to avoid infeasible repairs.
+The destroy size k is scaled by `k_scale`, which starts at 1.0 and shrinks by 10% whenever repair leaves requests unscheduled (floor 0.1), recovering by 2% when all requests are placed. On instances where tool availability is fully saturated and the schedule has little flexibility, `k_scale` quickly converges to 0.1, automatically reducing destroy sizes to avoid infeasible repairs.
 
 ### Break operators
 

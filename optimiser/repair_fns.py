@@ -3,7 +3,7 @@ import random
 import logging
 from collections import defaultdict
 from instance import Instance
-from scheduling.state import commit_request, is_feasible
+from scheduling.state import commit_request, is_feasible, _first_feasible_day
 
 log = logging.getLogger(__name__)
 
@@ -24,13 +24,6 @@ def _next_request(state: dict, instance: Instance, blocked: set):
                 best_key = key
                 best_req = req
     return best_req
-
-
-def _first_feasible_day(state: dict, instance: Instance, req) -> int | None:
-    for d in range(req.earliest, req.latest + 1):
-        if is_feasible(state, instance, req, d, d + req.duration):
-            return d
-    return None
 
 
 def _cheapest_insertion_cost(loc: int, routes: list, depot_id: int, instance) -> int:

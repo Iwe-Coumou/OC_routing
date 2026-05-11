@@ -101,7 +101,9 @@ def main():
 
         if initial_routes is None:
             state = build_schedule(instance)
-            validate_schedule(state['scheduled'], instance)
+            n_unscheduled = sum(len(v) for v in state['unscheduled'].values())
+            if n_unscheduled > 0:
+                print(f"  WARNING: {n_unscheduled} request(s) could not be scheduled")
 
             print(f"\n{'='*60}")
             print("  INITIAL SCHEDULE")
@@ -113,6 +115,9 @@ def main():
         print(f"{'='*60}")
         route_set = route_lns(state, instance, iterations=500, patience=150,
                               initial_routes=initial_routes)
+        if route_set is None:
+            print("\n  ERROR: no feasible solution found — not all requests could be scheduled.")
+            return
 
     print(f"\n{'='*60}")
     print("  FINAL COST")

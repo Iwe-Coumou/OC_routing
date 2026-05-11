@@ -1,4 +1,3 @@
-import random
 import logging
 from collections import defaultdict
 from instance import Instance, Request
@@ -16,9 +15,6 @@ def build_state(instance: Instance) -> dict:
     # within-day peak (after deliveries, before pickups), matching Validate._calculateSolution.
     pickups_per_day = defaultdict(lambda: [0] * (instance.config.days + 2))
     state_dict['pickups_per_day'] = pickups_per_day
-
-    stops_per_day = defaultdict(int)
-    state_dict['stops_per_day'] = stops_per_day
 
     state_dict['scheduled'] = []
 
@@ -65,9 +61,6 @@ def commit_request(state: dict, instance: Instance, request: Request, delivery_d
     state['loans'][request.machine_type][pickup_day] -= request.num_machines
     state['pickups_per_day'][request.machine_type][pickup_day] += request.num_machines
 
-    state['stops_per_day'][delivery_day] += 1
-    state['stops_per_day'][pickup_day] += 1
-
     state['scheduled'].append({
         'request': request,
         'delivery_day': delivery_day,
@@ -91,9 +84,6 @@ def uncommit_request(state: dict, request: Request) -> None:
     state['loans'][request.machine_type][pickup_day] += request.num_machines
     state['pickups_per_day'][request.machine_type][pickup_day] -= request.num_machines
 
-    state['stops_per_day'][delivery_day] -= 1
-    state['stops_per_day'][pickup_day] -= 1
-
     del state['scheduled'][idx]
 
     reqs = state['unscheduled'][request.machine_type]
@@ -108,7 +98,6 @@ def snapshot(state: dict) -> list:
 
 def restore(state: dict, instance: Instance, snap: list) -> None:
     state['scheduled'].clear()
-    state['stops_per_day'].clear()
     for v in state['loans'].values():
         v[:] = [0] * len(v)
     state['pickups_per_day'].clear()
@@ -129,20 +118,107 @@ def _first_feasible_day(state: dict, instance: Instance, request: Request) -> in
     return None
 
 
-def place_unscheduled(state: dict, instance: Instance, key=None, randomize=False) -> None:
+def place_unscheduled(state: dict, instance: Instance, key=None) -> None:
     requests = [r for reqs in state['unscheduled'].values() for r in reqs]
-    if randomize:
-        random.shuffle(requests)
-    else:
-        key = key or (lambda r: (r.latest, r.num_machines * r.duration))
-        requests.sort(key=key)
+    key = key or (lambda r: (r.latest, r.num_machines * r.duration))
+    requests.sort(key=key)
 
     for request in requests:
         day = _first_feasible_day(state, instance, request)
         if day is None:
-            log.warning(f"EDD req={request.id} has no feasible day — leaving unscheduled")
+            log.warning(f"place_unscheduled: req={request.id} has no feasible day — leaving unscheduled")
             continue
         commit_request(state, instance, request, day)
+
+
+def place_unscheduled_mrv(state: dict, instance: Instance) -> None:
+    """Dynamic MRV ordering: at each step place the most constrained unscheduled request."""
+    while True:
+        best_req = None
+        best_key = (float('inf'), float('inf'), float('inf'))
+        for reqs in state['unscheduled'].values():
+            for req in reqs:
+                count = sum(
+                    1 for d in range(req.earliest, req.latest + 1)
+                    if is_feasible(state, instance, req, d, d + req.duration)
+                )
+                key = (count, req.latest - req.earliest, req.latest)
+                if key < best_key:
+                    best_key = key
+                    best_req = req
+        if best_req is None:
+            break
+        day = _first_feasible_day(state, instance, best_req)
+        if day is None:
+            log.warning(f"MRV req={best_req.id} has no feasible day — leaving unscheduled")
+            break
+        commit_request(state, instance, best_req, day)
+
+
+def repair_by_ejection_chain(state: dict, instance: Instance) -> None:
+    """Place unscheduled requests via an ejection chain.
+
+    For each unscheduled request (most-constrained first), try direct
+    placement. If blocked, eject a same-type scheduled request to make room
+    and let it re-enter the unscheduled pool for the next iteration.
+    Each request can be ejected at most once, guaranteeing termination in
+    O(n) outer iterations.
+    """
+    displaced: set = set()  # ejected this call — cannot be ejected again
+    failed: set = set()     # no ejectee found — skip on future iterations
+
+    changed = True
+    while changed:
+        changed = False
+
+        candidates = []
+        for reqs in state['unscheduled'].values():
+            for req in reqs:
+                if req.id in failed:
+                    continue
+                count = sum(
+                    1 for d in range(req.earliest, req.latest + 1)
+                    if is_feasible(state, instance, req, d, d + req.duration)
+                )
+                candidates.append((count, req.latest - req.earliest, req.latest, req.id, req))
+
+        if not candidates:
+            break
+
+        candidates.sort()
+
+        for _, _, _, _, u in candidates:
+            day = _first_feasible_day(state, instance, u)
+            if day is not None:
+                commit_request(state, instance, u, day)
+                changed = True
+                break
+
+            placed = False
+            for entry in list(state['scheduled']):
+                s = entry['request']
+                if s.machine_type != u.machine_type or s.id in displaced:
+                    continue
+                s_day = entry['delivery_day']
+                uncommit_request(state, s)
+                u_day = _first_feasible_day(state, instance, u)
+                if u_day is not None:
+                    commit_request(state, instance, u, u_day)
+                    s_new_day = _first_feasible_day(state, instance, s)
+                    if s_new_day is not None:
+                        commit_request(state, instance, s, s_new_day)
+                        displaced.add(s.id)
+                        placed = True
+                        changed = True
+                        break
+                    uncommit_request(state, u)
+                commit_request(state, instance, s, s_day)
+
+            if not placed:
+                failed.add(u.id)
+
+            if changed:
+                break
 
 
 CONSTRUCTION_KEYS = {
@@ -161,13 +237,13 @@ def build_schedule(instance: Instance) -> dict:
     best_state = None
     best_cost = float('inf')
 
-    candidates = [{'key': key} for key in _ORDERINGS]
-    candidates += [{'randomize': True} for _ in range(10)]
-
-    for opts in candidates:
+    for key in _ORDERINGS:
         state = build_state(instance)
-        place_unscheduled(state, instance, **opts)
+        place_unscheduled(state, instance, key=key)
         n_unscheduled = sum(len(v) for v in state['unscheduled'].values())
+        if n_unscheduled > 0:
+            repair_by_ejection_chain(state, instance)
+            n_unscheduled = sum(len(v) for v in state['unscheduled'].values())
         if n_unscheduled > 0:
             continue
         cost = cost_breakdown(state, instance)['total']
@@ -175,16 +251,19 @@ def build_schedule(instance: Instance) -> dict:
             best_cost = cost
             best_state = state
 
-    if best_state is None:
-        log.warning("build_schedule: no ordering achieved full placement, using best partial")
-        best_n = float('inf')
-        for opts in candidates:
-            state = build_state(instance)
-            place_unscheduled(state, instance, **opts)
-            n = sum(len(v) for v in state['unscheduled'].values())
-            if n < best_n:
-                best_n = n
-                best_state = state
+    # MRV + ejection chain
+    mrv_state = build_state(instance)
+    place_unscheduled_mrv(mrv_state, instance)
+    n_mrv = sum(len(v) for v in mrv_state['unscheduled'].values())
+    if n_mrv > 0:
+        repair_by_ejection_chain(mrv_state, instance)
+        n_mrv = sum(len(v) for v in mrv_state['unscheduled'].values())
+    if n_mrv == 0:
+        cost = cost_breakdown(mrv_state, instance)['total']
+        if cost < best_cost:
+            best_state = mrv_state
+    elif best_state is None:
+        best_state = mrv_state
 
     return best_state
 
@@ -193,6 +272,9 @@ def build_schedule_single(instance: Instance, key) -> dict:
     state = build_state(instance)
     place_unscheduled(state, instance, key=key)
     n = sum(len(v) for v in state['unscheduled'].values())
+    if n > 0:
+        repair_by_ejection_chain(state, instance)
+        n = sum(len(v) for v in state['unscheduled'].values())
     if n > 0:
         log.warning(f"build_schedule_single: {n} requests could not be placed")
     return state
