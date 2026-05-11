@@ -297,7 +297,7 @@ def route_lns(
     log.info(f"final repair weights: { {k: f'{v:.2f}' for k, v in alns_w_repair.items()} }")
     print("  computing final routes (quality mode)...", flush=True)
     clean_fast_routes = solve_routing(state, instance, fast=True)
-    final_routes = solve_routing(state, instance, fast=False, time_limit_seconds=30,
+    final_routes = solve_routing(state, instance, fast=False, time_limit_seconds=15,
                                  initial_routes=clean_fast_routes)
     final_cost = cost_from_routes(final_routes, instance)['total']
     print(f"  final routed cost: {final_cost:.3e}  (LNS best was {best_cost:.3e})", flush=True)

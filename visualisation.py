@@ -169,8 +169,8 @@ def build_sequential_gif(instance_path, solution_path, output_path):
 if __name__ == "__main__":
     # Define paths
     base_dir = r"C:\Users\iweyn\Documents\Uni\Year_3\Combinatorial Optimization\Routing Project\OC_routing"
-    instance_file = os.path.join(base_dir, "instances/B2.txt")
-    solution_file = os.path.join(base_dir, "instances/B2_solution.txt")
-    output_file = os.path.join(base_dir, "full_timeline_animation_B2.gif")
+    instance_file = os.path.join(base_dir, "instances/B1.txt")
+    solution_file = os.path.join(base_dir, "solutions/alns/B1_solution.txt")
+    output_file = os.path.join(base_dir, "full_timeline_animation_B1.gif")
     
     build_sequential_gif(instance_file, solution_file, output_file)

@@ -66,7 +66,7 @@ def main():
         print(f"{'='*60}")
         print("  computing fast routes...", flush=True)
         fast_routes = solve_routing(state, instance, fast=True)
-        route_set = solve_routing(state, instance, fast=False, time_limit_seconds=30,
+        route_set = solve_routing(state, instance, fast=False, time_limit_seconds=15,
                                   initial_routes=fast_routes)
 
     elif args.method == 'greedy_gls':
@@ -83,7 +83,7 @@ def main():
         print(f"{'='*60}")
         print("  computing fast routes...", flush=True)
         fast_routes = solve_routing(state, instance, fast=True)
-        route_set = solve_routing(state, instance, fast=False, time_limit_seconds=30,
+        route_set = solve_routing(state, instance, fast=False, time_limit_seconds=15,
                                   initial_routes=fast_routes)
 
     else:  # alns
