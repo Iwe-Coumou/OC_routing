@@ -48,7 +48,7 @@ def main():
 
     instance = Instance(args.instance)
     os.makedirs('logs', exist_ok=True)
-    _setup_logging(instance.name.replace(' ', '_'))
+    _setup_logging(os.path.splitext(os.path.basename(args.instance))[0])
     output_file = _solution_path(args.instance, args.method)
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
