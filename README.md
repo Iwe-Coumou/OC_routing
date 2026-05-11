@@ -138,7 +138,7 @@ The true routing cost is computed by OR-Tools after each repair step; no estimat
 ### Performance
 
 - **Incremental routing** — after each destroy/repair, only the days whose stop sets changed are re-solved; all other days carry over their existing routes unchanged.
-- **Fast vs. quality solves** — the ALNS loop uses OR-Tools' SAVINGS heuristic (< 1 ms per day). The final solve uses GLS with a 30-second time limit per day.
+- **Fast vs. quality solves** — the ALNS loop uses OR-Tools' SAVINGS heuristic (< 1 ms per day). The final solve uses GLS with a 15-second time limit per day.
 - **Parallel day solves** — during fast routing, all days are solved concurrently via a `ThreadPoolExecutor`.
 - **Difference arrays** — O(1) commit/uncommit and O(days) feasibility checks avoid re-scanning the full schedule on every ALNS move.
 - **MRV ordering in repair** — inserting the most constrained requests first avoids dead-ends when the schedule is nearly full.
