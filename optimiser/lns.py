@@ -3,6 +3,7 @@ import random
 import logging
 from tqdm import tqdm
 from scheduling.state import snapshot, restore, uncommit_request, place_unscheduled
+from scheduling.cost import cost_breakdown
 from routing.solver import solve_routing, solve_routing_incremental, VehicleRoute
 from routing.export import cost_from_routes
 from .break_fns import (
@@ -136,6 +137,7 @@ def route_lns(
     total_improvements = 0
     total_sa_accepts = 0
     restarts = 0
+    dirty_days: set[int] = set()  # days changed by accepted infeasible states, not yet routed
 
     log.info(
         f"=== OPTIMISE START  instance={instance.name}  "
@@ -240,8 +242,54 @@ def route_lns(
                 changed_days.add(e['delivery_day'])
                 changed_days.add(e['pickup_day'])
 
+        # Penalty-mode estimate path: skip routing for infeasible states; use the
+        # scheduling cost estimate instead. Dirty days are carried forward and
+        # flushed into the next real routing call once the state is feasible.
+        if unscheduled_count > 0:  # n_init_unscheduled > 0 guaranteed (hard-reject above handles == 0)
+            sched_estimate = cost_breakdown(state, instance)['total']
+            candidate_cost = sched_estimate + unscheduled_count * unscheduled_penalty
+            delta = candidate_cost - current_cost
+            T = max(T * _SA_ALPHA, 1e-6)
+            if delta < 0 or (T > 1e-6 and random.random() < math.exp(-delta / T)):
+                current_cost = candidate_cost
+                dirty_days |= changed_days
+                no_improve += 1
+                alns_w_break[break_op]   = min(_ALNS_W_MAX, alns_w_break[break_op]   * _ALNS_SA_REWARD)
+                alns_w_repair[repair_op] = min(_ALNS_W_MAX, alns_w_repair[repair_op] * _ALNS_SA_REWARD)
+                log.info(
+                    f"iter={iteration:4d}  {op_detail}  "
+                    f"estimate={sched_estimate:.3e}  unscheduled={unscheduled_count}  delta={delta:+.3e}  ACCEPT (est)"
+                )
+            else:
+                restore(state, instance, snap)
+                no_improve += 1
+                alns_w_break[break_op]   = max(_ALNS_W_MIN, alns_w_break[break_op]   * _ALNS_PENALTY)
+                alns_w_repair[repair_op] = max(_ALNS_W_MIN, alns_w_repair[repair_op] * _ALNS_PENALTY)
+                log.info(
+                    f"iter={iteration:4d}  {op_detail}  "
+                    f"estimate={sched_estimate:.3e}  unscheduled={unscheduled_count}  delta={delta:+.3e}  reject (est)"
+                )
+            pbar.set_postfix(best=f"{best_feasible_cost:.3e}", impr=total_improvements,
+                             stale=no_improve, op=op_label, T=f"{T:.1e}", ks=f"{k_scale:.2f}")
+            if no_improve >= patience:
+                if restarts >= _MAX_RESTARTS:
+                    stop_reason = 'patience'
+                    break
+                restarts += 1
+                no_improve = 0
+                T = T0 * _REHEAT_FRAC
+                alns_w_break  = {k: 1.0 for k in _COST_BREAK_KEYS}
+                alns_w_break['random'] = _RANDOM_INIT_W
+                alns_w_break['geo']    = _RANDOM_INIT_W
+                alns_w_repair = {k: 1.0 for k in _REPAIR_KEYS}
+                log.info(f"iter={iteration:4d}  RESTART {restarts}/{_MAX_RESTARTS}  T={T:.3e}")
+            continue
+
+        # Feasible path: route changed days plus any days dirtied by prior infeasible acceptances.
+        all_changed = changed_days | dirty_days
+        dirty_days = set()
         candidate_routes = solve_routing_incremental(
-            state, instance, changed_days, current_routes
+            state, instance, all_changed, current_routes
         )
         routed_cost = cost_from_routes(candidate_routes, instance)['total']
         candidate_cost = routed_cost + unscheduled_count * unscheduled_penalty
