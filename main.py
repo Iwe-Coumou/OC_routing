@@ -5,6 +5,7 @@ from instance import Instance
 from scheduling.state import build_schedule, validate_schedule
 from scheduling.cost import cost_breakdown, print_cost
 from routing.export import write_solution, cost_from_routes, read_solution
+from routing.solver import solve_routing
 from optimiser.lns import route_lns
 
 logging.basicConfig(
@@ -21,6 +22,13 @@ _opt_logger.setLevel(logging.INFO)
 _opt_logger.addHandler(_opt_handler)
 _opt_logger.propagate = False  # keep optimiser events out of schedule.log
 
+METHODS = ['alns', 'greedy_gls']
+
+
+def _solution_path(instance_path: str, method: str) -> str:
+    name = os.path.splitext(os.path.basename(instance_path))[0]
+    return os.path.join('solutions', method, name + '_solution.txt')
+
 
 def valid_txt(value: str):
     if not value.endswith(".txt"):
@@ -33,43 +41,61 @@ def valid_txt(value: str):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("instance", help="txt file of the instance to be used.", type=valid_txt)
+    parser.add_argument("--method", choices=METHODS, default='alns',
+                        help="Solver method: 'alns' (default) or 'greedy_gls' (benchmark)")
     args = parser.parse_args()
 
     instance = Instance(args.instance)
-    output_file = args.instance.replace('.txt', '_solution.txt')
+    output_file = _solution_path(args.instance, args.method)
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-    # --- warm start from existing solution if available ---
-    initial_routes = None
-    if os.path.isfile(output_file):
-        try:
-            state, initial_routes = read_solution(output_file, instance)
-            print(f"\n{'='*60}")
-            print("  WARM START")
-            print(f"{'='*60}")
-            print_cost(cost_from_routes(initial_routes, instance))
-        except Exception as e:
-            print(f"\n  Could not load existing solution ({e}), starting fresh.")
-            initial_routes = None
-
-    if initial_routes is None:
-        # --- cold start: build fresh schedule ---
+    if args.method == 'greedy_gls':
         state = build_schedule(instance)
         if not validate_schedule(state['scheduled'], instance):
             raise ValueError("Initial schedule is not valid")
 
         print(f"\n{'='*60}")
-        print("  INITIAL SCHEDULE")
+        print("  GREEDY SCHEDULE")
         print(f"{'='*60}")
         print_cost(cost_breakdown(state, instance))
 
-    # --- optimise ---
-    print(f"\n{'='*60}")
-    print("  OPTIMISING")
-    print(f"{'='*60}")
-    route_set = route_lns(state, instance, iterations=500, patience=500,
-                          initial_routes=initial_routes)
+        print(f"\n{'='*60}")
+        print("  ROUTING (GLS)")
+        print(f"{'='*60}")
+        print("  computing fast routes...", flush=True)
+        fast_routes = solve_routing(state, instance, fast=True)
+        route_set = solve_routing(state, instance, fast=False, time_limit_seconds=30,
+                                  initial_routes=fast_routes)
 
-    # --- final cost ---
+    else:  # alns
+        initial_routes = None
+        if os.path.isfile(output_file):
+            try:
+                state, initial_routes = read_solution(output_file, instance)
+                print(f"\n{'='*60}")
+                print("  WARM START")
+                print(f"{'='*60}")
+                print_cost(cost_from_routes(initial_routes, instance))
+            except Exception as e:
+                print(f"\n  Could not load existing solution ({e}), starting fresh.")
+                initial_routes = None
+
+        if initial_routes is None:
+            state = build_schedule(instance)
+            if not validate_schedule(state['scheduled'], instance):
+                raise ValueError("Initial schedule is not valid")
+
+            print(f"\n{'='*60}")
+            print("  INITIAL SCHEDULE")
+            print(f"{'='*60}")
+            print_cost(cost_breakdown(state, instance))
+
+        print(f"\n{'='*60}")
+        print("  OPTIMISING")
+        print(f"{'='*60}")
+        route_set = route_lns(state, instance, iterations=500, patience=500,
+                              initial_routes=initial_routes)
+
     print(f"\n{'='*60}")
     print("  FINAL COST")
     print(f"{'='*60}")

@@ -1,3 +1,0 @@
-=== OPTIMISE START  instance=vehicles over tools over vehicle days over distance with 500 requests over 15 days  initial=3.468e+08  tool=6.430e+07  vehicle=2.800e+08  veh_days=6.760e+05  distance=1.830e+06 ===
-repair_vehicle_cost: req=141 has no feasible day — leaving unscheduled
-repair_vehicle_cost: req=48 has no feasible day — leaving unscheduled

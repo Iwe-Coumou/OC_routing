@@ -17,12 +17,19 @@ def _read_cost(solution_file: str):
     return None
 
 
+def _solution_path(instance_path: str, method: str) -> str:
+    name = os.path.splitext(os.path.basename(instance_path))[0]
+    return os.path.join('solutions', method, name + '_solution.txt')
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Run the optimiser on all instances in the instances/ directory."
     )
     parser.add_argument('--dir', default='instances',
                         help='Directory containing .txt instance files (default: instances/)')
+    parser.add_argument('--method', default='alns', choices=['alns', 'greedy_gls'],
+                        help='Solver method (default: alns)')
     args = parser.parse_args()
 
     instances = sorted(
@@ -35,15 +42,16 @@ def main():
         print(f"No instance files found in {args.dir}/")
         return
 
-    print(f"Found {len(instances)} instances\n")
+    print(f"Found {len(instances)} instances  |  method={args.method}\n")
 
     results = []
     for instance_path in instances:
         name = os.path.basename(instance_path)
-        solution_path = instance_path.replace('.txt', '_solution.txt')
+        solution_path = _solution_path(instance_path, args.method)
         cost_before = _read_cost(solution_path)
 
-        result = subprocess.run([sys.executable, 'main.py', instance_path])
+        result = subprocess.run([sys.executable, 'main.py', instance_path,
+                                 '--method', args.method])
 
         cost_after = _read_cost(solution_path)
         improved = (cost_before is None and cost_after is not None) or \
