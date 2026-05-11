@@ -177,7 +177,8 @@ def route_lns(
                 targets = _BREAK_FNS[break_op](state, instance, current_routes)
             else:
                 targets = _BREAK_FNS[break_op](state, instance)
-            k_str = 'all'
+            targets = targets[:max_destroy]
+            k_str = str(len(targets))
         else:
             k = min(max_destroy, max(1, int(len(state['scheduled']) * k_scale * random.uniform(0.1, 0.25))))
             if break_op in _NEEDS_ROUTES:
@@ -202,6 +203,32 @@ def route_lns(
 
         # --- evaluate ---
         unscheduled_count = sum(len(v) for v in state['unscheduled'].values())
+
+        # Hard-reject fast path: instances that started fully scheduled should never
+        # explore infeasible states — skip routing entirely and restore immediately.
+        if unscheduled_count > 0 and n_init_unscheduled == 0:
+            k_scale = max(0.1, k_scale * 0.9)
+            restore(state, instance, snap)
+            no_improve += 1
+            T = max(T * _SA_ALPHA, 1e-6)
+            alns_w_break[break_op]   = max(_ALNS_W_MIN, alns_w_break[break_op]   * _ALNS_PENALTY)
+            alns_w_repair[repair_op] = max(_ALNS_W_MIN, alns_w_repair[repair_op] * _ALNS_PENALTY)
+            log.info(f"iter={iteration:4d}  {op_detail}  REJECT (unscheduled={unscheduled_count})")
+            pbar.set_postfix(best=f"{best_feasible_cost:.3e}", impr=total_improvements,
+                             stale=no_improve, op=op_label, T=f"{T:.1e}", ks=f"{k_scale:.2f}")
+            if no_improve >= patience:
+                if restarts >= _MAX_RESTARTS:
+                    stop_reason = 'patience'
+                    break
+                restarts += 1
+                no_improve = 0
+                T = T0 * _REHEAT_FRAC
+                alns_w_break  = {k: 1.0 for k in _COST_BREAK_KEYS}
+                alns_w_break['random'] = _RANDOM_INIT_W
+                alns_w_break['geo']    = _RANDOM_INIT_W
+                alns_w_repair = {k: 1.0 for k in _REPAIR_KEYS}
+                log.info(f"iter={iteration:4d}  RESTART {restarts}/{_MAX_RESTARTS}  T={T:.3e}")
+            continue
 
         if unscheduled_count > 0:
             k_scale = max(0.1, k_scale * 0.9)

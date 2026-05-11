@@ -8,22 +8,17 @@ from scheduling.state import commit_request, is_feasible, _first_feasible_day
 log = logging.getLogger(__name__)
 
 
-def _next_request(state: dict, instance: Instance, blocked: set):
-    best_req = None
-    best_key = (float('inf'),) * 3
+def _sorted_candidates(state: dict, instance: Instance) -> list:
+    result = []
     for reqs in state['unscheduled'].values():
         for req in reqs:
-            if req.id in blocked:
-                continue
             count = sum(
                 1 for d in range(req.earliest, req.latest + 1)
                 if is_feasible(state, instance, req, d, d + req.duration)
             )
-            key = (count, req.latest - req.earliest, req.latest)
-            if key < best_key:
-                best_key = key
-                best_req = req
-    return best_req
+            result.append((count, req.latest - req.earliest, req.latest, req.id, req))
+    result.sort()
+    return [req for _, _, _, _, req in result]
 
 
 def _cheapest_insertion_cost(loc: int, routes: list, depot_id: int, instance) -> int:
@@ -47,13 +42,8 @@ def _cheapest_insertion_cost(loc: int, routes: list, depot_id: int, instance) ->
 def repair_tool_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                      current_routes: dict | None = None) -> None:
     n = instance.config.days + 2
-    blocked: set = set()
 
-    while True:
-        req = _next_request(state, instance, blocked)
-        if req is None:
-            break
-
+    for req in _sorted_candidates(state, instance):
         diff = state['loans'].get(req.machine_type, [0] * n)
         pickups = state['pickups_per_day'].get(req.machine_type, [0] * n)
 
@@ -97,20 +87,14 @@ def repair_tool_cost(state: dict, instance: Instance, epsilon: float = 0.0,
             commit_request(state, instance, req, best_day)
         else:
             log.warning(f"repair_tool_cost: req={req.id} has no feasible day — leaving unscheduled")
-            blocked.add(req.id)
 
 
 def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                         current_routes: dict | None = None) -> None:
     tool_by_type = {t.id: t for t in instance.tools}
     cap = instance.config.capacity
-    blocked: set = set()
 
-    while True:
-        req = _next_request(state, instance, blocked)
-        if req is None:
-            break
-
+    for req in _sorted_candidates(state, instance):
         req_load = req.num_machines * tool_by_type[req.machine_type].size
 
         load: dict[int, int] = defaultdict(int)
@@ -149,19 +133,13 @@ def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0,
             commit_request(state, instance, req, best_day)
         else:
             log.warning(f"repair_vehicle_cost: req={req.id} has no feasible day — leaving unscheduled")
-            blocked.add(req.id)
 
 
 def repair_vehicle_day_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                             current_routes: dict | None = None) -> None:
     tool_by_type = {t.id: t for t in instance.tools}
-    blocked: set = set()
 
-    while True:
-        req = _next_request(state, instance, blocked)
-        if req is None:
-            break
-
+    for req in _sorted_candidates(state, instance):
         load: dict[int, int] = defaultdict(int)
         for e in state['scheduled']:
             r = e['request']
@@ -191,19 +169,13 @@ def repair_vehicle_day_cost(state: dict, instance: Instance, epsilon: float = 0.
             commit_request(state, instance, req, best_day)
         else:
             log.warning(f"repair_vehicle_day_cost: req={req.id} has no feasible day — leaving unscheduled")
-            blocked.add(req.id)
 
 
 def repair_distance_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                          current_routes: dict | None = None) -> None:
     depot_id = instance.depot_id
-    blocked: set = set()
 
-    while True:
-        req = _next_request(state, instance, blocked)
-        if req is None:
-            break
-
+    for req in _sorted_candidates(state, instance):
         depot_dist = instance.get_distance(depot_id, req.location_id)
 
         locs_per_day: dict[int, list[int]] = defaultdict(list)
@@ -253,4 +225,3 @@ def repair_distance_cost(state: dict, instance: Instance, epsilon: float = 0.0,
             commit_request(state, instance, req, best_day)
         else:
             log.warning(f"repair_distance_cost: req={req.id} has no feasible day — leaving unscheduled")
-            blocked.add(req.id)
