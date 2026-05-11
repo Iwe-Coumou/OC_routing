@@ -58,10 +58,12 @@ _REPAIR_FNS  = {
     'distance':     repair_distance_cost,
 }
 
-_RANDOM_INIT_W = 0.625  # random+geo start at ~20% combined across 7 break ops
-_EPSILON       = 0.25   # repair randomness
-_SA_T0_FRAC    = 0.02
-_SA_ALPHA      = 0.998
+_RANDOM_INIT_W  = 0.625  # random+geo start at ~20% combined across 7 break ops
+_EPSILON        = 0.25   # repair randomness
+_SA_T0_FRAC     = 0.02
+_SA_ALPHA       = 0.998
+_MAX_RESTARTS   = 3      # weight+temperature resets before stopping
+_REHEAT_FRAC    = 0.5    # T after reheat as fraction of T0
 
 
 def _routes_without(routes: dict, req_ids: set) -> dict:
@@ -121,6 +123,7 @@ def route_lns(
     no_improve = 0
     total_improvements = 0
     total_sa_accepts = 0
+    restarts = 0
 
     log.info(
         f"=== OPTIMISE START  instance={instance.name}  "
@@ -197,8 +200,17 @@ def route_lns(
             pbar.set_postfix(best=f"{best_cost:.3e}", impr=total_improvements,
                              stale=no_improve, op=op_label, ks=f"{k_scale:.2f}")
             if no_improve >= patience:
-                stop_reason = 'patience'
-                break
+                if restarts >= _MAX_RESTARTS:
+                    stop_reason = 'patience'
+                    break
+                restarts += 1
+                no_improve = 0
+                T = T0 * _REHEAT_FRAC
+                alns_w_break  = {k: 1.0 for k in _COST_BREAK_KEYS}
+                alns_w_break['random'] = _RANDOM_INIT_W
+                alns_w_break['geo']    = _RANDOM_INIT_W
+                alns_w_repair = {k: 1.0 for k in _REPAIR_KEYS}
+                log.info(f"iter={iteration:4d}  RESTART {restarts}/{_MAX_RESTARTS}  T={T:.3e}")
             continue
 
         k_scale = min(1.0, k_scale * 1.02)
@@ -263,14 +275,23 @@ def route_lns(
                          stale=no_improve, op=op_label, T=f"{T:.1e}", ks=f"{k_scale:.2f}")
 
         if no_improve >= patience:
-            stop_reason = 'patience'
-            break
+            if restarts >= _MAX_RESTARTS:
+                stop_reason = 'patience'
+                break
+            restarts += 1
+            no_improve = 0
+            T = T0 * _REHEAT_FRAC
+            alns_w_break  = {k: 1.0 for k in _COST_BREAK_KEYS}
+            alns_w_break['random'] = _RANDOM_INIT_W
+            alns_w_break['geo']    = _RANDOM_INIT_W
+            alns_w_repair = {k: 1.0 for k in _REPAIR_KEYS}
+            log.info(f"iter={iteration:4d}  RESTART {restarts}/{_MAX_RESTARTS}  T={T:.3e}")
 
     restore(state, instance, best_snap)
     log.info(
         f"=== OPTIMISE END  best={best_cost:.3e}  improvements={total_improvements}  "
         f"sa_accepts={total_sa_accepts}  iterations={iteration + 1}  stopped={stop_reason}  "
-        f"final_k_scale={k_scale:.3f} ==="
+        f"restarts={restarts}  final_k_scale={k_scale:.3f} ==="
     )
     log.info(f"final break weights:  { {k: f'{v:.2f}' for k, v in alns_w_break.items()} }")
     log.info(f"final repair weights: { {k: f'{v:.2f}' for k, v in alns_w_repair.items()} }")

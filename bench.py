@@ -37,6 +37,8 @@ def main():
         os.path.join(args.dir, f)
         for f in os.listdir(args.dir)
         if f.endswith('.txt') and '_solution' not in f
+        and not f.startswith('B')
+        and any(f'r{n}' in f for n in (300, 500))
     )
 
     if not instances:

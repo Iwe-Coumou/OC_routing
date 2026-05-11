@@ -8,19 +8,19 @@ from routing.export import write_solution, cost_from_routes, read_solution
 from routing.solver import solve_routing
 from optimiser.lns import route_lns
 
-logging.basicConfig(
-    filename='schedule.log',
-    filemode='w',
-    level=logging.DEBUG,
-    format='%(message)s'
-)
-
-_opt_handler = logging.FileHandler('optimiser.log', mode='w')
-_opt_handler.setFormatter(logging.Formatter('%(message)s'))
-_opt_logger = logging.getLogger('optimiser')
-_opt_logger.setLevel(logging.INFO)
-_opt_logger.addHandler(_opt_handler)
-_opt_logger.propagate = False  # keep optimiser events out of schedule.log
+def _setup_logging(instance_name: str) -> None:
+    logging.basicConfig(
+        filename=f'logs/{instance_name}_schedule.log',
+        filemode='w',
+        level=logging.DEBUG,
+        format='%(message)s'
+    )
+    opt_handler = logging.FileHandler(f'logs/{instance_name}_optimiser.log', mode='w')
+    opt_handler.setFormatter(logging.Formatter('%(message)s'))
+    opt_logger = logging.getLogger('optimiser')
+    opt_logger.setLevel(logging.INFO)
+    opt_logger.addHandler(opt_handler)
+    opt_logger.propagate = False
 
 GREEDY_METHODS = {f'greedy_{k}_gls': key for k, key in CONSTRUCTION_KEYS.items()}
 METHODS = ['alns', 'greedy_gls'] + sorted(GREEDY_METHODS)
@@ -47,6 +47,8 @@ def main():
     args = parser.parse_args()
 
     instance = Instance(args.instance)
+    os.makedirs('logs', exist_ok=True)
+    _setup_logging(instance.name.replace(' ', '_'))
     output_file = _solution_path(args.instance, args.method)
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
@@ -109,7 +111,7 @@ def main():
         print(f"\n{'='*60}")
         print("  OPTIMISING")
         print(f"{'='*60}")
-        route_set = route_lns(state, instance, iterations=500, patience=500,
+        route_set = route_lns(state, instance, iterations=500, patience=150,
                               initial_routes=initial_routes)
 
     print(f"\n{'='*60}")

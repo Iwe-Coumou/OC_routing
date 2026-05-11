@@ -77,14 +77,16 @@ If a single fixed ordering is required (benchmark methods), `build_schedule_sing
 
 ### ALNS with simulated annealing
 
-The outer loop runs for a fixed number of iterations. Each iteration:
+The outer loop runs for up to 500 iterations. Each iteration:
 
 1. **Destroy** — a break operator removes a subset of requests from the schedule.
 2. **Repair** — a repair operator reinserts them.
 3. **Route** — the affected days are re-solved with OR-Tools to get an exact routing cost.
 4. **Accept/reject** — the candidate is accepted if it improves cost, or with probability exp(−Δ/T) under simulated annealing (SA).
 
-The SA temperature T starts at 2% of the initial cost and decays geometrically (α = 0.998), reaching ~37% of T₀ at iteration 500.
+The SA temperature T starts at 2% of the initial cost and decays geometrically (α = 0.998).
+
+**Weight and temperature resets** — when no improvement is found for 150 consecutive iterations (patience), rather than stopping immediately the search resets all operator weights to their initial values and reheats T to 50% of T₀. This allows the search to escape local optima by giving all operators a fresh start and restoring exploration capacity. Up to 3 resets are performed before the run terminates.
 
 ### Operator selection — unified adaptive pool
 
