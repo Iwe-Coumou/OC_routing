@@ -6,6 +6,8 @@ venv
 instances 2026
 
 **/*.log
+*.log
 *solution*
 
 *.gif
+optimiser.log
