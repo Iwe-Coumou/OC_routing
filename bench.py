@@ -2,6 +2,7 @@ import argparse
 import os
 import subprocess
 import sys
+from main import METHODS
 
 
 def _read_cost(solution_file: str):
@@ -28,7 +29,7 @@ def main():
     )
     parser.add_argument('--dir', default='instances',
                         help='Directory containing .txt instance files (default: instances/)')
-    parser.add_argument('--method', default='alns', choices=['alns', 'greedy_gls'],
+    parser.add_argument('--method', default='alns', choices=METHODS,
                         help='Solver method (default: alns)')
     args = parser.parse_args()
 

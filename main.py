@@ -2,7 +2,7 @@ import argparse
 import logging
 import os
 from instance import Instance
-from scheduling.state import build_schedule, validate_schedule
+from scheduling.state import build_schedule, build_schedule_single, validate_schedule, CONSTRUCTION_KEYS
 from scheduling.cost import cost_breakdown, print_cost
 from routing.export import write_solution, cost_from_routes, read_solution
 from routing.solver import solve_routing
@@ -22,7 +22,8 @@ _opt_logger.setLevel(logging.INFO)
 _opt_logger.addHandler(_opt_handler)
 _opt_logger.propagate = False  # keep optimiser events out of schedule.log
 
-METHODS = ['alns', 'greedy_gls']
+GREEDY_METHODS = {f'greedy_{k}_gls': key for k, key in CONSTRUCTION_KEYS.items()}
+METHODS = ['alns', 'greedy_gls'] + sorted(GREEDY_METHODS)
 
 
 def _solution_path(instance_path: str, method: str) -> str:
@@ -49,13 +50,29 @@ def main():
     output_file = _solution_path(args.instance, args.method)
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
 
-    if args.method == 'greedy_gls':
-        state = build_schedule(instance)
-        if not validate_schedule(state['scheduled'], instance):
-            raise ValueError("Initial schedule is not valid")
+    if args.method in GREEDY_METHODS:
+        state = build_schedule_single(instance, GREEDY_METHODS[args.method])
+        validate_schedule(state['scheduled'], instance)
 
         print(f"\n{'='*60}")
-        print("  GREEDY SCHEDULE")
+        print(f"  GREEDY SCHEDULE ({args.method})")
+        print(f"{'='*60}")
+        print_cost(cost_breakdown(state, instance))
+
+        print(f"\n{'='*60}")
+        print("  ROUTING (GLS)")
+        print(f"{'='*60}")
+        print("  computing fast routes...", flush=True)
+        fast_routes = solve_routing(state, instance, fast=True)
+        route_set = solve_routing(state, instance, fast=False, time_limit_seconds=30,
+                                  initial_routes=fast_routes)
+
+    elif args.method == 'greedy_gls':
+        state = build_schedule(instance)
+        validate_schedule(state['scheduled'], instance)
+
+        print(f"\n{'='*60}")
+        print("  GREEDY SCHEDULE (best construction)")
         print(f"{'='*60}")
         print_cost(cost_breakdown(state, instance))
 
@@ -82,8 +99,7 @@ def main():
 
         if initial_routes is None:
             state = build_schedule(instance)
-            if not validate_schedule(state['scheduled'], instance):
-                raise ValueError("Initial schedule is not valid")
+            validate_schedule(state['scheduled'], instance)
 
             print(f"\n{'='*60}")
             print("  INITIAL SCHEDULE")

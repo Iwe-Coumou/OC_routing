@@ -145,9 +145,56 @@ def place_unscheduled(state: dict, instance: Instance, key=None, randomize=False
         commit_request(state, instance, request, day)
 
 
+CONSTRUCTION_KEYS = {
+    'edd':   lambda r: (r.latest, r.num_machines * r.duration),
+    'tight': lambda r: (r.latest - r.earliest, r.latest),
+    'heavy': lambda r: (-r.num_machines, r.latest),
+    'late':  lambda r: (-r.earliest, r.latest),
+}
+
+_ORDERINGS = list(CONSTRUCTION_KEYS.values())
+
+
 def build_schedule(instance: Instance) -> dict:
+    from scheduling.cost import cost_breakdown
+
+    best_state = None
+    best_cost = float('inf')
+
+    candidates = [{'key': key} for key in _ORDERINGS]
+    candidates += [{'randomize': True} for _ in range(10)]
+
+    for opts in candidates:
+        state = build_state(instance)
+        place_unscheduled(state, instance, **opts)
+        n_unscheduled = sum(len(v) for v in state['unscheduled'].values())
+        if n_unscheduled > 0:
+            continue
+        cost = cost_breakdown(state, instance)['total']
+        if cost < best_cost:
+            best_cost = cost
+            best_state = state
+
+    if best_state is None:
+        log.warning("build_schedule: no ordering achieved full placement, using best partial")
+        best_n = float('inf')
+        for opts in candidates:
+            state = build_state(instance)
+            place_unscheduled(state, instance, **opts)
+            n = sum(len(v) for v in state['unscheduled'].values())
+            if n < best_n:
+                best_n = n
+                best_state = state
+
+    return best_state
+
+
+def build_schedule_single(instance: Instance, key) -> dict:
     state = build_state(instance)
-    place_unscheduled(state, instance)
+    place_unscheduled(state, instance, key=key)
+    n = sum(len(v) for v in state['unscheduled'].values())
+    if n > 0:
+        log.warning(f"build_schedule_single: {n} requests could not be placed")
     return state
 
 

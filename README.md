@@ -4,11 +4,13 @@ Solver for the VeRoLog 2017 challenge: a capacitated vehicle routing problem whe
 
 ## Methods
 
-Two solver methods are available, selected with `--method`:
+Several solver methods are available, selected with `--method`:
 
 **`alns`** (default) — Greedy construction followed by ALNS + simulated annealing. Supports warm-starting from a previous solution.
 
-**`greedy_gls`** (benchmark) — Greedy construction followed directly by GLS routing, no schedule optimisation. Used as a baseline to quantify ALNS improvement.
+**`greedy_gls`** (benchmark) — Greedy construction (best of multiple orderings) followed directly by GLS routing, no schedule optimisation.
+
+**`greedy_edd_gls`, `greedy_tight_gls`, `greedy_heavy_gls`, `greedy_late_gls`** (construction benchmarks) — Each uses a single fixed construction heuristic followed by GLS routing, allowing direct comparison of construction strategies.
 
 ## Usage
 
@@ -16,8 +18,9 @@ Two solver methods are available, selected with `--method`:
 # single run (ALNS)
 python main.py instances/B2.txt
 
-# single run with benchmark method
+# single run with a specific method
 python main.py instances/B2.txt --method greedy_gls
+python main.py instances/B2.txt --method greedy_tight_gls
 
 # repeated warm-start runs until no improvement
 python run.py instances/B2.txt --patience 3
@@ -46,6 +49,7 @@ visualisation.py — generates a GIF animation of the daily vehicle routes
 solutions/
   alns/          — solution files produced by the ALNS method
   greedy_gls/    — solution files produced by the greedy+GLS benchmark
+  greedy_*/      — solution files for each construction benchmark
 
 scheduling/
   state.py       — schedule state, commit/uncommit, greedy builder, validator
@@ -57,8 +61,8 @@ routing/
 
 optimiser/
   lns.py         — ALNS + SA optimisation loop
-  break_fns.py   — destroy operators (tool cost, vehicle cost, distance, geographic)
-  repair_fns.py  — repair operators (MRV insertion, cheapest insertion)
+  break_fns.py   — destroy operators
+  repair_fns.py  — repair operators
 ```
 
 ---
@@ -67,35 +71,50 @@ optimiser/
 
 ### Greedy construction
 
-Requests are sorted by latest delivery deadline (earliest-deadline-first). Each request is inserted on the first feasible day in its time window `[earliest, latest]`. Feasibility is checked in O(days) using a difference array over tool loans: for each day from delivery through to pickup, the cumulative loan count plus same-day pickups must not exceed the available tool count for that type. The result is a complete, capacity-feasible schedule.
+Multiple construction heuristics are tried and the one producing the lowest estimated cost is kept. The orderings are: earliest-deadline-first (EDD), tightest time window first, heaviest tool demand first, and latest-start first. Ten randomised orderings are also tried. Each ordering places requests one by one on the first feasible day; feasibility is checked in O(days) using a difference array over tool loans.
+
+If a single fixed ordering is required (benchmark methods), `build_schedule_single` is used instead.
 
 ### ALNS with simulated annealing
 
 The outer loop runs for a fixed number of iterations. Each iteration:
 
-1. **Destroy** — a destroy operator removes a subset of requests from the schedule.
-2. **Repair** — a repair operator reinserts them, targeting a specific cost driver.
+1. **Destroy** — a break operator removes a subset of requests from the schedule.
+2. **Repair** — a repair operator reinserts them.
 3. **Route** — the affected days are re-solved with OR-Tools to get an exact routing cost.
 4. **Accept/reject** — the candidate is accepted if it improves cost, or with probability exp(−Δ/T) under simulated annealing (SA).
 
-The SA temperature T starts at 2% of the initial cost and decays geometrically (α = 0.998), reaching ~37% of T₀ at iteration 500. This allows early diversification and later intensification.
+The SA temperature T starts at 2% of the initial cost and decays geometrically (α = 0.998), reaching ~37% of T₀ at iteration 500.
 
-Operator weights adapt via ALNS: operators that produce accepted improvements receive a reward multiplier (×1.5); those producing SA-accepted moves get a smaller reward (×1.05); rejected operators are penalised (×0.90). Weights are bounded to [0.1, 10.0]. In each iteration, 80% of iterations use a cost-targeted destroy operator (selected proportionally to both weight and current cost breakdown), and 20% use random or geographic destroy with a randomly weighted repair.
+### Operator selection — unified adaptive pool
 
-### Destroy operators
+Break and repair operators are selected independently from two separate adaptive pools. Each pool uses the ALNS weight update rule: accepted improvements receive a reward multiplier (×1.5), SA-accepted moves a smaller reward (×1.05), and rejected moves a penalty (×0.90). Weights are bounded to [0.1, 10.0].
 
-| Operator | Cost driver | Mechanism |
+**Break pool** (`tool`, `vehicle`, `vehicle_days`, `distance`, `worst_day`, `random`, `geo`): cost-targeted operators are weighted by their adaptive weight multiplied by their normalised share of the current cost breakdown, so the search naturally focuses on whichever cost component currently dominates. `random` and `geo` use raw adaptive weights and start at 0.625 (giving ~20% combined probability at the start).
+
+**Repair pool** (`tool`, `vehicle`, `vehicle_days`, `distance`): selected purely by adaptive weight, independent of the break operator chosen.
+
+This decoupled design gives the search `n_break × n_repair` effective operator combinations, all explored and weighted by the data rather than fixed pairing assumptions.
+
+### Adaptive destroy size
+
+The destroy size k is scaled by `k_scale`, which starts at 1.0 and shrinks by 10% on every repair failure (floor 0.1), recovering by 2% on every success. On instances where tool availability is fully saturated and the schedule has little flexibility, `k_scale` quickly converges to 0.1, automatically reducing destroy sizes to avoid infeasible repairs.
+
+### Break operators
+
+| Operator | Structural property targeted | Mechanism |
 |---|---|---|
-| `break_tool_cost` | Tool rental | Finds the tool type and day with the highest weighted peak (concurrent loans × unit cost); removes all requests of that type active on that day |
-| `break_vehicle_cost` | Fleet size | Finds the day using the most vehicles; removes requests on that day sorted by load (largest first) |
-| `break_vehicle_day_cost` | Vehicle-days | Scores each request by average route distance on its delivery/pickup days; removes top-k |
-| `break_distance_cost` | Routing distance | Computes detour cost per stop (marginal distance added to its route); removes the k requests with the highest total detour |
-| `break_worst_day` | Routing distance | Same detour scoring but restricted to stops on the single worst-distance day |
-| `break_geographic` | (diversification) | Picks a random seed location; removes the k geographically nearest requests |
+| `break_tool_cost` | Tool rental peak | Finds the tool type and day with the highest weighted peak (concurrent loans × unit cost); removes all requests of that type active on that day |
+| `break_vehicle_cost` | Busiest routing day | Finds the day using the most vehicles; removes requests on that day sorted by load |
+| `break_vehicle_day_cost` | Route density | Scores requests by average route distance on their delivery/pickup days; removes top-k |
+| `break_distance_cost` | Stop detour cost | Computes marginal detour per stop; removes the k requests with the highest total detour |
+| `break_worst_day` | Worst routing day | Same detour scoring restricted to the single worst-distance day |
+| `break_geographic` | Spatial clustering | Picks a random seed location; removes the k geographically nearest requests |
+| `random` | (diversification) | Uniformly random sample of k requests |
 
 ### Repair operators
 
-All repair operators use **MRV ordering** (Minimum Remaining Values): requests with fewer feasible days are inserted first to avoid dead-ends. Each targets a different cost component when choosing which feasible day to assign:
+All repair operators use **MRV ordering** (Minimum Remaining Values): requests with fewer feasible days are inserted first to avoid dead-ends. Each operator chooses among feasible days using a different placement criterion:
 
 | Operator | Placement criterion |
 |---|---|
@@ -108,21 +127,19 @@ A randomisation parameter ε gives each operator a chance to pick uniformly from
 
 ### Feasibility and value tracking
 
-The schedule state maintains two difference arrays per tool type: `loans[t][day]` records the net change in tools on loan (delivery: +machines, pickup: −machines), and `pickups_per_day[t][day]` tracks same-day returns. The current loan count on any day is the prefix sum of `loans`. The within-day peak — the number of tools simultaneously in use before morning pickups are counted — is `prefix_sum + pickups[day]`, which must not exceed the available count.
+The schedule state maintains two difference arrays per tool type: `loans[t][day]` records the net change in tools on loan (delivery: +machines, pickup: −machines), and `pickups_per_day[t][day]` tracks same-day returns. The current loan count on any day is the prefix sum of `loans`. The within-day peak — tools in use before morning pickups — is `prefix_sum + pickups[day]`, which must not exceed the available count.
 
-This representation makes feasibility checks O(days) and commit/uncommit O(1) (just increment/decrement two array entries).
+This representation makes feasibility checks O(days) and commit/uncommit O(1).
 
-The true routing cost is computed by OR-Tools after each repair step; no estimate is used for the accept/reject decision. The cost breakdown (tool rental, fleet size, vehicle-days, distance) is maintained from the last accepted best solution and used to weight operator selection.
+The true routing cost is computed by OR-Tools after each repair step; no estimate is used for the accept/reject decision. The cost breakdown is maintained from the last accepted best solution and used to weight break operator selection.
 
 ### Performance
 
-Several decisions keep the ALNS loop fast enough for 500 iterations on large instances:
-
 - **Incremental routing** — after each destroy/repair, only the days whose stop sets changed are re-solved; all other days carry over their existing routes unchanged.
-- **Fast vs. quality solves** — during the ALNS loop, routing uses OR-Tools' SAVINGS heuristic with no time limit (< 1 ms per day). The final solve uses GLS with a 30-second time limit per day to squeeze out extra routing quality.
-- **Parallel day solves** — during fast routing, all days are submitted concurrently to a `ThreadPoolExecutor`, exploiting OR-Tools' thread-safety and the independence of each day's routing subproblem.
+- **Fast vs. quality solves** — the ALNS loop uses OR-Tools' SAVINGS heuristic (< 1 ms per day). The final solve uses GLS with a 30-second time limit per day.
+- **Parallel day solves** — during fast routing, all days are solved concurrently via a `ThreadPoolExecutor`.
 - **Difference arrays** — O(1) commit/uncommit and O(days) feasibility checks avoid re-scanning the full schedule on every ALNS move.
-- **MRV ordering in repair** — inserting the most constrained requests first avoids expensive backtracking when the schedule is nearly full.
+- **MRV ordering in repair** — inserting the most constrained requests first avoids dead-ends when the schedule is nearly full.
 
 ---
 

@@ -2,6 +2,7 @@ import argparse
 import os
 import subprocess
 import sys
+from main import METHODS
 
 
 def _read_cost(solution_file: str):
@@ -27,7 +28,7 @@ def main():
         description="Run the optimiser repeatedly, warm-starting from the best known solution each time."
     )
     parser.add_argument("instance", help=".txt instance file")
-    parser.add_argument("--method", default='alns', choices=['alns', 'greedy_gls'],
+    parser.add_argument("--method", default='alns', choices=METHODS,
                         help="Solver method (default: alns)")
     parser.add_argument("--runs", type=int, default=0,
                         help="Max runs (0 = run until no improvement or Ctrl+C)")
