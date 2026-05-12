@@ -4,6 +4,7 @@ import os
 from instance import Instance
 from scheduling.state import build_schedule, build_schedule_single, validate_schedule, CONSTRUCTION_KEYS
 from scheduling.cost import cost_breakdown, print_cost
+from scheduling.feasibility import repair_feasibility
 from routing.export import write_solution, cost_from_routes, read_solution
 from routing.solver import solve_routing
 from optimiser.lns import route_lns
@@ -103,7 +104,13 @@ def main():
             state = build_schedule(instance)
             n_unscheduled = sum(len(v) for v in state['unscheduled'].values())
             if n_unscheduled > 0:
-                print(f"  WARNING: {n_unscheduled} request(s) could not be scheduled")
+                print(f"  {n_unscheduled} unscheduled request(s) — running CP-SAT feasibility repair...", flush=True)
+                success = repair_feasibility(state, instance)
+                n_unscheduled = sum(len(v) for v in state['unscheduled'].values())
+                if success:
+                    print(f"  Feasibility repair succeeded — all requests scheduled.", flush=True)
+                else:
+                    print(f"  WARNING: {n_unscheduled} request(s) could not be scheduled after repair", flush=True)
 
             print(f"\n{'='*60}")
             print("  INITIAL SCHEDULE")

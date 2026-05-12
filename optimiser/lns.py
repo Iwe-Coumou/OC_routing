@@ -3,7 +3,6 @@ import random
 import logging
 from tqdm import tqdm
 from scheduling.state import snapshot, restore, uncommit_request, place_unscheduled
-from scheduling.cost import cost_breakdown
 from routing.solver import solve_routing, solve_routing_incremental, VehicleRoute
 from routing.export import cost_from_routes
 from .break_fns import (
@@ -105,25 +104,17 @@ def route_lns(
         print("  computing initial routing cost...", flush=True)
         current_routes = solve_routing(state, instance, fast=True)
     best_clean_cost = cost_from_routes(current_routes, instance)['total']
-    best_snap = snapshot(state)
-    best_routes = current_routes
     breakdown = cost_from_routes(current_routes, instance)
     print(f"  initial routed cost: {best_clean_cost:.3e}", flush=True)
-    n_init_unscheduled = sum(len(v) for v in state['unscheduled'].values())
 
     T0 = _SA_T0_FRAC * best_clean_cost
-    unscheduled_penalty = int(T0)
     T = T0
-    best_cost = best_clean_cost + n_init_unscheduled * unscheduled_penalty
+    best_cost    = best_clean_cost
     current_cost = best_cost
 
-    best_feasible_cost   = float('inf')
-    best_feasible_snap   = None
-    best_feasible_routes = None
-    if n_init_unscheduled == 0:
-        best_feasible_cost   = best_clean_cost
-        best_feasible_snap   = best_snap
-        best_feasible_routes = current_routes
+    best_feasible_cost   = best_clean_cost
+    best_feasible_snap   = snapshot(state)
+    best_feasible_routes = current_routes
 
     max_destroy = max(30, len(state['scheduled']) // 8)
     k_scale = 1.0
@@ -137,11 +128,10 @@ def route_lns(
     total_improvements = 0
     total_sa_accepts = 0
     restarts = 0
-    dirty_days: set[int] = set()  # days changed by accepted infeasible states, not yet routed
 
     log.info(
         f"=== OPTIMISE START  instance={instance.name}  "
-        f"initial={best_clean_cost:.3e}  unscheduled={n_init_unscheduled}  "
+        f"initial={best_clean_cost:.3e}  "
         f"tool={breakdown['tool']:.3e}  vehicle={breakdown['vehicle']:.3e}  "
         f"veh_days={breakdown['vehicle_days']:.3e}  distance={breakdown['distance']:.3e} ==="
     )
@@ -206,9 +196,9 @@ def route_lns(
         # --- evaluate ---
         unscheduled_count = sum(len(v) for v in state['unscheduled'].values())
 
-        # Hard-reject fast path: instances that started fully scheduled should never
-        # explore infeasible states — skip routing entirely and restore immediately.
-        if unscheduled_count > 0 and n_init_unscheduled == 0:
+        # Hard-reject: if repair leaves any requests unscheduled, restore immediately
+        # without routing — the schedule is always feasible so this should never happen.
+        if unscheduled_count > 0:
             k_scale = max(0.1, k_scale * 0.9)
             restore(state, instance, snap)
             no_improve += 1
@@ -232,67 +222,18 @@ def route_lns(
                 log.info(f"iter={iteration:4d}  RESTART {restarts}/{_MAX_RESTARTS}  T={T:.3e}")
             continue
 
-        if unscheduled_count > 0:
-            k_scale = max(0.1, k_scale * 0.9)
-        else:
-            k_scale = min(1.0, k_scale * 1.02)
+        k_scale = min(1.0, k_scale * 1.02)
 
         for e in state['scheduled']:
             if e['request'].id in target_req_ids:
                 changed_days.add(e['delivery_day'])
                 changed_days.add(e['pickup_day'])
 
-        # Penalty-mode estimate path: skip routing for infeasible states; use the
-        # scheduling cost estimate instead. Dirty days are carried forward and
-        # flushed into the next real routing call once the state is feasible.
-        if unscheduled_count > 0:  # n_init_unscheduled > 0 guaranteed (hard-reject above handles == 0)
-            sched_estimate = cost_breakdown(state, instance)['total']
-            candidate_cost = sched_estimate + unscheduled_count * unscheduled_penalty
-            delta = candidate_cost - current_cost
-            T = max(T * _SA_ALPHA, 1e-6)
-            if delta < 0 or (T > 1e-6 and random.random() < math.exp(-delta / T)):
-                current_cost = candidate_cost
-                dirty_days |= changed_days
-                no_improve += 1
-                alns_w_break[break_op]   = min(_ALNS_W_MAX, alns_w_break[break_op]   * _ALNS_SA_REWARD)
-                alns_w_repair[repair_op] = min(_ALNS_W_MAX, alns_w_repair[repair_op] * _ALNS_SA_REWARD)
-                log.info(
-                    f"iter={iteration:4d}  {op_detail}  "
-                    f"estimate={sched_estimate:.3e}  unscheduled={unscheduled_count}  delta={delta:+.3e}  ACCEPT (est)"
-                )
-            else:
-                restore(state, instance, snap)
-                no_improve += 1
-                alns_w_break[break_op]   = max(_ALNS_W_MIN, alns_w_break[break_op]   * _ALNS_PENALTY)
-                alns_w_repair[repair_op] = max(_ALNS_W_MIN, alns_w_repair[repair_op] * _ALNS_PENALTY)
-                log.info(
-                    f"iter={iteration:4d}  {op_detail}  "
-                    f"estimate={sched_estimate:.3e}  unscheduled={unscheduled_count}  delta={delta:+.3e}  reject (est)"
-                )
-            pbar.set_postfix(best=f"{best_feasible_cost:.3e}", impr=total_improvements,
-                             stale=no_improve, op=op_label, T=f"{T:.1e}", ks=f"{k_scale:.2f}")
-            if no_improve >= patience:
-                if restarts >= _MAX_RESTARTS:
-                    stop_reason = 'patience'
-                    break
-                restarts += 1
-                no_improve = 0
-                T = T0 * _REHEAT_FRAC
-                alns_w_break  = {k: 1.0 for k in _COST_BREAK_KEYS}
-                alns_w_break['random'] = _RANDOM_INIT_W
-                alns_w_break['geo']    = _RANDOM_INIT_W
-                alns_w_repair = {k: 1.0 for k in _REPAIR_KEYS}
-                log.info(f"iter={iteration:4d}  RESTART {restarts}/{_MAX_RESTARTS}  T={T:.3e}")
-            continue
-
-        # Feasible path: route changed days plus any days dirtied by prior infeasible acceptances.
-        all_changed = changed_days | dirty_days
-        dirty_days = set()
         candidate_routes = solve_routing_incremental(
-            state, instance, all_changed, current_routes
+            state, instance, changed_days, current_routes
         )
-        routed_cost = cost_from_routes(candidate_routes, instance)['total']
-        candidate_cost = routed_cost + unscheduled_count * unscheduled_penalty
+        routed_cost   = cost_from_routes(candidate_routes, instance)['total']
+        candidate_cost = routed_cost
         delta = candidate_cost - current_cost
         T = max(T * _SA_ALPHA, 1e-6)
 
@@ -302,14 +243,12 @@ def route_lns(
             accept = False
 
         if accept:
-            current_cost = candidate_cost
+            current_cost   = candidate_cost
             current_routes = candidate_routes
 
             if candidate_cost < best_cost:
-                best_cost = candidate_cost
+                best_cost       = candidate_cost
                 best_clean_cost = routed_cost
-                best_snap = snapshot(state)
-                best_routes = candidate_routes
                 breakdown = cost_from_routes(candidate_routes, instance)
                 no_improve = 0
                 total_improvements += 1
@@ -317,7 +256,7 @@ def route_lns(
                 alns_w_repair[repair_op] = min(_ALNS_W_MAX, alns_w_repair[repair_op] * _ALNS_REWARD)
                 log.info(
                     f"iter={iteration:4d}  {op_detail}  "
-                    f"candidate={routed_cost:.3e}  unscheduled={unscheduled_count}  delta={delta:+.3e}  ACCEPT (improve)  "
+                    f"candidate={routed_cost:.3e}  delta={delta:+.3e}  ACCEPT (improve)  "
                     f"[tool={breakdown['tool']:.3e}  vehicle={breakdown['vehicle']:.3e}  "
                     f"veh_days={breakdown['vehicle_days']:.3e}  distance={breakdown['distance']:.3e}]"
                 )
@@ -328,7 +267,7 @@ def route_lns(
                 alns_w_repair[repair_op] = min(_ALNS_W_MAX, alns_w_repair[repair_op] * _ALNS_SA_REWARD)
                 log.info(
                     f"iter={iteration:4d}  {op_detail}  "
-                    f"candidate={routed_cost:.3e}  unscheduled={unscheduled_count}  delta={delta:+.3e}  ACCEPT (SA)"
+                    f"candidate={routed_cost:.3e}  delta={delta:+.3e}  ACCEPT (SA)"
                 )
         else:
             restore(state, instance, snap)
@@ -337,10 +276,10 @@ def route_lns(
             alns_w_repair[repair_op] = max(_ALNS_W_MIN, alns_w_repair[repair_op] * _ALNS_PENALTY)
             log.info(
                 f"iter={iteration:4d}  {op_detail}  "
-                f"candidate={routed_cost:.3e}  unscheduled={unscheduled_count}  delta={delta:+.3e}  reject"
+                f"candidate={routed_cost:.3e}  delta={delta:+.3e}  reject"
             )
 
-        if accept and unscheduled_count == 0 and routed_cost < best_feasible_cost:
+        if accept and routed_cost < best_feasible_cost:
             best_feasible_cost   = routed_cost
             best_feasible_snap   = snapshot(state)
             best_feasible_routes = candidate_routes
@@ -362,7 +301,7 @@ def route_lns(
             log.info(f"iter={iteration:4d}  RESTART {restarts}/{_MAX_RESTARTS}  T={T:.3e}")
 
     log.info(
-        f"=== OPTIMISE END  best_feasible={best_feasible_cost:.3e}  best_penalized={best_clean_cost:.3e}  "
+        f"=== OPTIMISE END  best={best_feasible_cost:.3e}  "
         f"improvements={total_improvements}  sa_accepts={total_sa_accepts}  "
         f"iterations={iteration + 1}  stopped={stop_reason}  "
         f"restarts={restarts}  final_k_scale={k_scale:.3f} ==="

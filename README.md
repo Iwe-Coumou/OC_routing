@@ -6,7 +6,7 @@ Solver for the VeRoLog 2017 challenge: a capacitated vehicle routing problem whe
 
 Several solver methods are available, selected with `--method`:
 
-**`alns`** (default) — Greedy construction followed by ALNS + simulated annealing. Supports warm-starting from a previous solution. If construction leaves requests unscheduled, ALNS uses a penalty approach to search toward a feasible solution; otherwise infeasible repairs are instantly hard-rejected.
+**`alns`** (default) — Greedy construction, CP-SAT feasibility repair (if needed), then ALNS + simulated annealing. Supports warm-starting from a previous solution.
 
 **`greedy_gls`** (benchmark) — Greedy construction (best of multiple orderings) followed directly by GLS routing, no schedule optimisation.
 
@@ -81,12 +81,11 @@ The outer loop runs for up to 500 iterations. Each iteration:
 
 1. **Destroy** — a break operator removes a subset of requests from the schedule.
 2. **Repair** — a repair operator reinserts them.
-3. **Evaluate** — the candidate state is costed and accepted or rejected via simulated annealing. Three cases:
-   - **Hard-reject** (normal instances, repair left requests unscheduled): state is immediately restored without routing.
-   - **Estimate** (instances where construction itself left requests unscheduled, repair still leaves some unscheduled): the scheduling cost estimate replaces true routing cost. Candidate cost is `schedule_estimate + n_unscheduled × penalty` where `penalty = int(T₀)`. No OR-Tools call is made. SA may accept infeasible states on a path toward full scheduling. Changed days are accumulated in a dirty set.
-   - **Route** (all requests scheduled): the affected days — plus any days dirtied by prior infeasible acceptances — are re-solved with OR-Tools. The dirty set is then cleared.
+3. **Evaluate** — the candidate state is costed and accepted or rejected via simulated annealing:
+   - **Hard-reject**: if repair leaves any requests unscheduled, the state is immediately restored without routing. This should not occur in practice since CP-SAT guarantees a feasible starting schedule.
+   - **Route and accept/reject**: the affected days are re-solved with OR-Tools. The candidate cost is the true routed cost; SA acceptance uses `exp(-delta/T)`.
 
-   A separate feasible-best tracker records the best fully-scheduled state seen; that is what is restored at the end and written to disk. If no fully-scheduled state is ever found, no solution is written.
+   A feasible-best tracker records the best fully-scheduled state seen; that is what is restored at the end and written to disk.
 
 The SA temperature T starts at 2% of the initial routed cost and decays geometrically (α = 0.998).
 
@@ -137,7 +136,7 @@ The schedule state maintains two difference arrays per tool type: `loans[t][day]
 
 This representation makes feasibility checks O(days) and commit/uncommit O(1).
 
-The true routing cost is computed by OR-Tools only when all requests are scheduled. For infeasible states (penalty mode), a nearest-neighbour scheduling estimate is used instead, avoiding OR-Tools entirely on those iterations. The cost breakdown is maintained from the last accepted best solution and used to weight break operator selection.
+The true routing cost is computed by OR-Tools after every repair step. The cost breakdown is maintained from the last accepted best solution and used to weight break operator selection.
 
 ### Performance
 
