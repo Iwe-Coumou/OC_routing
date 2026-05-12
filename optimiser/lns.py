@@ -169,7 +169,8 @@ def route_lns(
                 targets = _BREAK_FNS[break_op](state, instance, current_routes)
             else:
                 targets = _BREAK_FNS[break_op](state, instance)
-            targets = targets[:max_destroy]
+            cap = max(1, min(max_destroy, round(len(targets) * k_scale)))
+            targets = targets[:cap]
             k_str = str(len(targets))
         else:
             k = min(max_destroy, max(1, int(len(state['scheduled']) * k_scale * random.uniform(0.1, 0.25))))

@@ -88,51 +88,62 @@ def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
         [instance.get_distance(loc_ids[i], loc_ids[j]) * d_cost for j in range(n)]
         for i in range(n)
     ]
+
+    scaled_transit_index = routing.RegisterTransitMatrix(scaled_matrix)
+    routing.SetArcCostEvaluatorOfAllVehicles(scaled_transit_index)
+    routing.SetFixedCostOfAllVehicles(instance.config.vehicle_day_cost)
+
     raw_matrix = [
         [instance.get_distance(loc_ids[i], loc_ids[j]) for j in range(n)]
         for i in range(n)
     ]
+    raw_transit_index = routing.RegisterTransitMatrix(raw_matrix)
 
-    scaled_transit_index = routing.RegisterTransitMatrix(scaled_matrix)
-    raw_transit_index    = routing.RegisterTransitMatrix(raw_matrix)
+    if fast:
+        # Aggregate capacity dimension: equivalent to per-type + cross-constraints
+        # but avoids N_types × N_nodes CP variables — same feasibility region.
+        # The per-type individual constraints are redundant: for non-negative loads,
+        # sum(loads) ≤ capacity implies each load ≤ capacity individually.
+        stop_loads = [0] + [
+            (-s.load if s.action == 'delivery' else s.load) for s in stops
+        ]
+        cb_idx = routing.RegisterUnaryTransitCallback(lambda i: stop_loads[manager.IndexToNode(i)])
+        routing.AddDimensionWithVehicleCapacity(cb_idx, 0, [capacity] * num_vehicles, False, 'Cap')
+    else:
+        types_present = {s.machine_type for s in stops}
+        type_dims = {}
+        solver = routing.solver()
 
-    routing.SetArcCostEvaluatorOfAllVehicles(scaled_transit_index)
-    routing.SetFixedCostOfAllVehicles(instance.config.vehicle_day_cost)
+        for tool in instance.tools:
+            if tool.id not in types_present:
+                continue
 
-    types_present = {s.machine_type for s in stops}
-    type_dims = {}
-    solver = routing.solver()
+            def make_demand_cb(t):
+                def cb(from_index):
+                    node = manager.IndexToNode(from_index)
+                    if node == 0:
+                        return 0
+                    s = stops[node - 1]
+                    if s.machine_type != t:
+                        return 0
+                    return -s.load if s.action == 'delivery' else s.load
+                return cb
 
-    for tool in instance.tools:
-        if tool.id not in types_present:
-            continue
+            cb_idx = routing.RegisterUnaryTransitCallback(make_demand_cb(tool.id))
+            dim_name = f'Cap_{tool.id}'
+            routing.AddDimensionWithVehicleCapacity(
+                cb_idx, 0, [capacity] * num_vehicles, False, dim_name,
+            )
+            type_dims[tool.id] = routing.GetDimensionOrDie(dim_name)
 
-        def make_demand_cb(t):
-            def cb(from_index):
-                node = manager.IndexToNode(from_index)
-                if node == 0:
-                    return 0
-                s = stops[node - 1]
-                if s.machine_type != t:
-                    return 0
-                return -s.load if s.action == 'delivery' else s.load
-            return cb
-
-        cb_idx = routing.RegisterUnaryTransitCallback(make_demand_cb(tool.id))
-        dim_name = f'Cap_{tool.id}'
-        routing.AddDimensionWithVehicleCapacity(
-            cb_idx, 0, [capacity] * num_vehicles, False, dim_name,
-        )
-        type_dims[tool.id] = routing.GetDimensionOrDie(dim_name)
-
-    all_dims = list(type_dims.values())
-    if len(all_dims) > 1:
-        for node in range(1, num_nodes):
-            idx = manager.NodeToIndex(node)
-            solver.Add(solver.Sum([d.CumulVar(idx) for d in all_dims]) <= capacity)
-        for v in range(num_vehicles):
-            for idx in [routing.Start(v), routing.End(v)]:
+        all_dims = list(type_dims.values())
+        if len(all_dims) > 1:
+            for node in range(1, num_nodes):
+                idx = manager.NodeToIndex(node)
                 solver.Add(solver.Sum([d.CumulVar(idx) for d in all_dims]) <= capacity)
+            for v in range(num_vehicles):
+                for idx in [routing.Start(v), routing.End(v)]:
+                    solver.Add(solver.Sum([d.CumulVar(idx) for d in all_dims]) <= capacity)
 
     routing.AddDimension(
         raw_transit_index, 0, instance.config.max_trip_distance, True, 'Distance',
@@ -210,7 +221,10 @@ def solve_day(
     delivery_load = sum(s.load for s in stops if s.action == 'delivery')
     pickup_load   = sum(s.load for s in stops if s.action == 'pickup')
     min_cap = max(1, math.ceil(max(delivery_load, pickup_load) / capacity))
-    tight_n = min(len(stops), max(min_cap + 3, min_cap * 2))
+    if fast:
+        tight_n = min(len(stops), min_cap + 5)
+    else:
+        tight_n = min(len(stops), max(min_cap + 3, min_cap * 2))
 
     if initial_routes and len(initial_routes) > tight_n:
         tight_n = min(len(stops), len(initial_routes))
@@ -229,25 +243,14 @@ def solve_all_days(
     fast: bool = False,
     initial_routes: dict = None,
 ) -> dict:
-    import os
-    from concurrent.futures import ThreadPoolExecutor, as_completed
-
     days = sorted(daily_stops)
     route_set = {}
 
     if fast:
-        max_workers = min(len(days), os.cpu_count() or 4)
-        futures = {}
-        with ThreadPoolExecutor(max_workers=max_workers) as pool:
-            for day in days:
-                f = pool.submit(solve_day, day, daily_stops[day], instance,
-                                time_limit_seconds, True, None)
-                futures[f] = day
-            for f in as_completed(futures):
-                day = futures[f]
-                routes = f.result()
-                if routes:
-                    route_set[day] = routes
+        for day in days:
+            routes = solve_day(day, daily_stops[day], instance, time_limit_seconds, True, None)
+            if routes:
+                route_set[day] = routes
     else:
         with tqdm(days, desc='Routing', unit='day', leave=True) as bar:
             for day in bar:

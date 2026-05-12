@@ -136,13 +136,14 @@ The schedule state maintains two difference arrays per tool type: `loans[t][day]
 
 This representation makes feasibility checks O(days) and commit/uncommit O(1).
 
-The true routing cost is computed by OR-Tools after every repair step. The cost breakdown is maintained from the last accepted best solution and used to weight break operator selection.
+The true routing cost is computed by OR-Tools (fast SAVINGS) after every accepted repair step; only the days whose stop sets changed are re-solved. The cost breakdown is maintained from the last accepted best solution and used to weight break operator selection.
 
 ### Performance
 
 - **Incremental routing** — after each destroy/repair, only the days whose stop sets changed are re-solved; all other days carry over their existing routes unchanged.
-- **Fast vs. quality solves** — the ALNS loop uses OR-Tools' SAVINGS heuristic (< 1 ms per day). The final solve uses GLS with a 15-second time limit per day.
-- **Parallel day solves** — during fast routing, all days are solved concurrently via a `ThreadPoolExecutor`.
+- **Fast vs. quality solves** — the ALNS loop uses OR-Tools' SAVINGS heuristic with a simplified model (single aggregate capacity dimension). The final solve uses GLS with a 15-second time limit per day and the full per-type capacity model.
+- **Aggregate capacity dimension** — fast routing replaces the per-tool-type capacity dimensions and their cross-dimension constraints with a single aggregate dimension. The feasibility region is identical (for non-negative loads, `sum(loads) ≤ capacity` implies each term is within capacity), but the CP model is significantly smaller, reducing SAVINGS solve time by ~10–20× on dense instances.
+- **Vehicle count capping** — fast routing uses `tight_n = min_cap + 5` vehicles (just above the load-derived minimum), whereas quality routing uses `max(min_cap + 3, min_cap × 2)` for more vehicles and better route consolidation.
 - **Difference arrays** — O(1) commit/uncommit and O(days) feasibility checks avoid re-scanning the full schedule on every ALNS move.
 - **MRV ordering in repair** — inserting the most constrained requests first avoids dead-ends when the schedule is nearly full.
 
