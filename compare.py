@@ -87,7 +87,7 @@ def main():
         for method in methods:
             sol = table[instance][method]
             if sol and 'COST' in sol:
-                row += f"  {sol['COST']:>{col_w},}"
+                row += f"  {sol['COST']:>{col_w}.3e}"
                 costs.append(sol['COST'])
             else:
                 row += f"  {'—':>{col_w}}"
@@ -96,7 +96,7 @@ def main():
         if len(methods) == 2 and costs[0] is not None and costs[1] is not None:
             delta = costs[1] - costs[0]
             pct = 100 * delta / costs[0]
-            row += f"  {delta:>+{col_w},}  {pct:>+10.2f}%"
+            row += f"  {delta:>+{col_w}.3e}  {pct:>+10.2f}%"
         print(row)
 
     # Summary
@@ -115,8 +115,8 @@ def main():
             n = len(pairs)
             print('  ' + '-' * (35 + len(methods) * (col_w + 2) + 30))
             row = f"  {'TOTAL (' + str(n) + ' instances)':<35}"
-            row += f"  {total_0:>{col_w},}  {total_1:>{col_w},}"
-            row += f"  {total_delta:>+{col_w},}  {total_pct:>+10.2f}%"
+            row += f"  {total_0:>{col_w}.3e}  {total_1:>{col_w}.3e}"
+            row += f"  {total_delta:>+{col_w}.3e}  {total_pct:>+10.2f}%"
             print(row)
 
     # Detailed breakdown
@@ -142,7 +142,7 @@ def main():
                         if isinstance(val, list):
                             parts.append(f"{label}=[{' '.join(map(str,val))}]")
                         else:
-                            parts.append(f"{label}={val:,}")
+                            parts.append(f"{label}={val:.3e}")
                 print(f"    {method}: {' | '.join(parts)}")
 
 

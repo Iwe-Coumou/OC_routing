@@ -31,6 +31,8 @@ def main():
                         help='Directory containing .txt instance files (default: instances/)')
     parser.add_argument('--method', default='alns', choices=METHODS,
                         help='Solver method (default: alns)')
+    parser.add_argument('--skip-solved', action='store_true',
+                        help='Skip instances that already have a solution file')
     args = parser.parse_args()
 
     instances = sorted(
@@ -52,6 +54,11 @@ def main():
         name = os.path.basename(instance_path)
         solution_path = _solution_path(instance_path, args.method)
         cost_before = _read_cost(solution_path)
+
+        if args.skip_solved and cost_before is not None:
+            print(f"  {name:<35}  {cost_before:>12,}              [skipped]")
+            results.append((name, cost_before, cost_before, 0, False))
+            continue
 
         result = subprocess.run([sys.executable, 'main.py', instance_path,
                                  '--method', args.method])
