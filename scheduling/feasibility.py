@@ -7,15 +7,6 @@ log = logging.getLogger(__name__)
 
 
 def repair_feasibility(state: dict, instance: Instance) -> bool:
-    """Reschedule over-subscribed tool types using OR-Tools CP-SAT.
-
-    For each tool type that has unscheduled requests, all requests of that
-    type are uncommitted and re-solved as an independent interval-scheduling
-    problem.  Tool types are independent (separate capacity pools), so
-    solving them one at a time is safe.
-
-    Returns True if all requests are now scheduled.
-    """
     unscheduled_types = sorted({
         req.machine_type
         for reqs in state['unscheduled'].values()
@@ -25,14 +16,12 @@ def repair_feasibility(state: dict, instance: Instance) -> bool:
     for machine_type in unscheduled_types:
         all_requests = [r for r in instance.requests if r.machine_type == machine_type]
 
-        # Preserve current delivery-day assignments as hints for the solver.
         hints = {
             e['request'].id: e['delivery_day']
             for e in state['scheduled']
             if e['request'].machine_type == machine_type
         }
 
-        # Uncommit every scheduled request of this type before re-solving.
         to_uncommit = [
             e['request'] for e in state['scheduled']
             if e['request'].machine_type == machine_type
@@ -54,14 +43,6 @@ def repair_feasibility(state: dict, instance: Instance) -> bool:
 
 
 def _cp_sat_schedule(requests: list, instance: Instance, hints: dict) -> list | None:
-    """Solve the interval-scheduling subproblem for one tool type.
-
-    Each request occupies [delivery_day, pickup_day] inclusive (span =
-    duration + 1 days).  The cumulative constraint enforces that the total
-    machines on loan never exceeds the available count.
-
-    Returns [(request, delivery_day), ...] or None if infeasible.
-    """
     if not requests:
         return []
 
@@ -75,15 +56,12 @@ def _cp_sat_schedule(requests: list, instance: Instance, hints: dict) -> list | 
     demands:    list = []
 
     for req in requests:
-        # Loan is active on days [delivery_day, pickup_day] inclusive.
-        # CP-SAT interval [start, start+span) covers exactly those days
-        # when span = req.duration + 1.
         span  = req.duration + 1
         start = model.NewIntVar(req.earliest, req.latest,         f's{req.id}')
         end   = model.NewIntVar(req.earliest + span, req.latest + span, f'e{req.id}')
         iv    = model.NewIntervalVar(start, span, end,            f'i{req.id}')
 
-        model.Add(start + req.duration <= horizon)  # pickup must not exceed horizon
+        model.Add(start + req.duration <= horizon)
 
         start_vars.append((req, start))
         intervals.append(iv)

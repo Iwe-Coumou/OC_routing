@@ -3,11 +3,6 @@ from .solver import VehicleRoute, Stop
 
 
 def _single_trip_bring_end(stops: list, n: int, req_lookup: dict) -> tuple:
-    """Return (bring, end) depot-visit vectors for one trip.
-
-    bring[i] < 0 means |bring[i]| tools of kind i were loaded from the depot.
-    end[i] > 0 means end[i] tools of kind i were returned to the depot.
-    """
     if not stops:
         return [0] * n, [0] * n
     current = [0] * n
@@ -32,14 +27,11 @@ def _compute_depot_visits(route: VehicleRoute, instance: Instance, req_lookup: d
     trips = route.trips if route.trips else [route.stops]
     trip_bes = [_single_trip_bring_end(trip, n, req_lookup) for trip in trips]
 
-    # First depot visit: load tools for trip 1
     v_lines = [trip_bes[0][0]]
-    # Intermediate depot visits: return from previous trip + load for next trip
     for i in range(1, len(trip_bes)):
         prev_end = trip_bes[i - 1][1]
         curr_bring = trip_bes[i][0]
         v_lines.append([prev_end[j] + curr_bring[j] for j in range(n)])
-    # Final depot visit: return tools from last trip
     v_lines.append(trip_bes[-1][1])
     return v_lines
 
@@ -73,8 +65,6 @@ def _compute_depot_inventories(route_set: dict, instance: Instance, req_lookup: 
         cs, cf = _day_aggregates(route_set[day], instance, req_lookup)
         day_deltas[day] = (cs, cf)
 
-    # Replicates Validate._calculateSolution: peak measured after calcStartDepot
-    # (morning deliveries) but before calcFinishDepot (evening pickups).
     tool_status = [0] * n
     tool_use = [0] * n
     for day in sorted(day_deltas):

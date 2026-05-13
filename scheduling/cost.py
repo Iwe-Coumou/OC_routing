@@ -18,7 +18,12 @@ def compute_tool_cost(state: dict, instance: Instance) -> int:
 
 
 def day_tour_estimate(locs: list[int], instance: Instance) -> float:
-    unvisited = list(dict.fromkeys(locs))  # deduplicate, preserve order
+    seen = set()
+    unvisited = []
+    for loc in locs:
+        if loc not in seen:
+            seen.add(loc)
+            unvisited.append(loc)
     if not unvisited:
         return 0.0
     tour, current = 0, 0  # start at depot (location id 0)

@@ -1,9 +1,3 @@
-"""Quick test for the CP-SAT feasibility repair module.
-
-Usage:
-    python test_feasibility.py                  # defaults to instances/B3.txt
-    python test_feasibility.py instances/B2.txt
-"""
 import sys
 import os
 import logging

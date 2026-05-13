@@ -23,6 +23,12 @@ def _setup_logging(instance_name: str) -> None:
     opt_logger.addHandler(opt_handler)
     opt_logger.propagate = False
 
+
+def _alns_log_paths(instance_name: str) -> tuple[str, str]:
+    csv_path  = f'logs/{instance_name}_iterations.csv'
+    json_path = f'logs/{instance_name}_summary.json'
+    return csv_path, json_path
+
 GREEDY_METHODS = {f'greedy_{k}_gls': key for k, key in CONSTRUCTION_KEYS.items()}
 METHODS = ['alns', 'greedy_gls'] + sorted(GREEDY_METHODS)
 
@@ -120,8 +126,11 @@ def main():
         print(f"\n{'='*60}")
         print("  OPTIMISING")
         print(f"{'='*60}")
+        instance_name = os.path.splitext(os.path.basename(args.instance))[0]
+        csv_path, json_path = _alns_log_paths(instance_name)
         route_set = route_lns(state, instance, iterations=500, patience=150,
-                              initial_routes=initial_routes)
+                              initial_routes=initial_routes,
+                              csv_log_path=csv_path, json_log_path=json_path)
         if route_set is None:
             print("\n  ERROR: no feasible solution found — not all requests could be scheduled.")
             return

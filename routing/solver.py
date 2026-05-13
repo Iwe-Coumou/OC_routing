@@ -6,6 +6,7 @@ except ImportError as exc:
     ) from exc
 import math
 from dataclasses import dataclass, field
+from functools import partial
 from tqdm import tqdm
 
 from collections import defaultdict
@@ -74,6 +75,10 @@ def _compute_route_distance(stops, instance):
     return sum(instance.get_distance(locs[i], locs[i + 1]) for i in range(len(locs) - 1))
 
 
+def _node_demand(from_index, manager, demands):
+    return demands[manager.IndexToNode(from_index)]
+
+
 def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
                      time_limit_seconds: int, fast: bool,
                      initial_routes: list = None):
@@ -101,10 +106,7 @@ def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
     raw_transit_index = routing.RegisterTransitMatrix(raw_matrix)
 
     if fast:
-        # Aggregate capacity dimension: equivalent to per-type + cross-constraints
-        # but avoids N_types × N_nodes CP variables — same feasibility region.
-        # The per-type individual constraints are redundant: for non-negative loads,
-        # sum(loads) ≤ capacity implies each load ≤ capacity individually.
+        # single aggregate capacity dimension — faster, same feasibility region
         stop_loads = [0] + [
             (-s.load if s.action == 'delivery' else s.load) for s in stops
         ]
@@ -119,18 +121,16 @@ def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
             if tool.id not in types_present:
                 continue
 
-            def make_demand_cb(t):
-                def cb(from_index):
-                    node = manager.IndexToNode(from_index)
-                    if node == 0:
-                        return 0
-                    s = stops[node - 1]
-                    if s.machine_type != t:
-                        return 0
-                    return -s.load if s.action == 'delivery' else s.load
-                return cb
+            demands = [0]
+            for s in stops:
+                if s.machine_type == tool.id:
+                    demands.append(-s.load if s.action == 'delivery' else s.load)
+                else:
+                    demands.append(0)
 
-            cb_idx = routing.RegisterUnaryTransitCallback(make_demand_cb(tool.id))
+            cb_idx = routing.RegisterUnaryTransitCallback(
+                partial(_node_demand, manager=manager, demands=demands)
+            )
             dim_name = f'Cap_{tool.id}'
             routing.AddDimensionWithVehicleCapacity(
                 cb_idx, 0, [capacity] * num_vehicles, False, dim_name,
@@ -208,15 +208,10 @@ def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
 
 
 def merge_routes(routes: list, max_trip_distance: int) -> list:
-    """Merge single-trip routes into multi-trip vehicles (first-fit decreasing bin packing).
-
-    Reduces vehicle count by combining routes whose total distance fits within
-    max_trip_distance. The vehicle returns to the depot between trips to reload.
-    """
     if not routes:
         return routes
     sorted_routes = sorted(routes, key=lambda r: r.distance, reverse=True)
-    bins = []  # each bin: [total_distance, [VehicleRoute, ...]]
+    bins = []
     for route in sorted_routes:
         placed = False
         for b in bins:
@@ -259,10 +254,11 @@ def solve_day(
     pickup_load   = sum(s.load for s in stops if s.action == 'pickup')
     min_cap = max(1, math.ceil(max(delivery_load, pickup_load) / capacity))
     if fast:
-        tight_n = min(len(stops), min_cap + 5)
+        n_vehicles = min(len(stops), min_cap + 5)
     else:
-        tight_n = min(len(stops), max(min_cap + 3, min_cap * 2))
+        n_vehicles = min(len(stops), max(min_cap + 3, min_cap * 2))
 
+    tight_n = n_vehicles
     if initial_routes and len(initial_routes) > tight_n:
         tight_n = min(len(stops), len(initial_routes))
 

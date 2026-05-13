@@ -11,8 +11,7 @@ def build_state(instance: Instance) -> dict:
     loans = defaultdict(lambda: [0] * (instance.config.days + 2))
     state_dict['loans'] = loans
 
-    # Per-day pickup counts kept separately so is_feasible() can check the
-    # within-day peak (after deliveries, before pickups), matching Validate._calculateSolution.
+    # track same-day pickups separately to compute within-day peak correctly
     pickups_per_day = defaultdict(lambda: [0] * (instance.config.days + 2))
     state_dict['pickups_per_day'] = pickups_per_day
 
@@ -39,11 +38,9 @@ def is_feasible(state, instance, request, delivery_day, pickup_day) -> bool:
     diff = state['loans'][request.machine_type]
     pickups = state['pickups_per_day'][request.machine_type]
     running = 0
-    # Loop includes pickup_day: tools are still at the customer before pickup (morning peak).
     for day in range(pickup_day + 1):
         running += diff[day]
         if day >= delivery_day:
-            # Within-day peak: add back pickups[day] to get the before-pickup count.
             peak = running + pickups[day] + request.num_machines
             if peak > tool.num_available:
                 log.debug(f"INFEASIBLE req={request.id} peak on day={day}: {peak} > available={tool.num_available}")
@@ -132,7 +129,6 @@ def place_unscheduled(state: dict, instance: Instance, key=None) -> None:
 
 
 def place_unscheduled_mrv(state: dict, instance: Instance) -> None:
-    """Dynamic MRV ordering: at each step place the most constrained unscheduled request."""
     while True:
         best_req = None
         best_key = (float('inf'), float('inf'), float('inf'))
@@ -156,16 +152,8 @@ def place_unscheduled_mrv(state: dict, instance: Instance) -> None:
 
 
 def repair_by_ejection_chain(state: dict, instance: Instance) -> None:
-    """Place unscheduled requests via an ejection chain.
-
-    For each unscheduled request (most-constrained first), try direct
-    placement. If blocked, eject a same-type scheduled request to make room
-    and let it re-enter the unscheduled pool for the next iteration.
-    Each request can be ejected at most once, guaranteeing termination in
-    O(n) outer iterations.
-    """
-    displaced: set = set()  # ejected this call — cannot be ejected again
-    failed: set = set()     # no ejectee found — skip on future iterations
+    displaced: set = set()
+    failed: set = set()
 
     changed = True
     while changed:
@@ -320,7 +308,6 @@ def validate_schedule(scheduled: list, instance: Instance) -> bool:
         limit = tool_by_type[machine_type].num_available
         for day, delta in enumerate(diff):
             current += delta
-            # Within-day peak: after deliveries, before pickups.
             peak = current + pickups[machine_type][day]
             if peak > limit:
                 print(f"FAIL: type={machine_type} day={day} peak use={peak} exceeds available={limit}")

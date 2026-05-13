@@ -1,3 +1,5 @@
+import csv
+import json
 import math
 import random
 import logging
@@ -29,27 +31,6 @@ _ALNS_PENALTY   = 0.90   # rejected
 _ALNS_W_MIN     = 0.1
 _ALNS_W_MAX     = 10.0
 
-# Break operators: cost-targeted + random/geo
-_BREAK_KEYS      = ['tool', 'vehicle', 'vehicle_days', 'distance', 'worst_day', 'random', 'geo']
-_BREAK_FNS       = {
-    'tool':         break_tool_cost,
-    'vehicle':      break_vehicle_cost,
-    'vehicle_days': break_vehicle_day_cost,
-    'distance':     break_distance_cost,
-    'worst_day':    break_worst_day,
-}
-_NEEDS_ROUTES    = {'vehicle', 'vehicle_days', 'distance', 'worst_day'}
-_DAY_TARGETED    = {'tool', 'vehicle', 'worst_day'}
-_BREAK_DRIVER    = {        # which breakdown component weights each cost break op
-    'tool':         'tool',
-    'vehicle':      'vehicle',
-    'vehicle_days': 'vehicle_days',
-    'distance':     'distance',
-    'worst_day':    'distance',
-}
-_COST_BREAK_KEYS = [k for k in _BREAK_KEYS if k in _BREAK_DRIVER]
-
-# Repair operators (decoupled from break)
 _REPAIR_KEYS = ['tool', 'vehicle', 'vehicle_days', 'distance']
 _REPAIR_FNS  = {
     'tool':         repair_tool_cost,
@@ -97,6 +78,8 @@ def route_lns(
     iterations: int = 500,
     patience: int = 500,
     initial_routes: dict | None = None,
+    csv_log_path: str | None = None,
+    json_log_path: str | None = None,
 ) -> dict:
     if initial_routes is not None:
         current_routes = initial_routes
@@ -119,15 +102,45 @@ def route_lns(
     max_destroy = max(30, len(state['scheduled']) // 8)
     k_scale = 1.0
 
-    alns_w_break  = {k: 1.0 for k in _COST_BREAK_KEYS}
-    alns_w_break['random'] = _RANDOM_INIT_W
-    alns_w_break['geo']    = _RANDOM_INIT_W
+    alns_w_break = {
+        'tool': 1.0, 'vehicle': 1.0, 'vehicle_days': 1.0,
+        'distance': 1.0, 'worst_day': 1.0,
+        'random': _RANDOM_INIT_W, 'geo': _RANDOM_INIT_W,
+    }
     alns_w_repair = {k: 1.0 for k in _REPAIR_KEYS}
 
     no_improve = 0
     total_improvements = 0
     total_sa_accepts = 0
+    total_rejects = 0
+    total_infeasible = 0
     restarts = 0
+
+    _break_ops  = ['tool', 'vehicle', 'vehicle_days', 'distance', 'worst_day', 'random', 'geo']
+    _repair_ops = list(_REPAIR_KEYS)
+    op_stats = {
+        'break':  {k: {'selected': 0, 'improve': 0, 'sa_accept': 0, 'reject': 0, 'infeasible': 0} for k in _break_ops},
+        'repair': {k: {'selected': 0, 'improve': 0, 'sa_accept': 0, 'reject': 0, 'infeasible': 0} for k in _repair_ops},
+    }
+
+    _csv_break_w_cols  = ['wb_tool', 'wb_vehicle', 'wb_veh_days', 'wb_distance', 'wb_worst', 'wb_random', 'wb_geo']
+    _csv_break_p_cols  = ['pb_tool', 'pb_vehicle', 'pb_veh_days', 'pb_distance', 'pb_worst', 'pb_random', 'pb_geo']
+    _csv_repair_w_cols = ['wr_tool', 'wr_vehicle', 'wr_veh_days', 'wr_distance']
+    _csv_repair_p_cols = ['pr_tool', 'pr_vehicle', 'pr_veh_days', 'pr_distance']
+
+    csv_file = None
+    csv_writer = None
+    if csv_log_path:
+        csv_file = open(csv_log_path, 'w', newline='', encoding='utf-8')
+        csv_writer = csv.writer(csv_file)
+        csv_writer.writerow([
+            'iteration', 'break_op', 'repair_op', 'k', 'outcome',
+            'candidate_cost', 'current_cost', 'best_cost', 'delta',
+            'T', 'k_scale', 'n_changed_days', 'restart_num',
+            *_csv_break_w_cols, *_csv_break_p_cols,
+            *_csv_repair_w_cols, *_csv_repair_p_cols,
+            'bd_tool', 'bd_vehicle', 'bd_veh_days', 'bd_distance',
+        ])
 
     log.info(
         f"=== OPTIMISE START  instance={instance.name}  "
@@ -141,43 +154,60 @@ def route_lns(
     for iteration in pbar:
         snap = snapshot(state)
 
-        # --- select break operator ---
-        # cost-targeted ops weighted by normalised breakdown; random/geo by raw weight
-        cost_bvals = [breakdown[_BREAK_DRIVER[k]] for k in _COST_BREAK_KEYS]
-        total_bd = sum(cost_bvals) or 1
-        break_weights = [alns_w_break[k] * cost_bvals[i] / total_bd
-                         for i, k in enumerate(_COST_BREAK_KEYS)]
-        break_weights += [alns_w_break['random'], alns_w_break['geo']]
-        break_op = random.choices(_BREAK_KEYS, weights=break_weights, k=1)[0]
+        snap_wb = dict(alns_w_break)
+        snap_wr = dict(alns_w_repair)
 
-        # --- select repair operator ---
+        total_bd = max(1, breakdown['tool'] + breakdown['vehicle'] + breakdown['vehicle_days'] + breakdown['distance'])
+        w_tool     = alns_w_break['tool']         * breakdown['tool']         / total_bd
+        w_vehicle  = alns_w_break['vehicle']      * breakdown['vehicle']      / total_bd
+        w_veh_days = alns_w_break['vehicle_days'] * breakdown['vehicle_days'] / total_bd
+        w_distance = alns_w_break['distance']     * breakdown['distance']     / total_bd
+        w_worst    = alns_w_break['worst_day']    * breakdown['distance']     / total_bd
+        w_random   = alns_w_break['random']
+        w_geo      = alns_w_break['geo']
+        total_bw   = w_tool + w_vehicle + w_veh_days + w_distance + w_worst + w_random + w_geo
+        total_rw   = max(1e-9, sum(snap_wr.values()))
+
+        break_op = random.choices(
+            ['tool', 'vehicle', 'vehicle_days', 'distance', 'worst_day', 'random', 'geo'],
+            weights=[w_tool, w_vehicle, w_veh_days, w_distance, w_worst, w_random, w_geo],
+            k=1
+        )[0]
+
         repair_op = random.choices(_REPAIR_KEYS,
                                    weights=[alns_w_repair[k] for k in _REPAIR_KEYS], k=1)[0]
         repair_fn = _REPAIR_FNS[repair_op]
 
-        # --- execute break ---
-        if break_op == 'random':
-            k = min(max_destroy, max(1, int(len(state['scheduled']) * k_scale * random.uniform(0.1, 0.3))))
-            targets = [e['request'] for e in random.sample(state['scheduled'], k)]
+        if break_op == 'tool':
+            targets = break_tool_cost(state, instance)
+            cap = max(1, min(max_destroy, round(len(targets) * k_scale)))
+            targets = targets[:cap]
+            k_str = str(len(targets))
+        elif break_op == 'vehicle':
+            targets = break_vehicle_cost(state, instance, current_routes)
+            cap = max(1, min(max_destroy, round(len(targets) * k_scale)))
+            targets = targets[:cap]
+            k_str = str(len(targets))
+        elif break_op == 'vehicle_days':
+            k = min(max_destroy, max(1, int(len(state['scheduled']) * k_scale * random.uniform(0.1, 0.25))))
+            targets = break_vehicle_day_cost(state, instance, current_routes, k)
             k_str = str(k)
+        elif break_op == 'distance':
+            k = min(max_destroy, max(1, int(len(state['scheduled']) * k_scale * random.uniform(0.1, 0.25))))
+            targets = break_distance_cost(state, instance, current_routes, k)
+            k_str = str(k)
+        elif break_op == 'worst_day':
+            targets = break_worst_day(state, instance, current_routes)
+            cap = max(1, min(max_destroy, round(len(targets) * k_scale)))
+            targets = targets[:cap]
+            k_str = str(len(targets))
         elif break_op == 'geo':
             k = min(max_destroy, max(1, int(len(state['scheduled']) * k_scale * random.uniform(0.1, 0.3))))
             targets = break_geographic(state, instance, k)
             k_str = str(k)
-        elif break_op in _DAY_TARGETED:
-            if break_op in _NEEDS_ROUTES:
-                targets = _BREAK_FNS[break_op](state, instance, current_routes)
-            else:
-                targets = _BREAK_FNS[break_op](state, instance)
-            cap = max(1, min(max_destroy, round(len(targets) * k_scale)))
-            targets = targets[:cap]
-            k_str = str(len(targets))
-        else:
-            k = min(max_destroy, max(1, int(len(state['scheduled']) * k_scale * random.uniform(0.1, 0.25))))
-            if break_op in _NEEDS_ROUTES:
-                targets = _BREAK_FNS[break_op](state, instance, current_routes, k)
-            else:
-                targets = _BREAK_FNS[break_op](state, instance, k)
+        else:  # random
+            k = min(max_destroy, max(1, int(len(state['scheduled']) * k_scale * random.uniform(0.1, 0.3))))
+            targets = [e['request'] for e in random.sample(state['scheduled'], k)]
             k_str = str(k)
 
         target_req_ids = {r.id for r in targets}
@@ -185,7 +215,6 @@ def route_lns(
         for req in targets:
             uncommit_request(state, req)
 
-        # --- execute repair ---
         repair_routes = _routes_without(current_routes, target_req_ids)
         repair_fn(state, instance, epsilon=_EPSILON, current_routes=repair_routes)
         if any(v for v in state['unscheduled'].values()):
@@ -194,19 +223,35 @@ def route_lns(
         op_label  = f"{break_op[:4]}/{repair_op[:4]}"
         op_detail = f"break={break_op} repair={repair_op} k={k_str}"
 
-        # --- evaluate ---
         unscheduled_count = sum(len(v) for v in state['unscheduled'].values())
 
-        # Hard-reject: if repair leaves any requests unscheduled, restore immediately
-        # without routing — the schedule is always feasible so this should never happen.
         if unscheduled_count > 0:
             k_scale = max(0.1, k_scale * 0.9)
             restore(state, instance, snap)
             no_improve += 1
+            total_infeasible += 1
             T = max(T * _SA_ALPHA, 1e-6)
             alns_w_break[break_op]   = max(_ALNS_W_MIN, alns_w_break[break_op]   * _ALNS_PENALTY)
             alns_w_repair[repair_op] = max(_ALNS_W_MIN, alns_w_repair[repair_op] * _ALNS_PENALTY)
+            op_stats['break'][break_op]['selected']   += 1
+            op_stats['break'][break_op]['infeasible'] += 1
+            op_stats['repair'][repair_op]['selected']   += 1
+            op_stats['repair'][repair_op]['infeasible'] += 1
             log.info(f"iter={iteration:4d}  {op_detail}  REJECT (unscheduled={unscheduled_count})")
+            if csv_writer:
+                csv_writer.writerow([
+                    iteration, break_op, repair_op, len(targets), 'infeasible',
+                    '', current_cost, best_feasible_cost, '',
+                    T, k_scale, len(changed_days), restarts,
+                    snap_wb['tool'], snap_wb['vehicle'], snap_wb['vehicle_days'],
+                    snap_wb['distance'], snap_wb['worst_day'], snap_wb['random'], snap_wb['geo'],
+                    w_tool/total_bw, w_vehicle/total_bw, w_veh_days/total_bw,
+                    w_distance/total_bw, w_worst/total_bw, w_random/total_bw, w_geo/total_bw,
+                    snap_wr['tool'], snap_wr['vehicle'], snap_wr['vehicle_days'], snap_wr['distance'],
+                    snap_wr['tool']/total_rw, snap_wr['vehicle']/total_rw,
+                    snap_wr['vehicle_days']/total_rw, snap_wr['distance']/total_rw,
+                    breakdown['tool'], breakdown['vehicle'], breakdown['vehicle_days'], breakdown['distance'],
+                ])
             pbar.set_postfix(best=f"{best_feasible_cost:.3e}", impr=total_improvements,
                              stale=no_improve, op=op_label, T=f"{T:.1e}", ks=f"{k_scale:.2f}")
             if no_improve >= patience:
@@ -216,9 +261,11 @@ def route_lns(
                 restarts += 1
                 no_improve = 0
                 T = T0 * _REHEAT_FRAC
-                alns_w_break  = {k: 1.0 for k in _COST_BREAK_KEYS}
-                alns_w_break['random'] = _RANDOM_INIT_W
-                alns_w_break['geo']    = _RANDOM_INIT_W
+                alns_w_break = {
+                    'tool': 1.0, 'vehicle': 1.0, 'vehicle_days': 1.0,
+                    'distance': 1.0, 'worst_day': 1.0,
+                    'random': _RANDOM_INIT_W, 'geo': _RANDOM_INIT_W,
+                }
                 alns_w_repair = {k: 1.0 for k in _REPAIR_KEYS}
                 log.info(f"iter={iteration:4d}  RESTART {restarts}/{_MAX_RESTARTS}  T={T:.3e}")
             continue
@@ -243,6 +290,9 @@ def route_lns(
         else:
             accept = False
 
+        op_stats['break'][break_op]['selected']   += 1
+        op_stats['repair'][repair_op]['selected'] += 1
+
         if accept:
             current_cost   = candidate_cost
             current_routes = candidate_routes
@@ -253,8 +303,11 @@ def route_lns(
                 breakdown = cost_from_routes(candidate_routes, instance)
                 no_improve = 0
                 total_improvements += 1
+                outcome = 'improve'
                 alns_w_break[break_op]   = min(_ALNS_W_MAX, alns_w_break[break_op]   * _ALNS_REWARD)
                 alns_w_repair[repair_op] = min(_ALNS_W_MAX, alns_w_repair[repair_op] * _ALNS_REWARD)
+                op_stats['break'][break_op]['improve']   += 1
+                op_stats['repair'][repair_op]['improve'] += 1
                 log.info(
                     f"iter={iteration:4d}  {op_detail}  "
                     f"candidate={routed_cost:.3e}  delta={delta:+.3e}  ACCEPT (improve)  "
@@ -264,8 +317,11 @@ def route_lns(
             else:
                 no_improve += 1
                 total_sa_accepts += 1
+                outcome = 'sa_accept'
                 alns_w_break[break_op]   = min(_ALNS_W_MAX, alns_w_break[break_op]   * _ALNS_SA_REWARD)
                 alns_w_repair[repair_op] = min(_ALNS_W_MAX, alns_w_repair[repair_op] * _ALNS_SA_REWARD)
+                op_stats['break'][break_op]['sa_accept']   += 1
+                op_stats['repair'][repair_op]['sa_accept'] += 1
                 log.info(
                     f"iter={iteration:4d}  {op_detail}  "
                     f"candidate={routed_cost:.3e}  delta={delta:+.3e}  ACCEPT (SA)"
@@ -273,12 +329,31 @@ def route_lns(
         else:
             restore(state, instance, snap)
             no_improve += 1
+            total_rejects += 1
+            outcome = 'reject'
             alns_w_break[break_op]   = max(_ALNS_W_MIN, alns_w_break[break_op]   * _ALNS_PENALTY)
             alns_w_repair[repair_op] = max(_ALNS_W_MIN, alns_w_repair[repair_op] * _ALNS_PENALTY)
+            op_stats['break'][break_op]['reject']   += 1
+            op_stats['repair'][repair_op]['reject'] += 1
             log.info(
                 f"iter={iteration:4d}  {op_detail}  "
                 f"candidate={routed_cost:.3e}  delta={delta:+.3e}  reject"
             )
+
+        if csv_writer:
+            csv_writer.writerow([
+                iteration, break_op, repair_op, len(targets), outcome,
+                routed_cost, current_cost, best_feasible_cost, delta,
+                T, k_scale, len(changed_days), restarts,
+                snap_wb['tool'], snap_wb['vehicle'], snap_wb['vehicle_days'],
+                snap_wb['distance'], snap_wb['worst_day'], snap_wb['random'], snap_wb['geo'],
+                w_tool/total_bw, w_vehicle/total_bw, w_veh_days/total_bw,
+                w_distance/total_bw, w_worst/total_bw, w_random/total_bw, w_geo/total_bw,
+                snap_wr['tool'], snap_wr['vehicle'], snap_wr['vehicle_days'], snap_wr['distance'],
+                snap_wr['tool']/total_rw, snap_wr['vehicle']/total_rw,
+                snap_wr['vehicle_days']/total_rw, snap_wr['distance']/total_rw,
+                breakdown['tool'], breakdown['vehicle'], breakdown['vehicle_days'], breakdown['distance'],
+            ])
 
         if accept and routed_cost < best_feasible_cost:
             best_feasible_cost   = routed_cost
@@ -295,20 +370,56 @@ def route_lns(
             restarts += 1
             no_improve = 0
             T = T0 * _REHEAT_FRAC
-            alns_w_break  = {k: 1.0 for k in _COST_BREAK_KEYS}
-            alns_w_break['random'] = _RANDOM_INIT_W
-            alns_w_break['geo']    = _RANDOM_INIT_W
+            alns_w_break = {
+                'tool': 1.0, 'vehicle': 1.0, 'vehicle_days': 1.0,
+                'distance': 1.0, 'worst_day': 1.0,
+                'random': _RANDOM_INIT_W, 'geo': _RANDOM_INIT_W,
+            }
             alns_w_repair = {k: 1.0 for k in _REPAIR_KEYS}
             log.info(f"iter={iteration:4d}  RESTART {restarts}/{_MAX_RESTARTS}  T={T:.3e}")
 
+    total_feasible = total_improvements + total_sa_accepts + total_rejects
     log.info(
         f"=== OPTIMISE END  best={best_feasible_cost:.3e}  "
         f"improvements={total_improvements}  sa_accepts={total_sa_accepts}  "
+        f"rejects={total_rejects}  infeasible={total_infeasible}  "
         f"iterations={iteration + 1}  stopped={stop_reason}  "
         f"restarts={restarts}  final_k_scale={k_scale:.3f} ==="
     )
     log.info(f"final break weights:  { {k: f'{v:.2f}' for k, v in alns_w_break.items()} }")
     log.info(f"final repair weights: { {k: f'{v:.2f}' for k, v in alns_w_repair.items()} }")
+
+    if csv_file:
+        csv_file.close()
+
+    if json_log_path:
+        summary = {
+            'instance': instance.name,
+            'initial_cost': best_clean_cost if initial_routes is not None else None,
+            'final_best_cost': best_feasible_cost,
+            'initial_breakdown': {
+                'tool': breakdown['tool'], 'vehicle': breakdown['vehicle'],
+                'vehicle_days': breakdown['vehicle_days'], 'distance': breakdown['distance'],
+            },
+            'iterations_run': iteration + 1,
+            'stop_reason': stop_reason,
+            'restarts': restarts,
+            'final_k_scale': k_scale,
+            'total_feasible_iters': total_feasible,
+            'total_improvements': total_improvements,
+            'total_sa_accepts': total_sa_accepts,
+            'total_rejects': total_rejects,
+            'total_infeasible': total_infeasible,
+            'improve_rate': total_improvements / max(1, total_feasible),
+            'sa_accept_rate': total_sa_accepts / max(1, total_feasible),
+            'reject_rate': total_rejects / max(1, total_feasible),
+            'infeasible_rate': total_infeasible / max(1, iteration + 1),
+            'final_break_weights': dict(alns_w_break),
+            'final_repair_weights': dict(alns_w_repair),
+            'operator_stats': op_stats,
+        }
+        with open(json_log_path, 'w', encoding='utf-8') as jf:
+            json.dump(summary, jf, indent=2)
 
     if best_feasible_snap is None:
         log.warning("=== NO FEASIBLE SOLUTION FOUND — all states had unscheduled requests ===")

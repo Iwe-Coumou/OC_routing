@@ -100,14 +100,13 @@ def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0,
         load: dict[int, int] = defaultdict(int)
         for e in state['scheduled']:
             r = e['request']
-            l = r.num_machines * tool_by_type[r.machine_type].size
-            load[e['delivery_day']] += l
-            load[e['pickup_day']] += l
+            load[e['delivery_day']] += r.num_machines * tool_by_type[r.machine_type].size
+            load[e['pickup_day']]   += r.num_machines * tool_by_type[r.machine_type].size
 
         current_max = max((math.ceil(l / cap) for l in load.values()), default=0)
 
         best_day = None
-        best_peak = float('inf')
+        best_vehicles = float('inf')
         best_secondary = float('-inf')
         feasible_days = []
 
@@ -120,10 +119,11 @@ def repair_vehicle_cost(state: dict, instance: Instance, epsilon: float = 0.0,
             new_veh_p = math.ceil((load.get(p, 0) + req_load) / cap)
             projected_max = max(current_max, new_veh_d, new_veh_p)
             secondary = load.get(d, 0) + load.get(p, 0)
-            if projected_max < best_peak or (projected_max == best_peak and secondary > best_secondary):
-                best_peak = projected_max
+            if projected_max < best_vehicles or (projected_max == best_vehicles and secondary > best_secondary):
+                best_vehicles = projected_max
                 best_secondary = secondary
                 best_day = d
+
         if epsilon > 0 and feasible_days and random.random() < epsilon:
             best_day = random.choice(feasible_days)
 
@@ -184,18 +184,26 @@ def repair_distance_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                 locs_per_day[e['delivery_day']].append(e['request'].location_id)
                 locs_per_day[e['pickup_day']].append(e['request'].location_id)
 
+        feasible_days = [
+            d for d in range(req.earliest, req.latest + 1)
+            if is_feasible(state, instance, req, d, d + req.duration)
+        ]
+
+        if not feasible_days:
+            log.warning(f"repair_distance_cost: req={req.id} has no feasible day — leaving unscheduled")
+            continue
+
+        if epsilon > 0 and random.random() < epsilon:
+            commit_request(state, instance, req, random.choice(feasible_days))
+            continue
+
         best_day = None
-        best_score = float('inf')
-        feasible_days = []
+        best_insert_cost = float('inf')
 
-        for d in range(req.earliest, req.latest + 1):
+        for d in feasible_days:
             p = d + req.duration
-            if not is_feasible(state, instance, req, d, p):
-                continue
-            feasible_days.append(d)
-
             if current_routes is not None:
-                score = (
+                insert_cost = (
                     _cheapest_insertion_cost(req.location_id, current_routes.get(d, []), depot_id, instance)
                     + _cheapest_insertion_cost(req.location_id, current_routes.get(p, []), depot_id, instance)
                 )
@@ -210,18 +218,12 @@ def repair_distance_cost(state: dict, instance: Instance, epsilon: float = 0.0,
                     (instance.get_distance(req.location_id, l) for l in p_locs),
                     default=depot_dist,
                 )
-                score = nearest_d + nearest_p
+                insert_cost = nearest_d + nearest_p
 
-            if score < best_score:
-                best_score = score
+            if insert_cost < best_insert_cost:
+                best_insert_cost = insert_cost
                 best_day = d
 
-        if epsilon > 0 and feasible_days and random.random() < epsilon:
-            best_day = random.choice(feasible_days)
-
         if best_day is None:
-            best_day = _first_feasible_day(state, instance, req)
-        if best_day is not None:
-            commit_request(state, instance, req, best_day)
-        else:
-            log.warning(f"repair_distance_cost: req={req.id} has no feasible day — leaving unscheduled")
+            best_day = feasible_days[0]
+        commit_request(state, instance, req, best_day)
