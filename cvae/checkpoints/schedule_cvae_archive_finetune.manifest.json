@@ -1,0 +1,3926 @@
+[
+  {
+    "instance": "instances\\B1.txt",
+    "source": "solutions\\cvae_de\\B1_smoke_solution.txt",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      99,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      8,
+      94,
+      1920000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      93,
+      1920000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      94,
+      1940000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      94,
+      1960000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      95,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      95,
+      1920000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      96,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      97,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      97,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      97,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      97,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      98,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      218,
+      66400000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      218,
+      66700000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      218,
+      66700000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      218,
+      66800000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      218,
+      70600000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      218,
+      70600000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      219,
+      67000000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      219,
+      70800000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      220,
+      67500000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      220,
+      69900000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      220,
+      71000000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      221,
+      66700000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_de\\B3_solution.txt",
+    "sample": 0,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      49,
+      370,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed5001_solution.txt",
+    "sample": 1,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed5004_solution.txt",
+    "sample": 2,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002400172659_20260512_192535_103094400_initial9_seed5001.txt",
+    "sample": 3,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_de\\B3_cvae_multi_long_solution.txt",
+    "sample": 4,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed5000_solution.txt",
+    "sample": 5,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002446375156_20260512_191952_140951600_trial_i8_iter1_seed4007.txt",
+    "sample": 6,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      359,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002446545113_20260512_192735_970520900_trial_i7_iter1_seed5004.txt",
+    "sample": 7,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002446754953_20260512_191806_974811100_trial_i1_iter1_seed4001.txt",
+    "sample": 8,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed5002_solution.txt",
+    "sample": 9,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      356,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_de\\B3_capped_50_solution.txt",
+    "sample": 10,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002447068261_20260512_191736_868099200_initial10_seed4000.txt",
+    "sample": 11,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      354,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002447130438_20260512_191736_014097600_initial1_seed4003.txt",
+    "sample": 12,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed3000_solution.txt",
+    "sample": 13,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002447306461_20260512_192947_775811100_trial_i0_iter2_seed5004.txt",
+    "sample": 14,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002447547382_20260512_192903_967103400_trial_i13_iter1_seed5000.txt",
+    "sample": 15,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002447576824_20260512_193017_035009300_trial_i2_iter2_seed5001.txt",
+    "sample": 16,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002447625337_20260512_190457_iter2_seed3000.txt",
+    "sample": 17,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002447719411_20260512_192904_488508700_trial_i13_iter1_seed5004.txt",
+    "sample": 18,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_de\\B3_trained_solution.txt",
+    "sample": 19,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116200000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002447816147_20260512_191836_451795100_trial_i3_iter1_seed4002.txt",
+    "sample": 20,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed5003_solution.txt",
+    "sample": 21,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_de\\B3_friend_model_sample_solution.txt",
+    "sample": 22,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed3003_solution.txt",
+    "sample": 23,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448028569_20260512_190359_iter2_seed3000.txt",
+    "sample": 24,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      351,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448032204_20260512_190141_iter1_seed3000.txt",
+    "sample": 25,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448054056_20260512_193016_476344200_trial_i2_iter2_seed5002.txt",
+    "sample": 26,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      356,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed5005_solution.txt",
+    "sample": 27,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448169429_20260512_193114_917300600_trial_i6_iter2_seed5002.txt",
+    "sample": 28,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      355,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448262290_20260512_191735_681541400_initial2_seed4005.txt",
+    "sample": 29,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      351,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448298075_20260512_191921_427071900_trial_i6_iter1_seed4002.txt",
+    "sample": 30,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      357,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448411904_20260512_193131_611646300_trial_i7_iter2_seed5005.txt",
+    "sample": 31,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      352,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448490256_20260512_192621_322795600_trial_i2_iter1_seed5003.txt",
+    "sample": 32,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448493128_20260512_190100_iter1_seed3000.txt",
+    "sample": 33,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448496626_20260512_191735_765811300_initial2_seed4000.txt",
+    "sample": 34,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448531120_20260512_185907_initial_seed3000.txt",
+    "sample": 35,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed3002_solution.txt",
+    "sample": 36,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448567394_20260512_191736_868449000_initial10_seed4002.txt",
+    "sample": 37,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      42,
+      352,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448578151_20260512_192535_346255100_initial11_seed5005.txt",
+    "sample": 38,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448664920_20260512_191951_300875900_trial_i8_iter1_seed4000.txt",
+    "sample": 39,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      356,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448681927_20260512_191736_517735000_initial2_seed4006.txt",
+    "sample": 40,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448717089_20260512_193200_275220100_trial_i9_iter2_seed5005.txt",
+    "sample": 41,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448741304_20260512_192917_740195300_trial_i14_iter1_seed5002.txt",
+    "sample": 42,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448747899_20260512_185907_initial_seed3002.txt",
+    "sample": 43,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed3001_solution.txt",
+    "sample": 44,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      353,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002448914790_20260512_191736_657394700_initial5_seed4003.txt",
+    "sample": 45,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002449005402_20260512_192536_525627700_initial12_seed5001.txt",
+    "sample": 46,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002449068274_20260512_191737_259951100_initial10_seed4004.txt",
+    "sample": 47,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      352,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002449242555_20260512_191736_084298400_initial6_seed4005.txt",
+    "sample": 48,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002449353732_20260512_191822_013519200_trial_i2_iter1_seed4000.txt",
+    "sample": 49,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002449363968_20260512_192806_026265200_trial_i9_iter1_seed5004.txt",
+    "sample": 50,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002449680398_20260512_191851_670853400_trial_i4_iter1_seed4000.txt",
+    "sample": 51,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002449704822_20260512_193115_967196600_trial_i6_iter2_seed5005.txt",
+    "sample": 52,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002449726493_20260512_192707_682010900_trial_i5_iter1_seed5005.txt",
+    "sample": 53,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002449972150_20260512_192534_325262100_initial9_seed5002.txt",
+    "sample": 54,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450359904_20260512_191736_254525800_initial1_seed4006.txt",
+    "sample": 55,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      352,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450433915_20260512_191736_605944300_initial10_seed4001.txt",
+    "sample": 56,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450440009_20260512_191737_266234300_initial15_seed4006.txt",
+    "sample": 57,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450473629_20260512_192533_268130600_initial1_seed5001.txt",
+    "sample": 58,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      359,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450586083_20260512_191907_640795200_trial_i5_iter1_seed4003.txt",
+    "sample": 59,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450599282_20260512_185907_initial_seed3001.txt",
+    "sample": 60,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450623570_20260512_191752_284042300_trial_i0_iter1_seed4007.txt",
+    "sample": 61,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450635708_20260512_193002_880207300_trial_i1_iter2_seed5005.txt",
+    "sample": 62,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450759844_20260512_192534_978015000_initial5_seed5000.txt",
+    "sample": 63,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450771341_20260512_192535_912353900_initial14_seed5003.txt",
+    "sample": 64,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      352,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450929793_20260512_192933_303639100_trial_i15_iter1_seed5005.txt",
+    "sample": 65,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      349,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002450948993_20260512_192534_006983300_initial4_seed5004.txt",
+    "sample": 66,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      353,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002451023463_20260512_192533_170462900_initial3_seed5002.txt",
+    "sample": 67,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_de\\B3_cvae_multi_highfixed_solution.txt",
+    "sample": 68,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002451567798_20260512_192536_061940600_initial13_seed5005.txt",
+    "sample": 69,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002451641227_20260512_191736_868845500_initial10_seed4006.txt",
+    "sample": 70,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      355,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002451841044_20260512_191736_304639800_initial7_seed4005.txt",
+    "sample": 71,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002452134417_20260512_191807_692686900_trial_i1_iter1_seed4007.txt",
+    "sample": 72,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002452148641_20260512_192736_956205500_trial_i7_iter1_seed5005.txt",
+    "sample": 73,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496074908_20260512_191736_536581800_initial1_seed4002.txt",
+    "sample": 74,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      44,
+      357,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496085228_20260512_193003_170573700_trial_i1_iter2_seed5003.txt",
+    "sample": 75,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496244922_20260512_191852_214089200_trial_i4_iter1_seed4003.txt",
+    "sample": 76,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      352,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496315144_20260512_192553_822447300_trial_i0_iter1_seed5004.txt",
+    "sample": 77,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496341555_20260512_192536_657481100_initial15_seed5003.txt",
+    "sample": 78,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496428053_20260512_191807_646214000_trial_i1_iter1_seed4003.txt",
+    "sample": 79,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      353,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496728642_20260512_192537_251069100_initial13_seed5001.txt",
+    "sample": 80,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496859101_20260512_191736_923369700_initial6_seed4003.txt",
+    "sample": 81,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496923723_20260512_192535_347820800_initial8_seed5004.txt",
+    "sample": 82,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      352,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002496947101_20260512_193017_555277200_trial_i2_iter2_seed5004.txt",
+    "sample": 83,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497011876_20260512_191736_868201900_initial8_seed4004.txt",
+    "sample": 84,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497119756_20260512_193144_283090100_trial_i8_iter2_seed5004.txt",
+    "sample": 85,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497156330_20260512_192636_787869900_trial_i3_iter1_seed5000.txt",
+    "sample": 86,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497178146_20260512_192537_136290300_initial11_seed5000.txt",
+    "sample": 87,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497362556_20260512_193001_632496600_trial_i1_iter2_seed5001.txt",
+    "sample": 88,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497365977_20260512_193017_817050100_trial_i2_iter2_seed5003.txt",
+    "sample": 89,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497397387_20260512_192849_760209200_trial_i12_iter1_seed5003.txt",
+    "sample": 90,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      353,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497430477_20260512_191921_110534300_trial_i6_iter1_seed4007.txt",
+    "sample": 91,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497543930_20260512_193117_207085500_trial_i6_iter2_seed5001.txt",
+    "sample": 92,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497584704_20260512_193115_437270600_trial_i6_iter2_seed5000.txt",
+    "sample": 93,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497597948_20260512_191736_319427500_initial8_seed4000.txt",
+    "sample": 94,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      352,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0002497612510_20260512_191736_129056300_initial7_seed4000.txt",
+    "sample": 95,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "solutions\\alns_two_phase\\challenge_r100d10_1_solution.txt",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      8,
+      63,
+      3890000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "solutions\\alns\\challenge_r100d10_1_solution.txt",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      9,
+      65,
+      3900000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      54,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      54,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      53,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      53,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      35200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      35600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      35600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      35700000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      35800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      36000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      34400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      34800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      34900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      5,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      84,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      110,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      110,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      112,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      112,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      112,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      113,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      78,
+      26600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      78,
+      26800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      79,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      79,
+      26800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      26600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      84,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      20900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      21100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      21800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      22200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      23800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      20100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      22200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      23300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      23400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      70,
+      20200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      7,
+      69,
+      23400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      7,
+      69,
+      23800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      103,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      103,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      103,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      108,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      9,
+      138,
+      3220000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      138,
+      3260000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      139,
+      3240000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      137,
+      3180000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      137,
+      3220000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      137,
+      3240000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      138,
+      3140000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      139,
+      3220000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      141,
+      3140000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      139,
+      3140000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      139,
+      3200000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      141,
+      3180000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      140,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      140,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      26700000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      142,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      142,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      142,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      144,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      144,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      183,
+      34100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      184,
+      34900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      184,
+      34900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      185,
+      34200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      185,
+      40000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      184,
+      34400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      184,
+      34900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      184,
+      39200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      186,
+      37900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      14,
+      186,
+      34100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      14,
+      186,
+      37100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      14,
+      187,
+      43700000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      148,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      149,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      151,
+      2060000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      153,
+      2060000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      153,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      153,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      156,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      158,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      160,
+      2050000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      162,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      154,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      153,
+      2090000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      256,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      256,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      257,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      257,
+      2000000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      259,
+      2030000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      259,
+      2030000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      257,
+      2010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      259,
+      2020000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      16,
+      258,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      16,
+      259,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      16,
+      269,
+      2010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      16,
+      273,
+      1950000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      89,
+      3950000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      91,
+      4000000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      92,
+      4010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      92,
+      4010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      92,
+      4030000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      92,
+      4040000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      93,
+      3940000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      93,
+      4060000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      90,
+      4030000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      91,
+      4020000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      93,
+      4000000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      6,
+      96,
+      4020000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      332,
+      51300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      332,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      332,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      334,
+      52300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      336,
+      51300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      336,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      338,
+      51400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      331,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      334,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      334,
+      52300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      337,
+      53500000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      338,
+      52400000
+    ]
+  }
+]

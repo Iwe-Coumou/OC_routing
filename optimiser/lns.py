@@ -320,5 +320,15 @@ def route_lns(
     final_routes = solve_routing(state, instance, fast=False, time_limit_seconds=15,
                                  initial_routes=best_feasible_routes)
     final_cost = cost_from_routes(final_routes, instance)['total']
-    print(f"  final routed cost: {final_cost:.3e}  (LNS best feasible was {best_feasible_cost:.3e})", flush=True)
-    return final_routes
+
+    # Keep the best routed solution found by the search loop if quality rerouting regresses.
+    if final_cost <= best_feasible_cost:
+        print(f"  final routed cost: {final_cost:.3e}  (LNS best feasible was {best_feasible_cost:.3e})", flush=True)
+        return final_routes
+
+    print(
+        f"  final quality reroute regressed ({final_cost:.3e} > {best_feasible_cost:.3e}); "
+        "keeping LNS best feasible routes",
+        flush=True,
+    )
+    return best_feasible_routes

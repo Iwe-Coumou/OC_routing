@@ -1,0 +1,5762 @@
+[
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      8,
+      91,
+      1960000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      95,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      95,
+      1920000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      95,
+      1920000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      96,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      96,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      96,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      96,
+      1920000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      97,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      97,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      97,
+      1940000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      98,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      98,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      98,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "solutions\\cvae_de\\B1_smoke_solution.txt",
+    "sample": 14,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      99,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      99,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      99,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      99,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      95,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      96,
+      1940000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      97,
+      1960000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      98,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      98,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B1.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      98,
+      1900000000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      217,
+      67600000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      218,
+      66200000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      218,
+      66500000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      219,
+      66600000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      219,
+      67100000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      219,
+      67600000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      220,
+      66300000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      220,
+      66400000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      220,
+      67400000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      220,
+      68200000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      220,
+      70400000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      220,
+      71600000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      221,
+      65700000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      221,
+      66400000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      221,
+      66900000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      221,
+      70700000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      222,
+      66300000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      222,
+      66500000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      222,
+      67700000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      15,
+      222,
+      71000000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      16,
+      219,
+      65800000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      16,
+      220,
+      66600000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      16,
+      222,
+      65600000
+    ]
+  },
+  {
+    "instance": "instances\\B2.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 500,
+    "days": 15,
+    "score": [
+      16,
+      225,
+      65800000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_de\\B3_capped_50_solution.txt",
+    "sample": 0,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_de\\B3_trained_solution.txt",
+    "sample": 16,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116200000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_de\\B3_cvae_multi_highfixed_solution.txt",
+    "sample": 20,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      352,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      58,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_1.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      59,
+      3310000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      54,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      54,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      54,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      54,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_2.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      55,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      51,
+      21300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      52,
+      21300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      53,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      53,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      53,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      53,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      53,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      54,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      54,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_3.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      55,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      24,
+      36600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      24,
+      37100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      24,
+      37600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      34000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      34800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      35200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      35500000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      35700000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      35900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      36400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      3,
+      25,
+      37100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      34800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      34900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35500000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35700000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      35800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      36300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_4.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      4,
+      25,
+      36800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      6,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      34,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r100d10_5.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 100,
+    "days": 10,
+    "score": [
+      7,
+      35,
+      2410000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      83,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      83,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_1.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      84,
+      2730000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      9,
+      108,
+      2290000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      109,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      110,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      110,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      110,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      112,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      112,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      112,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      110,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      110,
+      2300000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      111,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      111,
+      2300000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      112,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_2.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      11,
+      112,
+      2270000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      78,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      78,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      78,
+      26600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      79,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      79,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      79,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      79,
+      26600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      79,
+      26600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      80,
+      26800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      81,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      82,
+      26500000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      83,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      83,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      83,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_3.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      84,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      5,
+      68,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      5,
+      68,
+      22200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      5,
+      69,
+      20200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      20900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      21400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      22200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      68,
+      22200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      20100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      20500000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      20600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      20600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      20800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      20900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      20900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      21000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      21400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      21800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      22200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      69,
+      23000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      70,
+      20200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      6,
+      70,
+      21300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      7,
+      69,
+      23400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r200d15_4.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 200,
+    "days": 15,
+    "score": [
+      10,
+      69,
+      23800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      103,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      103,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      103,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      104,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      105,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      106,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      106,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      106,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      107,
+      3710000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      6,
+      109,
+      3760000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_1.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      7,
+      104,
+      3760000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      138,
+      3260000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      136,
+      3240000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      136,
+      3260000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      138,
+      3220000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      140,
+      3200000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      140,
+      3220000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      144,
+      3240000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      135,
+      3220000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      136,
+      3220000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      136,
+      3260000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      136,
+      3280000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      137,
+      3260000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      138,
+      3160000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      138,
+      3200000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      139,
+      3200000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      139,
+      3220000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      139,
+      3240000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      137,
+      3180000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      138,
+      3140000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      139,
+      3140000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      140,
+      3160000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      140,
+      3180000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      141,
+      3180000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_2.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      145,
+      3180000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      139,
+      26700000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      140,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      140,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      26600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      27000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      141,
+      28000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      142,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      143,
+      26500000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      144,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      144,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      144,
+      26400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_3.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      8,
+      145,
+      26200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      183,
+      33700000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      184,
+      33900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      184,
+      34200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      184,
+      34300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      184,
+      35000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      184,
+      35300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      184,
+      35800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      185,
+      33800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      185,
+      33900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      185,
+      34100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      185,
+      34200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      185,
+      35300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      185,
+      35900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      185,
+      35900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      186,
+      33800000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      186,
+      33900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      187,
+      34500000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      183,
+      35900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      184,
+      36000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      185,
+      35500000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      185,
+      38000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      12,
+      185,
+      39400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      13,
+      185,
+      38400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_4.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      13,
+      186,
+      37300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      9,
+      148,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      9,
+      150,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      9,
+      151,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      9,
+      151,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      9,
+      152,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      9,
+      153,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      148,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      149,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      150,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      150,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      151,
+      2060000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      151,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      152,
+      2060000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      152,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      153,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      153,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      153,
+      2090000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      154,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      155,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      160,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      162,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      163,
+      2080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      10,
+      164,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r300d20_5.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 300,
+    "days": 20,
+    "score": [
+      11,
+      153,
+      2070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      13,
+      257,
+      2010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      255,
+      2010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      256,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      256,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      256,
+      2000000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      257,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      258,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      259,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      259,
+      2010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      260,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      255,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      255,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      255,
+      2010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      256,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      256,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      257,
+      2000000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      259,
+      1970000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      260,
+      2000000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      261,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      16,
+      259,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      16,
+      260,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      16,
+      260,
+      1990000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      17,
+      261,
+      1980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_1.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      17,
+      264,
+      2000000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      89,
+      4030000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      89,
+      4070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      90,
+      3940000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      90,
+      4000000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      90,
+      4000000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      90,
+      4010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      90,
+      4030000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      90,
+      4080000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      91,
+      3970000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      91,
+      4010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      91,
+      4050000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      91,
+      4150000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      92,
+      3980000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      92,
+      4010000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      4,
+      94,
+      4060000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      92,
+      3970000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      92,
+      4120000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      93,
+      4090000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      94,
+      3930000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      94,
+      4070000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      95,
+      3960000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      95,
+      4020000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      95,
+      4040000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_2.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      5,
+      97,
+      4040000000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 0,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      330,
+      56200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 1,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      332,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 2,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      332,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 3,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      332,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 4,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      332,
+      52100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 5,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      333,
+      50900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 6,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      333,
+      51200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 7,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      333,
+      51300000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 8,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      333,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 9,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      334,
+      51500000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 10,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      335,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 11,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      335,
+      51900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 12,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      336,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 13,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      336,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 14,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      337,
+      52400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 15,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      14,
+      339,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 16,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      331,
+      51600000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 17,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      332,
+      51200000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 18,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      335,
+      50900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 19,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      336,
+      52400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 20,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      337,
+      52100000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 21,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      337,
+      52400000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 22,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      338,
+      51900000
+    ]
+  },
+  {
+    "instance": "instances\\challenge_r500d25_3.txt",
+    "source": "cp_decoder",
+    "sample": 23,
+    "requests": 500,
+    "days": 25,
+    "score": [
+      15,
+      341,
+      51700000
+    ]
+  }
+]
