@@ -26,6 +26,7 @@ class VehicleRoute:
     vehicle_id: int
     stops: list = field(default_factory=list)
     distance: int = 0
+    trips: list = field(default_factory=list)  # non-empty = multi-trip; each element is list[Stop]
 
 
 def _tasks_by_day(state: dict, instance: Instance) -> dict:
@@ -206,6 +207,42 @@ def _build_and_solve(stops: list, instance: Instance, num_vehicles: int,
     return vehicle_routes
 
 
+def merge_routes(routes: list, max_trip_distance: int) -> list:
+    """Merge single-trip routes into multi-trip vehicles (first-fit decreasing bin packing).
+
+    Reduces vehicle count by combining routes whose total distance fits within
+    max_trip_distance. The vehicle returns to the depot between trips to reload.
+    """
+    if not routes:
+        return routes
+    sorted_routes = sorted(routes, key=lambda r: r.distance, reverse=True)
+    bins = []  # each bin: [total_distance, [VehicleRoute, ...]]
+    for route in sorted_routes:
+        placed = False
+        for b in bins:
+            if b[0] + route.distance <= max_trip_distance:
+                b[0] += route.distance
+                b[1].append(route)
+                placed = True
+                break
+        if not placed:
+            bins.append([route.distance, [route]])
+    result = []
+    for vehicle_id, (total_dist, route_list) in enumerate(bins):
+        if len(route_list) == 1:
+            r = route_list[0]
+            result.append(VehicleRoute(vehicle_id=vehicle_id, stops=r.stops, distance=r.distance))
+        else:
+            all_stops = [s for r in route_list for s in r.stops]
+            result.append(VehicleRoute(
+                vehicle_id=vehicle_id,
+                stops=all_stops,
+                distance=total_dist,
+                trips=[r.stops for r in route_list],
+            ))
+    return result
+
+
 def solve_day(
     day: int,
     stops: list,
@@ -230,8 +267,12 @@ def solve_day(
         tight_n = min(len(stops), len(initial_routes))
 
     result = _build_and_solve(stops, instance, tight_n, time_limit_seconds, fast, initial_routes)
+    if result is not None:
+        result = merge_routes(result, instance.config.max_trip_distance)
     if result is None and tight_n < len(stops):
         result = _build_and_solve(stops, instance, len(stops), time_limit_seconds, fast)
+        if result is not None:
+            result = merge_routes(result, instance.config.max_trip_distance)
 
     return result or []
 
