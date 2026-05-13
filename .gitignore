@@ -12,3 +12,5 @@ logs/
 
 *.gif
 optimiser.log
+
+**/*.png
