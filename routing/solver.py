@@ -26,6 +26,54 @@ class VehicleRoute:
     vehicle_id: int
     stops: list = field(default_factory=list)
     distance: int = 0
+    trips: list = field(default_factory=list)
+
+
+def merge_routes(routes: list, max_trip_distance: int) -> list:
+    if not routes:
+        return []
+
+    # First-fit decreasing by route distance.
+    ordered = sorted((r for r in routes if r.stops), key=lambda r: r.distance, reverse=True)
+    bins: list[dict] = []
+    for route in ordered:
+        placed = False
+        for b in bins:
+            if b['distance'] + route.distance <= max_trip_distance:
+                b['routes'].append(route)
+                b['distance'] += route.distance
+                placed = True
+                break
+        if not placed:
+            bins.append({'routes': [route], 'distance': route.distance})
+
+    merged: list[VehicleRoute] = []
+    for vid, b in enumerate(bins):
+        parts = b['routes']
+        if len(parts) == 1:
+            single = parts[0]
+            merged.append(
+                VehicleRoute(
+                    vehicle_id=vid,
+                    stops=list(single.stops),
+                    distance=single.distance,
+                    trips=[],
+                )
+            )
+            continue
+
+        trips = [list(r.stops) for r in parts]
+        flat_stops = [s for trip in trips for s in trip]
+        merged.append(
+            VehicleRoute(
+                vehicle_id=vid,
+                stops=flat_stops,
+                distance=b['distance'],
+                trips=trips,
+            )
+        )
+
+    return merged
 
 
 def _tasks_by_day(state: dict, instance: Instance) -> dict:
@@ -230,8 +278,12 @@ def solve_day(
         tight_n = min(len(stops), len(initial_routes))
 
     result = _build_and_solve(stops, instance, tight_n, time_limit_seconds, fast, initial_routes)
+    if result is not None:
+        result = merge_routes(result, instance.config.max_trip_distance)
     if result is None and tight_n < len(stops):
         result = _build_and_solve(stops, instance, len(stops), time_limit_seconds, fast)
+        if result is not None:
+            result = merge_routes(result, instance.config.max_trip_distance)
 
     return result or []
 

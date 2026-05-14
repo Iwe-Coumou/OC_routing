@@ -6,7 +6,7 @@ from scheduling.state import build_schedule, build_schedule_single, validate_sch
 from scheduling.cost import cost_breakdown, print_cost
 from scheduling.feasibility import repair_feasibility
 from routing.export import write_solution, cost_from_routes, read_solution
-from routing.solver import solve_routing
+from routing.solver import solve_routing, merge_routes
 from optimiser.lns import route_lns
 
 def _setup_logging(instance_name: str) -> None:
@@ -126,13 +126,26 @@ def main():
             print("\n  ERROR: no feasible solution found — not all requests could be scheduled.")
             return
 
+    # Final merge pass: combine any per-day routes that fit within max_trip_distance
+    # into multi-trip vehicles, reducing the vehicle fleet size.
+    for day in list(route_set):
+        route_set[day] = merge_routes(route_set[day], instance.config.max_trip_distance)
+
+    routed_bd = cost_from_routes(route_set, instance)
+    new_cost = routed_bd['total']
     print(f"\n{'='*60}")
     print("  FINAL COST")
     print(f"{'='*60}")
-    routed_bd = cost_from_routes(route_set, instance)
     print_cost(routed_bd)
 
-    new_cost = routed_bd['total']
+    # Count multi-trip vehicles
+    multi_trip_days = sum(
+        sum(1 for r in routes if r.trips)
+        for routes in route_set.values()
+    )
+    if multi_trip_days:
+        print(f"\n  Multi-trip vehicles: {multi_trip_days} vehicle-day(s) do multiple trips in one day")
+
     existing_cost = None
     if os.path.isfile(output_file):
         with open(output_file) as fh:

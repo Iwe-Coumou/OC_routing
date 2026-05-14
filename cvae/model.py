@@ -573,3 +573,76 @@ def _combine_prediction(instance: Instance, request_z: torch.Tensor, day_bias: t
     day_part = day_bias[0, : instance.config.days].detach().cpu().numpy()
     request_part = request_z[0, : len(instance.requests)].detach().cpu().numpy()
     return np.concatenate([day_part, request_part]).astype(np.float64)
+
+
+def sample_prior_latent_vectors(
+    model: nn.Module,
+    instance: Instance,
+    *,
+    n_samples: int = 4,
+    device: torch.device | str = "cpu",
+    seed: int = 0,
+) -> list[np.ndarray]:
+    """Sample z vectors from the prior N(0,I) for latent-space DE.
+
+    When *model* is a CVAE / AttentiveCVAE this returns raw 64-D latent
+    vectors so that differential evolution can search *directly in the
+    learned latent space* rather than in the 510-D raw guidance space.
+    Falls back to ``predict_latent_vectors`` for non-CVAE models.
+    """
+    if not isinstance(model, (ScheduleCVAE, AttentiveScheduleCVAE)):
+        return predict_latent_vectors(model, instance, n_samples=n_samples, device=device, seed=seed)
+
+    generator = torch.Generator(device=device)
+    generator.manual_seed(seed)
+    vectors: list[np.ndarray] = []
+    # First seed: posterior mean of the prior  == zeros in standard normal
+    vectors.append(np.zeros(model.latent_dim, dtype=np.float64))
+    for _ in range(max(0, n_samples - 1)):
+        z = torch.randn(model.latent_dim, device=device, generator=generator)
+        vectors.append(z.cpu().numpy().astype(np.float64))
+    return vectors
+
+
+def encode_to_latent_vector(
+    model: nn.Module,
+    instance: Instance,
+    state: dict,
+    device: torch.device | str = "cpu",
+    *,
+    n_samples: int = 1,
+    seed: int = 0,
+) -> list[np.ndarray]:
+    """Encode a known-good solution to latent space and return mu + posterior samples.
+
+    Returns a list of 64-D latent vectors: the first is the posterior mean
+    (mu), the remaining are samples from N(mu, sigma).  Use these as DE seed
+    vectors when searching in latent space.
+
+    Falls back to ``predict_latent_vectors_from_encoded`` for non-CVAE models
+    (returns decoded 510-D raw vectors in that case).
+    """
+    if not isinstance(model, (ScheduleCVAE, AttentiveScheduleCVAE)):
+        return predict_latent_vectors_from_encoded(
+            model, instance, state, n_samples=n_samples, device=device, seed=seed
+        )
+
+    model.eval()
+    tensor = make_instance_tensor(instance, state=state, max_days=model.max_days)
+    features = tensor.features.unsqueeze(0).to(device)
+    mask = tensor.request_mask.unsqueeze(0).to(device)
+    target_z = tensor.target_z.unsqueeze(0).to(device)
+
+    generator = torch.Generator(device=device)
+    generator.manual_seed(seed)
+    vectors: list[np.ndarray] = []
+    with torch.no_grad():
+        mu, logvar = model.encode(features, mask, target_z)
+        std = torch.exp(0.5 * logvar)
+        # First: posterior mean — the single best guess for this solution
+        vectors.append(mu[0].cpu().numpy().astype(np.float64))
+        for _ in range(max(0, n_samples - 1)):
+            eps = torch.randn(std.shape, device=std.device, generator=generator).to(std.dtype)
+            latent = mu + eps * std
+            vectors.append(latent[0].cpu().numpy().astype(np.float64))
+    return vectors

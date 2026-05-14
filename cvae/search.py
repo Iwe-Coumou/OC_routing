@@ -1,18 +1,21 @@
 """Continuous latent CP-DE search for VeRoLog schedules.
 
 Implements CVAE-Opt (Hottung et al., ICLR 2021) adapted for VeRoLog 2017:
-  - differential evolution explores a continuous latent vector
-  - a CP-SAT decoder maps each vector to a feasible delivery-day assignment
+  - differential evolution explores the CVAE's *learned* latent space (64-D)
+  - the CVAE decoder maps each latent z → per-request guidance signals
+  - a CP-SAT feasibility decoder produces a complete schedule from those signals
   - the existing routing/cost code evaluates the decoded solution exactly
 
-Key improvements over the original version:
-  - Archive-seeded initialization: best archived solutions are converted directly
-    to DE seed vectors via state_to_search_vector, giving DE an informed start in
-    the neighbourhood of known-good solutions (the CVAE-Opt §4.1 inference idea)
-  - Encoded posteriors: when a checkpoint is loaded, each archived solution is
-    also encoded through the CVAE encoder; DE starts from N(mu, sigma) samples
-    centred on the known-good region of latent space
-  - The --encode-archives flag activates both mechanisms automatically
+True CVAE-Opt search flow:
+  z ∈ R^64  →  model.decode(z)  →  (request_z, day_bias) 510-D  →  CP-SAT  →  routes  →  cost
+
+DE never touches the raw 510-D space; it only mutates/recombines 64-D latent
+vectors.  Every candidate is therefore guided by learned inter-request structure.
+Seeding uses the CVAE encoder: archived solutions are compressed to posterior
+means (mu) so DE starts in the high-quality neighbourhood of the latent manifold.
+
+Fallback: when no CVAE checkpoint is provided, the original 510-D raw search is
+used automatically (backwards compatible with --checkpoint-free runs).
 """
 
 from __future__ import annotations
@@ -43,8 +46,15 @@ class Candidate:
     breakdown: dict | None
 
 
-def latent_dimension(instance: Instance) -> int:
-    """One day-bias coordinate plus one target-day coordinate per request."""
+def latent_dimension(instance: Instance, model=None) -> int:
+    """Return the DE search-space dimension.
+
+    When *model* is a CVAE / AttentiveScheduleCVAE this is the compact learned
+    latent dimension (e.g. 64).  Otherwise it falls back to the raw guidance
+    dimension: one day-bias coordinate + one per-request target-day coordinate.
+    """
+    if model is not None and hasattr(model, "latent_dim"):
+        return model.latent_dim
     return instance.config.days + len(instance.requests)
 
 
@@ -53,18 +63,50 @@ def decode_latent_schedule(
     vector: np.ndarray,
     *,
     cp_time_seconds: float = 5.0,
+    model=None,
+    device=None,
+    instance_tensor=None,
 ) -> dict | None:
     """Decode a continuous vector into a feasible schedule state.
+
+    When *model* is a CVAE / AttentiveScheduleCVAE *vector* is a 64-D latent
+    vector sampled directly from the learned manifold.  It is first passed
+    through the CVAE decoder to obtain (request_z, day_bias) guidance signals,
+    then those are fed to the CP-SAT feasibility decoder.  This is the true
+    CVAE-Opt inner loop: DE never touches the raw guidance space.
+
+    Without a model *vector* is the legacy 510-D raw guidance vector.
 
     The hard constraints enforce one delivery day per request and per-tool stock
     availability.  The objective follows the real cost hierarchy where possible:
     lower bound on max vehicles, lower bound on vehicle-days, peak tool cost,
     then latent tie-break terms that select among equivalent schedules.
     """
+    import torch
+    from cvae.model import (
+        AttentiveScheduleCVAE,
+        ScheduleCVAE,
+        _combine_prediction,
+        make_instance_tensor,
+    )
+
+    # --- CVAE decode: latent z → raw guidance vector ---
+    if model is not None and device is not None and hasattr(model, "latent_dim"):
+        if isinstance(model, (ScheduleCVAE, AttentiveScheduleCVAE)):
+            if instance_tensor is None:
+                instance_tensor = make_instance_tensor(instance, max_days=model.max_days)
+            features = instance_tensor.features.unsqueeze(0).to(device)
+            mask = instance_tensor.request_mask.unsqueeze(0).to(device)
+            z = torch.tensor(vector, dtype=torch.float32, device=device).unsqueeze(0)
+            with torch.no_grad():
+                request_z, day_bias_t = model.decode(features, mask, z)
+            vector = _combine_prediction(instance, request_z, day_bias_t)
+
     days = instance.config.days
     n_req = len(instance.requests)
-    if len(vector) != latent_dimension(instance):
-        raise ValueError(f"latent vector has length {len(vector)}, expected {latent_dimension(instance)}")
+    raw_dim = instance.config.days + len(instance.requests)
+    if len(vector) != raw_dim:
+        raise ValueError(f"raw guidance vector has length {len(vector)}, expected {raw_dim}")
 
     day_bias = vector[:days]
     request_latent = vector[days:]
@@ -175,8 +217,18 @@ def evaluate_vector(
     route_time_seconds: int,
     quality: bool,
     routing_fixed_cost: int | None = None,
+    model=None,
+    device=None,
+    instance_tensor=None,
 ) -> Candidate:
-    state = decode_latent_schedule(instance, vector, cp_time_seconds=cp_time_seconds)
+    state = decode_latent_schedule(
+        instance,
+        vector,
+        cp_time_seconds=cp_time_seconds,
+        model=model,
+        device=device,
+        instance_tensor=instance_tensor,
+    )
     if state is None:
         return Candidate(vector=vector.copy(), cost=float("inf"), routes=None, breakdown=None)
 
@@ -230,14 +282,29 @@ def differential_evolution(
     archive_top_k: int = 50,
     archive_all_feasible: bool = False,
     archive_cost_limit: float | None = None,
+    model=None,
+    device=None,
 ) -> Candidate:
-    """Run DE over the latent CP decoder."""
+    """Run DE over the CVAE latent space (or raw guidance space if no model).
+
+    When *model* is an AttentiveScheduleCVAE the search space is the 64-D
+    learned latent manifold.  Each candidate z is decoded through the CVAE
+    before being passed to the CP-SAT feasibility decoder.  This is the true
+    CVAE-Opt inner loop: every DE mutation stays on the smooth solution manifold.
+    """
     if population_size < 4:
         raise ValueError("differential evolution requires population_size >= 4")
     rng = np.random.default_rng(seed)
     random.seed(seed)
-    dim = latent_dimension(instance)
+    dim = latent_dimension(instance, model)
     start = time.monotonic()
+
+    # Pre-compute instance feature tensor once so every evaluate_vector call
+    # reuses it instead of recomputing 500-request features each time.
+    instance_tensor = None
+    if model is not None and device is not None and hasattr(model, "latent_dim"):
+        from cvae.model import make_instance_tensor
+        instance_tensor = make_instance_tensor(instance, max_days=model.max_days)
 
     vectors = rng.normal(0.0, 1.0, size=(population_size, dim))
     base_vectors = []
@@ -247,12 +314,14 @@ def differential_evolution(
                 raise ValueError(f"seed vector has length {len(vector)}, expected {dim}")
             base_vectors.append(np.asarray(vector, dtype=np.float64))
     base_vectors.append(np.zeros(dim, dtype=np.float64))
-    early = np.zeros(dim, dtype=np.float64)
-    early[: instance.config.days] = np.linspace(-1.0, 1.0, instance.config.days)
-    base_vectors.append(early)
-    late = np.zeros(dim, dtype=np.float64)
-    late[: instance.config.days] = np.linspace(1.0, -1.0, instance.config.days)
-    base_vectors.append(late)
+    # For raw-space fallback only: add structured day-bias initialisation
+    if not (model is not None and hasattr(model, "latent_dim")):
+        early = np.zeros(dim, dtype=np.float64)
+        early[: instance.config.days] = np.linspace(-1.0, 1.0, instance.config.days)
+        base_vectors.append(early)
+        late = np.zeros(dim, dtype=np.float64)
+        late[: instance.config.days] = np.linspace(1.0, -1.0, instance.config.days)
+        base_vectors.append(late)
     for idx, vector in enumerate(base_vectors[:population_size]):
         vectors[idx, :] = vector
     if seed_vectors:
@@ -268,6 +337,9 @@ def differential_evolution(
             route_time_seconds=route_time_seconds,
             quality=quality,
             routing_fixed_cost=routing_fixed_cost,
+            model=model,
+            device=device,
+            instance_tensor=instance_tensor,
         )
         for vector in vectors
     ]
@@ -317,6 +389,9 @@ def differential_evolution(
                 route_time_seconds=route_time_seconds,
                 quality=quality,
                 routing_fixed_cost=routing_fixed_cost,
+                model=model,
+                device=device,
+                instance_tensor=instance_tensor,
             )
             if archive_all_feasible:
                 _archive_candidate(
@@ -363,51 +438,62 @@ def build_archive_seed_vectors(
 ) -> list[np.ndarray]:
     """Build DE seed vectors from the best archived solutions.
 
-    Two seed types are generated:
-    1. *Direct seeds*: convert each archived solution state to a search vector via
-       ``state_to_search_vector``.  This places DE directly in the neighbourhood
-       of every known-good solution without needing a model at all.
-    2. *Encoded seeds* (when a CVAE model is provided): encode each archived
-       solution through the CVAE posterior, then sample N(mu, sigma) to get
-       diverse candidates near the known-good latent region — the CVAE-Opt §4.1
-       inference procedure.
+    True CVAE-Opt seeding (when a model is available):
+      Each archived solution is *encoded* through the CVAE posterior to obtain
+      its mean (mu) in the 64-D learned latent space.  DE therefore starts
+      directly in the high-quality region of the *manifold* rather than having
+      to discover that region from random initialisation.
+
+    Raw-space fallback (no model):
+      The legacy ``state_to_search_vector`` converts each solution directly to a
+      510-D guidance vector.
     """
     from cvae.archive import best_archived
-    from cvae.model import state_to_search_vector
+    from cvae.model import (
+        AttentiveScheduleCVAE,
+        ScheduleCVAE,
+        encode_to_latent_vector,
+        state_to_search_vector,
+    )
     from routing.export import read_solution
 
     records = best_archived(instance_path=instance_path, archive_dir=archive_dir)
     seeds: list[np.ndarray] = []
     max_days = instance.config.days
+    use_latent = model is not None and device is not None and isinstance(
+        model, (ScheduleCVAE, AttentiveScheduleCVAE)
+    )
 
     for _cost, path in records[:max_seeds]:
         try:
             state, _ = read_solution(str(path), instance)
         except Exception:
             continue
-        # Direct seed: the solution converted to a DE search vector
-        try:
-            vec = state_to_search_vector(instance, state, max_days)
-            seeds.append(vec)
-        except Exception:
-            pass
-        # Encoded seeds via CVAE posterior (CVAE-Opt §4.1)
-        if model is not None and device is not None:
+
+        if use_latent:
+            # Encode to CVAE latent space: returns [mu, sample1, sample2, ...]
             try:
-                from cvae.model import predict_latent_vectors_from_encoded
-                encoded = predict_latent_vectors_from_encoded(
-                    model, instance, state,
+                latent_vecs = encode_to_latent_vector(
+                    model, instance, state, device,
                     n_samples=n_encoded_samples,
-                    device=device,
                     seed=seed + len(seeds),
                 )
-                seeds.extend(encoded)
+                seeds.extend(latent_vecs)
             except Exception:
                 pass
-        if len(seeds) >= max_seeds * (1 + n_encoded_samples):
+        else:
+            # Legacy: convert to raw 510-D guidance vector
+            try:
+                vec = state_to_search_vector(instance, state, max_days)
+                seeds.append(vec)
+            except Exception:
+                pass
+
+        if len(seeds) >= max_seeds * max(1, n_encoded_samples):
             break
 
-    print(f"archive seeds: {len(seeds)} vectors from {len(records)} archived solutions", flush=True)
+    mode = f"latent-space ({model.latent_dim}-D)" if use_latent else f"raw-space ({latent_dimension(instance)}-D)"
+    print(f"archive seeds: {len(seeds)} {mode} vectors from {len(records)} archived solutions", flush=True)
     return seeds
 
 
@@ -481,11 +567,13 @@ def main() -> None:
     device = None
     if args.checkpoint:
         import torch
-        from cvae.model import load_checkpoint, predict_latent_vectors
+        from cvae.model import AttentiveScheduleCVAE, ScheduleCVAE, load_checkpoint, sample_prior_latent_vectors
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model = load_checkpoint(args.checkpoint, device=device)
-        prior_seeds = predict_latent_vectors(
+
+        # Sample seed vectors from the learned prior in latent space (64-D)
+        prior_seeds = sample_prior_latent_vectors(
             model,
             instance,
             n_samples=args.checkpoint_samples,
@@ -493,7 +581,13 @@ def main() -> None:
             seed=args.seed,
         )
         seed_vectors.extend(prior_seeds)
-        print(f"loaded checkpoint {args.checkpoint}: {len(prior_seeds)} prior seed(s)", flush=True)
+        latent_mode = isinstance(model, (ScheduleCVAE, AttentiveScheduleCVAE))
+        dim = latent_dimension(instance, model)
+        print(
+            f"loaded checkpoint {args.checkpoint}: {len(prior_seeds)} prior seed(s) "
+            f"| {'latent-space DE (' + str(dim) + '-D)' if latent_mode else 'raw-space DE (' + str(dim) + '-D)'}",
+            flush=True,
+        )
 
     if args.encode_archives and args.archive_dir:
         archive_seeds = build_archive_seed_vectors(
@@ -524,6 +618,8 @@ def main() -> None:
         archive_top_k=args.archive_top_k,
         archive_all_feasible=args.archive_all_feasible,
         archive_cost_limit=args.archive_cost_limit,
+        model=model,
+        device=device,
     )
     if best.routes is None or best.breakdown is None or not math.isfinite(best.cost):
         raise SystemExit("no feasible decoded solution found")

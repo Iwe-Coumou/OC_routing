@@ -2,32 +2,44 @@ from instance import Instance
 from .solver import VehicleRoute, Stop
 
 
+def _route_trips(route: VehicleRoute) -> list:
+    if getattr(route, 'trips', None):
+        return route.trips
+    return [route.stops]
+
+
 def _compute_depot_visits(route: VehicleRoute, instance: Instance, req_lookup: dict) -> list:
     n = len(instance.tools)
-    current = [0] * n
-    node_visits = []
+    visits = []
+    for trip_stops in _route_trips(route):
+        current = [0] * n
+        node_visits = []
 
-    for stop in route.stops:
-        req = req_lookup[stop.request_id]
-        idx = req.machine_type - 1
-        if stop.action == 'delivery':
-            current[idx] -= req.num_machines
-        else:
-            current[idx] += req.num_machines
-        node_visits.append(list(current))
+        for stop in trip_stops:
+            req = req_lookup[stop.request_id]
+            idx = req.machine_type - 1
+            if stop.action == 'delivery':
+                current[idx] -= req.num_machines
+            else:
+                current[idx] += req.num_machines
+            node_visits.append(list(current))
 
-    if not node_visits:
+        if not node_visits:
+            visits.extend([[0] * n, [0] * n])
+            continue
+
+        # Replicate validator: compute bringTools and sumTools over all node visits.
+        bring = [0] * n
+        for nv in node_visits:
+            bring = [min(a, b) for a, b in zip(bring, nv)]
+
+        depot_start = list(bring)
+        depot_end = [b - a for a, b in zip(bring, node_visits[-1])]
+        visits.extend([depot_start, depot_end])
+
+    if not visits:
         return [[0] * n, [0] * n]
-
-    # Replicate validator: compute bringTools and sumTools over all node visits
-    bring = [0] * n
-    for nv in node_visits:
-        bring = [min(a, b) for a, b in zip(bring, nv)]
-
-    depot_start = list(bring)
-    depot_end = [b - a for a, b in zip(bring, node_visits[-1])]
-
-    return [depot_start, depot_end]
+    return visits
 
 
 def _day_aggregates(vehicles: list, instance: Instance, req_lookup: dict) -> tuple:
@@ -130,6 +142,7 @@ def read_solution(path: str, instance: Instance) -> tuple:
 
     current_day = None
     veh_stops = {}
+    veh_trips = {}
     veh_dist = {}
 
     def _finalise_day():
@@ -138,11 +151,13 @@ def read_solution(path: str, instance: Instance) -> tuple:
         routes = []
         for vnum in sorted(veh_stops):
             stops = veh_stops[vnum]
+            trips = veh_trips.get(vnum, [stops] if stops else [])
             if stops:
                 routes.append(VehicleRoute(
                     vehicle_id=vnum,
                     stops=stops,
                     distance=veh_dist.get(vnum, 0),
+                    trips=trips if len(trips) > 1 else [],
                 ))
         route_set[current_day] = routes
 
@@ -153,34 +168,60 @@ def read_solution(path: str, instance: Instance) -> tuple:
                 _finalise_day()
                 current_day = int(line.split('=', 1)[1].strip())
                 veh_stops = {}
+                veh_trips = {}
                 veh_dist = {}
             elif '\tR\t' in line:
                 parts = line.split('\t')
                 vnum = int(parts[0])
                 tokens = parts[3:-1]
-                stops = []
+                split_tokens = []
+                current = []
                 for tok in tokens:
-                    rid = int(tok)
-                    if rid > 0:
-                        req = req_by_id[rid]
-                        delivery_days[rid] = current_day
-                        stops.append(Stop(
-                            request_id=rid,
-                            action='delivery',
-                            location_id=req.location_id,
-                            load=req.num_machines * tool_by_type[req.machine_type].size,
-                            machine_type=req.machine_type,
-                        ))
-                    elif rid < 0:
-                        req = req_by_id[-rid]
-                        stops.append(Stop(
-                            request_id=-rid,
-                            action='pickup',
-                            location_id=req.location_id,
-                            load=req.num_machines * tool_by_type[req.machine_type].size,
-                            machine_type=req.machine_type,
-                        ))
+                    if tok == '0':
+                        if current:
+                            split_tokens.append(current)
+                            current = []
+                    else:
+                        current.append(tok)
+                if current:
+                    split_tokens.append(current)
+                if not split_tokens:
+                    split_tokens = [tokens]
+
+                stops = []
+                trips = []
+                for part in split_tokens:
+                    trip = []
+                    for tok in part:
+                        rid = int(tok)
+                        if rid > 0:
+                            req = req_by_id[rid]
+                            delivery_days[rid] = current_day
+                            stop = Stop(
+                                request_id=rid,
+                                action='delivery',
+                                location_id=req.location_id,
+                                load=req.num_machines * tool_by_type[req.machine_type].size,
+                                machine_type=req.machine_type,
+                            )
+                            trip.append(stop)
+                            stops.append(stop)
+                        elif rid < 0:
+                            req = req_by_id[-rid]
+                            stop = Stop(
+                                request_id=-rid,
+                                action='pickup',
+                                location_id=req.location_id,
+                                load=req.num_machines * tool_by_type[req.machine_type].size,
+                                machine_type=req.machine_type,
+                            )
+                            trip.append(stop)
+                            stops.append(stop)
+                    if trip:
+                        trips.append(trip)
+
                 veh_stops[vnum] = stops
+                veh_trips[vnum] = trips
             elif '\tD\t' in line:
                 parts = line.split('\t')
                 veh_dist[int(parts[0])] = int(parts[2])
@@ -227,8 +268,16 @@ def write_solution(route_set: dict, instance: Instance, output_path: str) -> Non
 
             for veh_num, route in enumerate(routes, start=1):
                 route_ids = []
-                for stop in route.stops:
-                    route_ids.append(stop.request_id if stop.action == 'delivery' else -stop.request_id)
+                trips = _route_trips(route)
+                if len(trips) > 1:
+                    for i, trip in enumerate(trips):
+                        for stop in trip:
+                            route_ids.append(stop.request_id if stop.action == 'delivery' else -stop.request_id)
+                        if i < len(trips) - 1:
+                            route_ids.append(0)
+                else:
+                    for stop in route.stops:
+                        route_ids.append(stop.request_id if stop.action == 'delivery' else -stop.request_id)
                 r_line = '\t'.join(str(x) for x in [veh_num, 'R', 0] + route_ids + [0])
                 f.write(r_line + '\n')
 

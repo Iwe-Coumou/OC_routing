@@ -1,0 +1,722 @@
+[
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11005_solution.txt",
+    "sample": 0,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11005_solution.txt_jitter",
+    "sample": 0,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11005_solution.txt_jitter",
+    "sample": 0,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11005_solution.txt_jitter",
+    "sample": 0,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11005_solution.txt_jitter",
+    "sample": 0,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10002_solution.txt",
+    "sample": 1,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10002_solution.txt_jitter",
+    "sample": 1,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10002_solution.txt_jitter",
+    "sample": 1,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10002_solution.txt_jitter",
+    "sample": 1,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10002_solution.txt_jitter",
+    "sample": 1,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11004_solution.txt",
+    "sample": 2,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      353,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11004_solution.txt_jitter",
+    "sample": 2,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      353,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11004_solution.txt_jitter",
+    "sample": 2,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      353,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11004_solution.txt_jitter",
+    "sample": 2,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      353,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11004_solution.txt_jitter",
+    "sample": 2,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      353,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11001_solution.txt",
+    "sample": 3,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11001_solution.txt_jitter",
+    "sample": 3,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11001_solution.txt_jitter",
+    "sample": 3,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11001_solution.txt_jitter",
+    "sample": 3,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11001_solution.txt_jitter",
+    "sample": 3,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      348,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11006_solution.txt",
+    "sample": 4,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11006_solution.txt_jitter",
+    "sample": 4,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11006_solution.txt_jitter",
+    "sample": 4,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11006_solution.txt_jitter",
+    "sample": 4,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11006_solution.txt_jitter",
+    "sample": 4,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11007_solution.txt",
+    "sample": 5,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11007_solution.txt_jitter",
+    "sample": 5,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11007_solution.txt_jitter",
+    "sample": 5,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11007_solution.txt_jitter",
+    "sample": 5,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11007_solution.txt_jitter",
+    "sample": 5,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      346,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10005_solution.txt",
+    "sample": 6,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10005_solution.txt_jitter",
+    "sample": 6,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10005_solution.txt_jitter",
+    "sample": 6,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10005_solution.txt_jitter",
+    "sample": 6,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10005_solution.txt_jitter",
+    "sample": 6,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      347,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0000996329590_20260513_194357_705144600_initial_seed11006.txt",
+    "sample": 7,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0000996329590_20260513_194357_705144600_initial_seed11006.txt_jitter",
+    "sample": 7,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0000996329590_20260513_194357_705144600_initial_seed11006.txt_jitter",
+    "sample": 7,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0000996329590_20260513_194357_705144600_initial_seed11006.txt_jitter",
+    "sample": 7,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_archive\\B3\\0000996329590_20260513_194357_705144600_initial_seed11006.txt_jitter",
+    "sample": 7,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      351,
+      116400000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10003_solution.txt",
+    "sample": 8,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10003_solution.txt_jitter",
+    "sample": 8,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10003_solution.txt_jitter",
+    "sample": 8,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10003_solution.txt_jitter",
+    "sample": 8,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10003_solution.txt_jitter",
+    "sample": 8,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10000_solution.txt",
+    "sample": 9,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10000_solution.txt_jitter",
+    "sample": 9,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10000_solution.txt_jitter",
+    "sample": 9,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10000_solution.txt_jitter",
+    "sample": 9,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed10000_solution.txt_jitter",
+    "sample": 9,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      349,
+      115600000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11002_solution.txt",
+    "sample": 10,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11002_solution.txt_jitter",
+    "sample": 10,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11002_solution.txt_jitter",
+    "sample": 10,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11002_solution.txt_jitter",
+    "sample": 10,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11002_solution.txt_jitter",
+    "sample": 10,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      40,
+      350,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11000_solution.txt",
+    "sample": 11,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      355,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11000_solution.txt_jitter",
+    "sample": 11,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      355,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11000_solution.txt_jitter",
+    "sample": 11,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      355,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11000_solution.txt_jitter",
+    "sample": 11,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      355,
+      116000000
+    ]
+  },
+  {
+    "instance": "instances\\B3.txt",
+    "source": "solutions\\cvae_parallel\\B3_seed11000_solution.txt_jitter",
+    "sample": 11,
+    "requests": 500,
+    "days": 10,
+    "score": [
+      41,
+      355,
+      116000000
+    ]
+  }
+]
